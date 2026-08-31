@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agendamento-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: agendamento
+      POSTGRES_USER: agendamento
+      POSTGRES_PASSWORD: agendamento
+    volumes:
+      - agendamento-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agendamento -d agendamento"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  agendamento-pgdata:

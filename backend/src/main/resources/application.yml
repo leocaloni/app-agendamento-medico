@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: agendamento
+  datasource:
+    url: jdbc:postgresql://localhost:5432/agendamento
+    username: agendamento
+    password: agendamento
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
