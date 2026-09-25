@@ -1,8 +1,11 @@
 package com.pi.agendamento.controller;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,9 @@ import com.pi.agendamento.dto.request.UpdateDoctorProfileRequest;
 import com.pi.agendamento.dto.request.UpdateScheduleRequest;
 import com.pi.agendamento.dto.response.DoctorDetailResponse;
 import com.pi.agendamento.dto.response.DoctorSearchResponse;
+import com.pi.agendamento.dto.response.TimeSlotResponse;
+import com.pi.agendamento.enums.AppointmentType;
+import com.pi.agendamento.service.AvailabilityService;
 import com.pi.agendamento.service.DoctorService;
 
 import jakarta.validation.Valid;
@@ -27,9 +33,11 @@ import jakarta.validation.Valid;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private final AvailabilityService availabilityService;
 
-    public DoctorController(DoctorService doctorService) {
+    public DoctorController(DoctorService doctorService, AvailabilityService availabilityService) {
         this.doctorService = doctorService;
+        this.availabilityService = availabilityService;
     }
 
     @GetMapping
@@ -66,5 +74,15 @@ public class DoctorController {
     @GetMapping("/{id}")
     public DoctorDetailResponse getById(@PathVariable UUID id) {
         return doctorService.getById(id);
+    }
+
+    // Grade gerada em memoria; nao ha tabela de horarios.
+    @GetMapping("/{id}/availability")
+    public List<TimeSlotResponse> availability(
+            @PathVariable UUID id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = "PRIMEIRA_CONSULTA") AppointmentType type) {
+        return availabilityService.getAvailability(id, from, to, type);
     }
 }

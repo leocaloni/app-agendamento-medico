@@ -26,7 +26,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,11 +33,16 @@ import lombok.Setter;
 //Entidade agendamento, 1-N com paciente, 1-N com medico, 1-N com especialidade, 1-N com anexos,
 // 1-N com consulta pai (para retorno), 1-N com convenio
 @Entity
+// A protecao contra horario duplicado NAO esta aqui. Era uma UNIQUE(doctor_id, start_at), que
+// tinha dois defeitos: so pegava colisao de inicio exato (uma consulta de 40min as 10:00 e um
+// retorno de 20min as 10:20 passavam por ela) e nao olhava o status, entao uma consulta
+// cancelada bloqueava aquele horario para sempre — a disponibilidade oferecia o horario e o
+// POST recusava com 409.
+// Foi substituida pela EXCLUDE USING gist, parcial em status = 'SCHEDULED', criada em
+// DatabaseExtensionsRunner: cobre sobreposicao de intervalo e libera horario cancelado.
+// JPA nao tem EXCLUDE, por isso ela nao pode ser declarada em @Table.
 @Table(
         name = "appointment",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_appointment_doctor_start",
-                columnNames = {"doctor_id", "start_at"}),
         indexes = {
                 @Index(name = "idx_appointment_doctor_start", columnList = "doctor_id, start_at"),
                 @Index(name = "idx_appointment_patient", columnList = "patient_id")

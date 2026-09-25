@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         return build(HttpStatus.BAD_REQUEST, "BUSINESS_ERROR", ex.getMessage());
+    }
+
+    // Sem este handler a excecao cairia no catch-all de Exception e viraria 500: o advice roda
+    // dentro do DispatcherServlet, antes de a excecao chegar ao filtro do Spring Security.
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        return build(HttpStatus.FORBIDDEN, "ACCESS_DENIED", ex.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
