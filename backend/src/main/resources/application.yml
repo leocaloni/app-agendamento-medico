@@ -15,3 +15,8 @@ spring:
         format_sql: true
         jdbc:
           time_zone: UTC
+
+app:
+  jwt:
+    secret: pi-agendamento-jwt-secret-0123456789abcdef
+    expiration: 24h

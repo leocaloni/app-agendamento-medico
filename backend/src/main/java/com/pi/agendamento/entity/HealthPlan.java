@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade plano de saude, 1-N com convenio, 1-N com appointment
+//Entidade convenio, N-N com medico, 1-N com usuario, 1-N com appointment
 @Entity
 @Table(
         name = "health_plan",

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade especialidade, 1-N com medico, 1-N com convenio, 1-N com appointment
+//Entidade especialidade, N-N com medico, 1-N com appointment
 @Entity
 @Table(
         name = "specialty",
