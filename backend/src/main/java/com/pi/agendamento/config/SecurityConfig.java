@@ -57,6 +57,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/specialties", "/api/specialties/**",
                                 "/api/health-plans", "/api/health-plans/**").hasRole("ADMIN")
+                        // Antes do GET publico abaixo: /api/doctors/* casaria com /api/doctors/me
+                        .requestMatchers("/api/doctors/me", "/api/doctors/me/**").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.GET, "/api/doctors", "/api/doctors/*").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
