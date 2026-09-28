@@ -1,0 +1,18 @@
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #243548;
+  background: #f6f9fc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --azul: #2477c8;
+  --azul-hover: #eaf4fc;
+  --mut: #8291a2;
+  --line: #edf3f9;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { min-width: 320px; min-height: 100%; margin: 0; }
+body { min-height: 100vh; }
+button { font: inherit; }
+a { color: inherit; text-decoration: none; }
+
