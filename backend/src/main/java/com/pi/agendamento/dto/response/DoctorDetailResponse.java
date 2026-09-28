@@ -26,11 +26,10 @@ public record DoctorDetailResponse(
         int returnDurationMin,
         Set<SpecialtyResponse> specialties,
         Set<HealthPlanResponse> acceptedPlans,
-        Double ratingAvg,
-        long ratingCount
+        DoctorRatingResponse rating
 ) {
 
-    public static DoctorDetailResponse from(Doctor doctor, Double ratingAvg, long ratingCount) {
+    public static DoctorDetailResponse from(Doctor doctor, DoctorRatingResponse rating) {
         return new DoctorDetailResponse(
                 doctor.getId(),
                 doctor.getUser().getFullName(),
@@ -52,7 +51,6 @@ public record DoctorDetailResponse(
                         .map(HealthPlanResponse::from)
                         .sorted(Comparator.comparing(HealthPlanResponse::name))
                         .collect(Collectors.toCollection(LinkedHashSet::new)),
-                DoctorSearchProjection.round(ratingAvg),
-                ratingCount);
+                rating);
     }
 }

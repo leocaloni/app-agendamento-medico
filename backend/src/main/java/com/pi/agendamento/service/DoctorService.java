@@ -36,7 +36,6 @@ import com.pi.agendamento.exception.BusinessException;
 import com.pi.agendamento.exception.ResourceNotFoundException;
 import com.pi.agendamento.repository.DoctorRepository;
 import com.pi.agendamento.repository.HealthPlanRepository;
-import com.pi.agendamento.repository.ReviewRepository;
 import com.pi.agendamento.repository.SpecialtyRepository;
 import com.pi.agendamento.repository.UserRepository;
 
@@ -51,7 +50,7 @@ public class DoctorService {
     private final UserRepository userRepository;
     private final SpecialtyRepository specialtyRepository;
     private final HealthPlanRepository healthPlanRepository;
-    private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
     private final CurrentUserProvider currentUserProvider;
 
     public DoctorService(
@@ -59,13 +58,13 @@ public class DoctorService {
             UserRepository userRepository,
             SpecialtyRepository specialtyRepository,
             HealthPlanRepository healthPlanRepository,
-            ReviewRepository reviewRepository,
+            ReviewService reviewService,
             CurrentUserProvider currentUserProvider) {
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.specialtyRepository = specialtyRepository;
         this.healthPlanRepository = healthPlanRepository;
-        this.reviewRepository = reviewRepository;
+        this.reviewService = reviewService;
         this.currentUserProvider = currentUserProvider;
     }
 
@@ -190,10 +189,7 @@ public class DoctorService {
     }
 
     private DoctorDetailResponse detail(Doctor doctor) {
-        return DoctorDetailResponse.from(
-                doctor,
-                reviewRepository.findAverageRatingByDoctorId(doctor.getId()),
-                reviewRepository.countByDoctorId(doctor.getId()));
+        return DoctorDetailResponse.from(doctor, reviewService.getRating(doctor.getId()));
     }
 
     private Set<Specialty> resolveSpecialties(Set<UUID> ids) {

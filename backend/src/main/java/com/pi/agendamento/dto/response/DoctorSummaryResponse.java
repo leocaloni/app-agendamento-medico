@@ -16,8 +16,7 @@ public record DoctorSummaryResponse(
         String state,
         Set<String> specialties,
         Set<String> acceptedPlans,
-        Double ratingAvg,
-        long ratingCount
+        RatingSummaryResponse rating
 ) {
 
     public static DoctorSummaryResponse from(Doctor doctor, Double ratingAvg, long ratingCount) {
@@ -29,8 +28,7 @@ public record DoctorSummaryResponse(
                 doctor.getState(),
                 names(doctor.getSpecialties().stream().map(Specialty::getName).toList()),
                 names(doctor.getAcceptedPlans().stream().map(HealthPlan::getName).toList()),
-                ratingAvg,
-                ratingCount);
+                new RatingSummaryResponse(ratingAvg, ratingCount));
     }
 
     static String crm(Doctor doctor) {

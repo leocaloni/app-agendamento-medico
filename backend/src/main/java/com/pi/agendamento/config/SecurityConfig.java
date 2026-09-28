@@ -59,12 +59,16 @@ public class SecurityConfig {
                                 "/api/health-plans", "/api/health-plans/**").hasRole("ADMIN")
                         // Antes do GET publico abaixo: /api/doctors/* casaria com /api/doctors/me
                         .requestMatchers("/api/doctors/me", "/api/doctors/me/**").hasRole("DOCTOR")
-                        .requestMatchers(HttpMethod.GET, "/api/doctors", "/api/doctors/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/appointments").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/doctors", "/api/doctors/*", "/api/doctors/*/reviews").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/appointments", "/api/appointments/*/review").hasRole("PATIENT")
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/appointments/*/complete",
                                 "/api/appointments/*/no-show",
                                 "/api/appointments/*/notes").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/me").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/reviews/*").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
