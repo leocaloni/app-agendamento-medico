@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;600&family=Lora:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap');
+
+.login-page {
+  --login-blue: #5aa9f0;
+  --login-blue-dark: #3a5a78;
+  --login-blue-bg: #eaf4fe;
+  --login-mint: #7fd8c4;
+  --login-text: #3a5a78;
+  --login-secondary: #5b7690;
+  --login-muted: #93a5b8;
+  --login-line: #e9f1fa;
+  min-height: 100vh;
+  color: var(--login-text);
+  background: #f7fafe;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-layout { display: grid; min-height: 100vh; grid-template-columns: 1.08fr .92fr; }
+.login-mobile-header { display: none; }
+.login-promo { display: flex; flex-direction: column; justify-content: center; padding: 72px clamp(48px, 8vw, 120px); background: var(--login-blue-bg); }
+.login-promo-kicker { margin: 0 0 22px; color: var(--login-blue); font-size: 11px; font-weight: 600; letter-spacing: 1.4px; }
+.login-promo h1 { margin: 0 0 18px; color: var(--login-blue-dark); font: 500 clamp(36px, 4vw, 48px)/1.2 'Lora', serif; }
+.login-promo-copy { max-width: 400px; margin: 0; color: var(--login-secondary); font-size: 14px; line-height: 1.8; }
+.login-promo-detail { display: flex; align-items: center; gap: 12px; margin-top: 54px; color: var(--login-secondary); font-size: 11px; }
+.promo-detail-line { width: 34px; height: 1px; background: var(--login-mint); }
+.login-panel { display: flex; align-items: center; justify-content: center; padding: 56px 42px; background: #fff; }
+.login-panel-content { width: min(100%, 360px); }
+.tervis-brand { display: inline-flex; flex-direction: column; align-items: center; }
+.tervis-logo-mark { display: grid; width: 56px; height: 56px; place-items: center; margin-bottom: 10px; border-radius: 18px; color: #fff; background: var(--login-blue); }
+.tervis-brand-name { color: var(--login-blue-dark); font: 600 24px 'Josefin Sans', sans-serif; }
+.login-form-brand { align-items: flex-start; margin-bottom: 28px; }
+.login-form-brand .tervis-logo-mark { display: none; }
+.login-form-brand .tervis-brand-name { font-size: 27px; }
+.login-panel h2 { margin: 0 0 5px; color: #314d69; font-size: 20px; font-weight: 500; }
+.login-intro { margin: 0 0 24px; color: var(--login-secondary); font-size: 12px; }
+.login-form { display: grid; gap: 14px; }
+.login-field-group { display: grid; gap: 6px; }
+.login-label { color: var(--login-secondary); font-size: 12px; }
+.login-input-wrap { display: flex; min-height: 47px; align-items: center; gap: 10px; padding: 0 13px; border: 1px solid transparent; border-radius: 11px; color: var(--login-blue); background: #f5f9fe; transition: border-color .16s ease, box-shadow .16s ease; }
+.login-input-wrap:focus-within { border-color: #a8d2f7; box-shadow: 0 0 0 3px rgba(90, 169, 240, .12); }
+.login-input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--login-blue-dark); background: transparent; font: 400 12px 'Poppins', sans-serif; }
+.login-input-wrap input::placeholder { color: var(--login-muted); opacity: 1; }
+.login-text-button { padding: 0; border: 0; color: var(--login-blue); background: transparent; font: 500 12px 'Poppins', sans-serif; cursor: pointer; }
+.login-text-button:hover { color: #348bd8; }
+.forgot-password { justify-self: end; margin-top: -3px; }
+.login-button { display: inline-flex; min-height: 47px; align-items: center; justify-content: center; padding: 0 18px; border: 0; border-radius: 99px; font: 500 14px 'Poppins', sans-serif; cursor: pointer; transition: background .16s ease, transform .16s ease; }
+.login-button:active { transform: scale(.99); }
+.login-submit { width: 100%; color: #fff; background: var(--login-blue); }
+.login-submit:hover { background: #4699e4; }
+.social-login-section { display: none; }
+.signup-prompt { margin: 2px 0 0; color: var(--login-secondary); font-size: 12px; text-align: center; }
+.signup-prompt .login-text-button { margin-left: 2px; }
+.login-terms { margin: 25px 0 0; color: var(--login-muted); font-size: 10px; line-height: 1.6; text-align: center; }
+
+@media (max-width: 760px) {
+  .login-layout { display: flex; flex-direction: column; }
+  .login-mobile-header { display: flex; min-height: 223px; flex-direction: column; align-items: center; justify-content: center; padding: 34px 22px 30px; border-radius: 0 0 26px 26px; background: var(--login-blue-bg); }
+  .login-mobile-header p { margin: 0; color: var(--login-secondary); font-size: 12px; }
+  .login-promo { display: none; }
+  .login-panel { flex: 1; align-items: flex-start; padding: 25px 22px calc(28px + env(safe-area-inset-bottom)); }
+  .login-panel-content { width: min(100%, 420px); margin: 0 auto; }
+  .login-form-brand { display: none; }
+  .login-panel h2 { margin-bottom: 3px; font-size: 16px; }
+  .login-intro { margin-bottom: 19px; font-size: 11px; }
+  .login-form { gap: 12px; }
+  .login-input-wrap { min-height: 45px; }
+  .login-submit { min-height: 46px; margin-top: 1px; }
+  .social-login-section { display: block; }
+  .login-divider { display: flex; align-items: center; gap: 10px; margin: 1px 0 12px; color: var(--login-muted); font-size: 10px; white-space: nowrap; }
+  .login-divider span:first-child, .login-divider span:last-child { height: 1px; flex: 1; background: var(--login-line); }
+  .social-login-options { display: flex; gap: 8px; }
+  .social-login-button { display: inline-flex; min-width: 0; min-height: 43px; flex: 1; align-items: center; justify-content: center; gap: 8px; padding: 0 10px; border: 1px solid var(--login-line); border-radius: 11px; color: var(--login-secondary); background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+  .social-login-button:hover { background: #f8fbff; }
+  .social-login-mark { display: inline-flex; align-items: center; justify-content: center; }
+  .social-login-mark-google { color: #4285f4; font: 600 16px Arial, sans-serif; }
+  .social-login-mark-gov { color: #2586d1; font: 600 10px 'Poppins', sans-serif; }
+  .signup-prompt { margin-top: 4px; }
+  .login-terms { margin-top: 19px; }
+}
+
+@media (max-width: 360px) {
+  .login-mobile-header { min-height: 200px; }
+  .login-panel { padding-right: 18px; padding-left: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-page *, .login-page *::before, .login-page *::after { transition-duration: .01ms !important; }
+}
