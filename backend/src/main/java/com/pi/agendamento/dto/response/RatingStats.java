@@ -1,5 +1,5 @@
 package com.pi.agendamento.dto.response;
 
-// Projection da query de estatisticas. AVG vem null quando o medico nao tem avaliacao.
+// media e total de avaliacoes do medico; media null se nao houver
 public record RatingStats(Double average, Long total) {
 }

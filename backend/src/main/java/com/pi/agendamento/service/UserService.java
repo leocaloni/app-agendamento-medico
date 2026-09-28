@@ -34,6 +34,7 @@ import com.pi.agendamento.repository.HealthPlanRepository;
 import com.pi.agendamento.repository.SpecialtyRepository;
 import com.pi.agendamento.repository.UserRepository;
 
+// cadastro, login e perfil de usuarios
 @Service
 public class UserService {
 
@@ -68,6 +69,7 @@ public class UserService {
         this.dummyPasswordHash = passwordEncoder.encode("dummy-password-timing-only");
     }
 
+    // cria paciente e retorna token
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         User user = newUser(request.fullName(), request.email(), request.password(),
@@ -77,10 +79,12 @@ public class UserService {
         return authResponseFor(user);
     }
 
+    // valida email e senha e retorna token
     @Transactional(readOnly = true)
     public AuthResponse authenticate(LoginRequest request) {
         User user = userRepository.findByEmail(normalizeEmail(request.email())).orElse(null);
 
+        // hash falso quando o email nao existe, para o tempo de resposta nao revelar cadastro
         String hash = user != null ? user.getPasswordHash() : dummyPasswordHash;
         boolean passwordMatches = passwordEncoder.matches(request.password(), hash);
 
@@ -90,11 +94,13 @@ public class UserService {
         return authResponseFor(user);
     }
 
+    // dados do usuario logado
     @Transactional(readOnly = true)
     public UserResponse getCurrentUser() {
         return UserResponse.from(loadCurrentUser());
     }
 
+    // atualiza o perfil do usuario logado
     @Transactional
     public UserResponse updateProfile(UpdateProfileRequest request) {
         User user = loadCurrentUser();
@@ -111,6 +117,7 @@ public class UserService {
         return UserResponse.from(user);
     }
 
+    // cria usuario e perfil de medico
     @Transactional
     public DoctorResponse createDoctor(CreateDoctorRequest request) {
         User user = newUser(request.fullName(), request.email(), request.password(),
@@ -146,6 +153,7 @@ public class UserService {
         return DoctorResponse.from(doctor);
     }
 
+    // cria usuario admin
     @Transactional
     public UserResponse createAdmin(CreateAdminRequest request) {
         User user = newUser(request.fullName(), request.email(), request.password(),

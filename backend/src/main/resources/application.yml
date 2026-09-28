@@ -17,6 +17,12 @@ spring:
         jdbc:
           time_zone: UTC
 
+springdoc:
+  swagger-ui:
+    # Mantem o token do Authorize entre recarregamentos da pagina
+    persist-authorization: true
+    tags-sorter: alpha
+
 app:
   jwt:
     secret: pi-agendamento-jwt-secret-0123456789abcdef

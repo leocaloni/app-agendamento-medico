@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade anexo de arquivo, 1-N com agendamento
+// anexo de arquivo de uma consulta
 @Entity
 @Table(name = "attachment")
 @Getter
@@ -42,7 +42,7 @@ public class Attachment {
 
     private long sizeBytes;
 
-    // Chave/caminho no storage. O arquivo em si nao vai pro banco.
+    // caminho no storage; o arquivo nao vai pro banco
     @Column(nullable = false)
     private String storageKey;
 

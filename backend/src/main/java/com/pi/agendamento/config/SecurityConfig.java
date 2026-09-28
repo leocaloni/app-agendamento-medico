@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import tools.jackson.databind.json.JsonMapper;
 
 
+// regras de acesso por rota, jwt stateless e cors
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -40,6 +41,7 @@ public class SecurityConfig {
         this.jsonMapper = jsonMapper;
     }
 
+    // define quem acessa cada rota e o formato de 401 e 403
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -52,12 +54,15 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET,
+                                "/v3/api-docs", "/v3/api-docs/**",
+                                "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
                                 "/api/specialties", "/api/specialties/*",
                                 "/api/health-plans", "/api/health-plans/*").permitAll()
                         .requestMatchers(
                                 "/api/specialties", "/api/specialties/**",
                                 "/api/health-plans", "/api/health-plans/**").hasRole("ADMIN")
-                        // Antes do GET publico abaixo: /api/doctors/* casaria com /api/doctors/me
+                        // antes do GET publico abaixo, senao /api/doctors/* casaria com /me
                         .requestMatchers("/api/doctors/me", "/api/doctors/me/**").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/doctors", "/api/doctors/*", "/api/doctors/*/reviews").permitAll()
@@ -80,11 +85,13 @@ public class SecurityConfig {
                 .build();
     }
 
+    // hash de senha com bcrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // libera os clientes locais e expoe o header Location
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

@@ -13,12 +13,16 @@ import org.springframework.data.repository.query.Param;
 
 import com.pi.agendamento.entity.Doctor;
 
+// acesso a medicos e busca com filtros
 public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
 
+    // indica se o crm ja esta cadastrado na uf
     boolean existsByCrmNumberAndCrmUf(String crmNumber, String crmUf);
 
+    // busca o medico pelo usuario
     Optional<Doctor> findByUserId(UUID userId);
 
+    // busca paginada so de ids e nota; COUNT(DISTINCT) porque os joins de especialidade e convenio repetem cada review
     @Query(value = """
             SELECT d.id AS doctor_id,
                    u.full_name AS name,
@@ -70,8 +74,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
             @Param("healthPlanId") UUID healthPlanId,
             Pageable pageable);
 
-    // Carrega a pagina ja selecionada de uma vez, para nao cair em N+1 ao ler
-    // specialties/acceptedPlans (ambos LAZY) na montagem do DTO.
+    // segunda query da busca: carrega as entidades dos ids da pagina de uma vez, evitando N+1 nas relacoes lazy
     @Query("""
             SELECT DISTINCT d FROM Doctor d
             JOIN FETCH d.user
@@ -81,6 +84,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, UUID> {
             """)
     List<Doctor> findAllWithDetails(@Param("ids") Collection<UUID> ids);
 
+    // busca o medico com usuario, especialidades e convenios
     @Query("""
             SELECT d FROM Doctor d
             JOIN FETCH d.user

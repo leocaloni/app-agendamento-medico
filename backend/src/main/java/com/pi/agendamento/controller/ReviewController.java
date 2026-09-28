@@ -22,9 +22,15 @@ import com.pi.agendamento.dto.response.MyReviewResponse;
 import com.pi.agendamento.dto.response.ReviewResponse;
 import com.pi.agendamento.service.ReviewService;
 
+import org.springdoc.core.annotations.ParameterObject;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-// Rotas espalhadas entre recursos (consulta, medico, avaliacao); acesso definido no SecurityConfig
+// rotas de avaliacao, sob consulta, medico e avaliacao
+@Tag(name = "Avaliacoes")
 @RestController
 @RequestMapping("/api")
 public class ReviewController {
@@ -35,6 +41,9 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
+    // avalia a consulta e responde 201 com Location
+    @Operation(summary = "Avaliar consulta (PATIENT)",
+            description = "So o paciente da consulta, e so se estiver COMPLETED. 409 se ja avaliada.")
     @PostMapping("/appointments/{id}/review")
     public ResponseEntity<ReviewResponse> create(@PathVariable UUID id,
                                                  @Valid @RequestBody CreateReviewRequest request) {
@@ -46,18 +55,25 @@ public class ReviewController {
         return ResponseEntity.created(location).body(response);
     }
 
-    // Ordenacao fixa em mais recentes primeiro; o service ignora `sort`.
+    // avaliacoes do medico, paginadas
+    @Operation(summary = "Avaliacoes do medico",
+            description = "Publico. Mais recentes primeiro; o parametro sort eh ignorado.")
+    @SecurityRequirements
     @GetMapping("/doctors/{id}/reviews")
     public Page<ReviewResponse> listForDoctor(@PathVariable UUID id,
-                                              @PageableDefault(size = 10) Pageable pageable) {
+                                              @ParameterObject @PageableDefault(size = 10) Pageable pageable) {
         return reviewService.listForDoctor(id, pageable);
     }
 
+    // avaliacoes do paciente logado
+    @Operation(summary = "Minhas avaliacoes (PATIENT)")
     @GetMapping("/reviews/me")
     public List<MyReviewResponse> listMine() {
         return reviewService.listMine();
     }
 
+    // remove e responde 204
+    @Operation(summary = "Remover avaliacao (ADMIN)", description = "Moderacao.")
     @DeleteMapping("/reviews/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         reviewService.delete(id);

@@ -21,38 +21,43 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.pi.agendamento.dto.response.ErrorResponse;
 
 
+// converte excecoes no formato padrao de erro da api
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    // recurso inexistente vira 404
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
         return build(HttpStatus.NOT_FOUND, "RESOURCE_NOT_FOUND", ex.getMessage());
     }
 
+    // conflito vira 409
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex) {
         return build(HttpStatus.CONFLICT, "CONFLICT", ex.getMessage());
     }
 
+    // regra de negocio violada vira 400
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         return build(HttpStatus.BAD_REQUEST, "BUSINESS_ERROR", ex.getMessage());
     }
 
-    // Sem este handler a excecao cairia no catch-all de Exception e viraria 500: o advice roda
-    // dentro do DispatcherServlet, antes de a excecao chegar ao filtro do Spring Security.
+    // 403; sem este handler o catch-all de Exception devolveria 500
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
         return build(HttpStatus.FORBIDDEN, "ACCESS_DENIED", ex.getMessage());
     }
 
+    // falha de autenticacao vira 401
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
         return build(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", ex.getMessage());
     }
 
+    // erro inesperado vira 500 e vai pro log
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex) {
         log.error("Erro nao tratado", ex);

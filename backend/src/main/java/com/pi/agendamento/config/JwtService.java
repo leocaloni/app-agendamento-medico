@@ -19,6 +19,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+// gera e valida tokens jwt
 @Component
 public class JwtService {
 
@@ -34,6 +35,7 @@ public class JwtService {
         this.expiration = expiration;
     }
 
+    // gera token com id e perfil do usuario
     public String generateToken(UUID userId, Role role) {
         Instant now = Instant.now();
         return Jwts.builder()
@@ -45,6 +47,7 @@ public class JwtService {
                 .compact();
     }
 
+    // valida o token e extrai os dados; vazio se invalido ou expirado
     public Optional<TokenClaims> parse(String token) {
         try {
             Claims claims = Jwts.parser()
@@ -67,6 +70,7 @@ public class JwtService {
         return expiration.toSeconds();
     }
 
+    // dados extraidos do token
     public record TokenClaims(UUID userId, Role role) {
     }
 }

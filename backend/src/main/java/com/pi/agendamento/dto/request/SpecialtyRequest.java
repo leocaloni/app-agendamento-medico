@@ -3,6 +3,7 @@ package com.pi.agendamento.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+// criacao ou edicao de especialidade
 public record SpecialtyRequest(
         @NotBlank @Size(max = 255) String name,
         @Size(max = 255) String description,

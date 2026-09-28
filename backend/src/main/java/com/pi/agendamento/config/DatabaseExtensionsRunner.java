@@ -13,42 +13,20 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-/**
- * Objetos de banco que o Hibernate nao sabe gerar a partir das entidades.
- *
- * O projeto nao tem Flyway, entao nao ha migration onde por isto. Como o ddl-auto eh
- * create-drop, o schema eh recriado a cada start e estes comandos rodam de novo — todos
- * sao idempotentes. Roda antes do DevSeedRunner.
- */
+// cria no banco o que o hibernate nao gera: extensoes e a constraint de sobreposicao
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class DatabaseExtensionsRunner implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseExtensionsRunner.class);
 
-    // Busca por nome de medico sem sensibilidade a acento (fase 04).
+    // busca por nome de medico sem diferenciar acento
     private static final String UNACCENT = "CREATE EXTENSION IF NOT EXISTS unaccent";
 
-    // btree_gist permite combinar igualdade de uuid com sobreposicao de intervalo
-    // no mesmo indice GiST, o que a constraint abaixo exige.
+    // permite uuid e intervalo no mesmo indice gist da constraint abaixo
     private static final String BTREE_GIST = "CREATE EXTENSION IF NOT EXISTS btree_gist";
 
-    /**
-     * Protecao real contra agendamento sobreposto sob concorrencia.
-     *
-     * A UNIQUE(doctor_id, start_at) declarada na entidade so pega colisao de inicio exato:
-     * uma primeira consulta de 50min as 10:00 e um retorno de 20min as 10:20 passam por ela.
-     * A checagem de sobreposicao no service resolve o caso sequencial, mas duas requisicoes
-     * simultaneas leem o banco antes de qualquer uma gravar — so uma constraint separa as duas.
-     *
-     * O predicado WHERE status = 'SCHEDULED' eh essencial: sem ele, uma consulta cancelada
-     * continuaria bloqueando o horario para sempre.
-     *
-     * tstzrange eh meio-aberto [inicio, fim), entao consultas encostadas (10:00-10:50 e
-     * 10:50-11:10) nao conflitam.
-     *
-     * Nao da para declarar isto em @Table: JPA nao tem EXCLUDE.
-     */
+    // barra sobreposicao sob concorrencia, que o service nao pega; so SCHEDULED, para liberar horario cancelado
     private static final String NO_OVERLAP = """
             DO $$
             BEGIN
@@ -69,6 +47,7 @@ public class DatabaseExtensionsRunner implements CommandLineRunner {
         this.dataSource = dataSource;
     }
 
+    // executa os comandos idempotentes no start
     @Override
     public void run(String... args) {
         execute(UNACCENT, "extensao unaccent",
@@ -85,8 +64,7 @@ public class DatabaseExtensionsRunner implements CommandLineRunner {
             statement.execute(sql);
             log.info("Banco: {} ok", what);
         } catch (SQLException ex) {
-            // Nao derruba o start para nao esconder o resto da aplicacao, mas o aviso
-            // precisa ser barulhento: sem isto o sistema fica com um buraco silencioso.
+            // nao derruba o start, mas loga como erro
             log.error("Banco: falha ao criar {} — {}. SQL: {}", what, consequence, sql, ex);
         }
     }

@@ -28,11 +28,11 @@ import com.pi.agendamento.repository.AppointmentRepository;
 import com.pi.agendamento.repository.DoctorRepository;
 import com.pi.agendamento.repository.ReviewRepository;
 
+// avaliacoes de consultas e nota dos medicos
 @Service
 public class ReviewService {
 
-    // Ordenacao fixa (mais recentes primeiro) e desempate por id para a paginacao nao repetir linhas.
-    // O sort do cliente eh ignorado: uma propriedade inexistente viraria 500.
+    // ordem fixa; o sort do cliente eh ignorado porque propriedade inexistente viraria 500
     private static final Sort NEWEST_FIRST = Sort.by(Sort.Direction.DESC, "createdAt")
             .and(Sort.by(Sort.Direction.ASC, "id"));
 
@@ -52,12 +52,13 @@ public class ReviewService {
         this.currentUserProvider = currentUserProvider;
     }
 
+    // paciente avalia a propria consulta realizada
     @Transactional
     public ReviewResponse create(UUID appointmentId, CreateReviewRequest request) {
         Appointment appointment = appointmentRepository.findByIdWithDetails(appointmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta nao encontrada"));
 
-        // Dono antes do status: quem nao eh o paciente nao deve descobrir em que estado a consulta esta.
+        // dono antes do status, para nao revelar o estado da consulta a terceiros
         if (!appointment.getPatient().getId().equals(currentUserProvider.getId())) {
             throw new AccessDeniedException("Consulta de outro paciente");
         }
@@ -70,7 +71,7 @@ public class ReviewService {
 
         Review review = new Review();
         review.setAppointment(appointment);
-        // Medico e autor copiados da consulta, nunca vindos do request.
+        // medico e autor vem da consulta, nunca do request
         review.setDoctor(appointment.getDoctor());
         review.setAuthor(appointment.getPatient());
         review.setRating(request.rating());
@@ -79,6 +80,7 @@ public class ReviewService {
         return ReviewResponse.from(save(review));
     }
 
+    // avaliacoes do medico, mais recentes primeiro
     @Transactional(readOnly = true)
     public Page<ReviewResponse> listForDoctor(UUID doctorId, Pageable pageable) {
         doctorRepository.findById(doctorId)
@@ -89,6 +91,7 @@ public class ReviewService {
         return reviewRepository.findByDoctorId(doctorId, newestFirst).map(ReviewResponse::from);
     }
 
+    // avaliacoes do paciente logado
     @Transactional(readOnly = true)
     public List<MyReviewResponse> listMine() {
         return reviewRepository.findByAuthorIdOrderByCreatedAtDesc(currentUserProvider.getId()).stream()
@@ -96,6 +99,7 @@ public class ReviewService {
                 .toList();
     }
 
+    // remove avaliacao, usado na moderacao
     @Transactional
     public void delete(UUID id) {
         Review review = reviewRepository.findById(id)
@@ -103,8 +107,7 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    // Duas queries agregadas, sem cache nem coluna desnormalizada. Nao chamar em laco (N+1):
-    // a busca de medicos ja calcula a media na propria query.
+    // media, total e distribuicao do medico; nao chamar em laco
     @Transactional(readOnly = true)
     public DoctorRatingResponse getRating(UUID doctorId) {
         Map<Integer, Long> distribution = new TreeMap<>();
@@ -117,10 +120,7 @@ public class ReviewService {
         return DoctorRatingResponse.from(reviewRepository.getStatsByDoctorId(doctorId), distribution);
     }
 
-    /**
-     * existsByAppointmentId nao segura duas requisicoes simultaneas: as duas leem "nao existe".
-     * Quem separa eh a UNIQUE(appointment_id); o flush faz a excecao subir aqui, e nao no commit.
-     */
+    // a UNIQUE do banco barra avaliacao dupla simultanea; o flush faz o erro subir aqui
     private Review save(Review review) {
         try {
             return reviewRepository.saveAndFlush(review);

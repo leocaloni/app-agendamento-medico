@@ -8,6 +8,7 @@ import com.pi.agendamento.entity.Doctor;
 import com.pi.agendamento.entity.HealthPlan;
 import com.pi.agendamento.entity.Specialty;
 
+// medico resumido para a listagem da busca
 public record DoctorSummaryResponse(
         UUID id,
         String fullName,
@@ -19,6 +20,7 @@ public record DoctorSummaryResponse(
         RatingSummaryResponse rating
 ) {
 
+    // monta o resumo com a nota ja calculada na busca
     public static DoctorSummaryResponse from(Doctor doctor, Double ratingAvg, long ratingCount) {
         return new DoctorSummaryResponse(
                 doctor.getId(),

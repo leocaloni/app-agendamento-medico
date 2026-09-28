@@ -9,12 +9,12 @@ import com.pi.agendamento.enums.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+// pedido de agendamento do paciente
 public record CreateAppointmentRequest(
         @NotNull UUID doctorId,
         @NotNull UUID specialtyId,
         @NotNull AppointmentType type,
-        // Obrigatorio: nao ha default. Quem escolhe PARTICULAR ou CONVENIO eh o front,
-        // o back nao adivinha pelo patient.healthPlan.
+        // sem default: o back nao deduz pelo convenio do paciente
         @NotNull PaymentType paymentType,
         UUID healthPlanId,
         @NotNull Instant startAt,

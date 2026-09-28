@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.pi.agendamento.entity.Review;
 
-// So o primeiro nome do autor: nome completo numa avaliacao publica expoe quem consultou com quem.
+// avaliacao publica; so o primeiro nome para nao expor quem consultou com quem
 public record ReviewResponse(
         UUID id,
         int rating,
@@ -14,6 +14,7 @@ public record ReviewResponse(
         Instant createdAt
 ) {
 
+    // converte a entidade em response
     public static ReviewResponse from(Review review) {
         return new ReviewResponse(
                 review.getId(),

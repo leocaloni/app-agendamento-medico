@@ -33,10 +33,11 @@ import com.pi.agendamento.repository.HealthPlanRepository;
 import com.pi.agendamento.repository.SpecialtyRepository;
 import com.pi.agendamento.repository.UserRepository;
 
+// agendamento e ciclo de vida das consultas
 @Service
 public class AppointmentService {
 
-    // Limites abertos para quando o cliente nao manda from/to.
+    // limites usados quando o cliente nao manda from/to
     private static final Instant OPEN_START = Instant.EPOCH;
     private static final Instant OPEN_END = Instant.parse("9999-12-31T23:59:59Z");
 
@@ -65,16 +66,15 @@ public class AppointmentService {
         this.currentUserProvider = currentUserProvider;
     }
 
+    // valida as regras e agenda a consulta do paciente logado
     @Transactional
     public AppointmentResponse create(CreateAppointmentRequest request) {
         User patient = loadCurrentUser();
 
-        // 1. Medico existe e esta ativo
         Doctor doctor = doctorRepository.findByIdWithDetails(request.doctorId())
                 .filter(found -> found.getUser().isActive())
                 .orElseThrow(() -> new ResourceNotFoundException("Medico nao encontrado"));
 
-        // 2. Especialidade existe, esta ativa e pertence ao medico
         Specialty specialty = specialtyRepository.findById(request.specialtyId())
                 .filter(Specialty::isActive)
                 .orElseThrow(() -> new BusinessException("Especialidade nao encontrada ou inativa"));
@@ -82,10 +82,9 @@ public class AppointmentService {
             throw new BusinessException("O medico nao atende esta especialidade");
         }
 
-        // 3. Forma de pagamento. Checagem barata, feita antes de gerar a grade de horarios.
+        // pagamento antes da grade por ser a checagem mais barata
         HealthPlan healthPlan = resolvePaymentPlan(request, doctor);
 
-        // 4. startAt no futuro
         if (!request.startAt().isAfter(Instant.now())) {
             throw new BusinessException("A consulta deve ser marcada para um horario futuro");
         }
@@ -93,24 +92,18 @@ public class AppointmentService {
         Duration duration = Duration.ofMinutes(doctor.durationFor(request.type()));
         Instant endAt = request.startAt().plus(duration);
 
-        // 5. Sobreposicao com outra consulta do MEDICO -> 409.
-        //    Vem antes da revalidacao de slot para separar os dois casos: horario ocupado eh
-        //    conflito (409), horario que nao existe na grade eh pedido invalido (400).
-        //    A UNIQUE(doctor_id, start_at) so pega inicio exato: uma primeira consulta de 40min
-        //    as 10:00 e um retorno de 20min as 10:20 passariam por ela.
+        // antes da grade para separar horario ocupado (409) de horario inexistente (400)
         if (appointmentRepository.existsDoctorOverlap(doctor.getId(), request.startAt(), endAt)) {
             throw new ConflictException("Este horario conflita com outra consulta do medico");
         }
 
-        // 6. Sobreposicao com outra consulta do PACIENTE (possivelmente com outro medico) -> 409
         if (appointmentRepository.existsPatientOverlap(patient.getId(), request.startAt(), endAt)) {
             throw new ConflictException("Voce ja tem outra consulta marcada neste horario");
         }
 
-        // 7. startAt bate com um slot real do medico — recalculado aqui, nunca confiando no front
+        // grade recalculada aqui, sem confiar no front
         requireValidSlot(doctor, request);
 
-        // 8. Retorno precisa de consulta pai concluida, do mesmo paciente e do mesmo medico
         Appointment parent = resolveParent(request, patient, doctor);
 
         Appointment appointment = new Appointment();
@@ -123,24 +116,25 @@ public class AppointmentService {
         appointment.setType(request.type());
         appointment.setStatus(AppointmentStatus.SCHEDULED);
         appointment.setPaymentType(request.paymentType());
-        // Por copia: a consulta guarda o plano usado e nunca mais le patient.healthPlan.
+        // copia o convenio: a consulta nao depende do plano atual do paciente
         appointment.setHealthPlan(healthPlan);
         appointment.setPatientNotes(request.patientNotes());
 
         return AppointmentResponse.from(save(appointment));
     }
 
+    // calcula os horarios livres do medico no periodo
     @Transactional(readOnly = true)
     public List<TimeSlotResponse> getAvailability(UUID doctorId, LocalDate from, LocalDate to,
                                                   AppointmentType type) {
         return availabilityService.getAvailability(doctorId, from, to, type);
     }
 
+    // consultas do paciente ou agenda do medico logado
     @Transactional(readOnly = true)
     public List<AppointmentResponse> listMine(Instant from, Instant to, AppointmentStatus status) {
         User user = loadCurrentUser();
-        // Filtros ausentes viram limites abertos / todos os status, para a query nao precisar
-        // de parametro anulavel (ver comentario em AppointmentRepository.findForPatient).
+        // filtro ausente vira limite aberto, para a query nao receber null
         Instant fromOrOpen = from != null ? from : OPEN_START;
         Instant toOrOpen = to != null ? to : OPEN_END;
         Collection<AppointmentStatus> statuses = status != null
@@ -161,19 +155,21 @@ public class AppointmentService {
         return appointments.stream().map(AppointmentResponse::from).toList();
     }
 
+    // detalhe da consulta para o paciente ou o medico dela
     @Transactional(readOnly = true)
     public AppointmentResponse getById(UUID id) {
         return AppointmentResponse.from(loadVisible(id));
     }
 
+    // cancela consulta do paciente ou do medico
     @Transactional
     public AppointmentResponse cancel(UUID id, String reason) {
         Appointment appointment = loadVisible(id);
-        // Transicao validada na entidade; o service nunca faz setStatus direto.
         appointment.cancel(reason);
         return AppointmentResponse.from(appointment);
     }
 
+    // medico marca a consulta como realizada
     @Transactional
     public AppointmentResponse complete(UUID id) {
         Appointment appointment = loadAsOwningDoctor(id);
@@ -181,6 +177,7 @@ public class AppointmentService {
         return AppointmentResponse.from(appointment);
     }
 
+    // medico marca falta do paciente
     @Transactional
     public AppointmentResponse markNoShow(UUID id) {
         Appointment appointment = loadAsOwningDoctor(id);
@@ -188,6 +185,7 @@ public class AppointmentService {
         return AppointmentResponse.from(appointment);
     }
 
+    // medico grava anotacoes na consulta
     @Transactional
     public AppointmentResponse updateNotes(UUID id, String doctorNotes) {
         Appointment appointment = loadAsOwningDoctor(id);
@@ -195,13 +193,7 @@ public class AppointmentService {
         return AppointmentResponse.from(appointment);
     }
 
-    /**
-     * Ultima linha de defesa contra concorrencia: duas requisicoes simultaneas passam pelas
-     * validacoes juntas, porque cada uma le um estado em que a outra ainda nao gravou.
-     * Quem separa as duas eh a constraint do banco.
-     *
-     * O flush explicito eh necessario para a excecao subir aqui dentro, e nao so no commit.
-     */
+    // a constraint do banco barra a concorrencia; o flush faz o erro subir aqui e nao no commit
     private Appointment save(Appointment appointment) {
         try {
             return appointmentRepository.saveAndFlush(appointment);
@@ -212,8 +204,7 @@ public class AppointmentService {
 
     private HealthPlan resolvePaymentPlan(CreateAppointmentRequest request, Doctor doctor) {
         if (request.paymentType() == PaymentType.PARTICULAR) {
-            // Recusa em vez de ignorar: ignorando, o front acha que gravou convenio
-            // e na verdade gravou particular.
+            // recusa em vez de ignorar, para o front nao achar que gravou convenio
             if (request.healthPlanId() != null) {
                 throw new BusinessException(
                         "Consulta PARTICULAR nao aceita healthPlanId");
@@ -230,8 +221,7 @@ public class AppointmentService {
         if (!doctor.acceptsPlan(healthPlan.getId())) {
             throw new BusinessException("O medico nao aceita este convenio");
         }
-        // Nao se checa se eh igual a patient.healthPlan: o plano do paciente serve para
-        // pre-preencher a tela e pre-filtrar a busca, nao para autorizar.
+        // nao exige o convenio do paciente: ele so pre-preenche a tela
         return healthPlan;
     }
 
@@ -263,7 +253,7 @@ public class AppointmentService {
         return parent;
     }
 
-    // Paciente dono ou medico da consulta.
+    // so o paciente ou o medico da consulta
     private Appointment loadVisible(UUID id) {
         Appointment appointment = appointmentRepository.findByIdWithDetails(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Consulta nao encontrada"));

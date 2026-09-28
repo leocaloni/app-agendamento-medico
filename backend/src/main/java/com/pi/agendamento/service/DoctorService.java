@@ -39,9 +39,11 @@ import com.pi.agendamento.repository.HealthPlanRepository;
 import com.pi.agendamento.repository.SpecialtyRepository;
 import com.pi.agendamento.repository.UserRepository;
 
+// busca, perfil e agenda de medicos
 @Service
 public class DoctorService {
 
+    // whitelist do sort: o valor vai direto para a query nativa, entao so colunas conhecidas
     private static final Map<String, String> SORTABLE = Map.of(
             "rating", "rating",
             "name", "name");
@@ -68,10 +70,12 @@ public class DoctorService {
         this.currentUserProvider = currentUserProvider;
     }
 
+    // busca medicos com filtros, paginada
     @Transactional(readOnly = true)
     public DoctorSearchResponse search(DoctorSearchFilter filter, Pageable pageable) {
         HealthPlan planFilter = resolvePlanFilter(filter);
 
+        // duas queries: ids e nota paginados primeiro, entidades depois; paginar com fetch join seria em memoria
         Page<Object[]> rows = doctorRepository.search(
                 trimToNull(filter.name()),
                 filter.specialtyId(),
@@ -102,6 +106,7 @@ public class DoctorService {
         return new DoctorSearchResponse(doctors, HealthPlanSummary.from(planFilter));
     }
 
+    // perfil publico de medico ativo
     @Transactional(readOnly = true)
     public DoctorDetailResponse getById(UUID id) {
         Doctor doctor = doctorRepository.findByIdWithDetails(id)
@@ -110,11 +115,13 @@ public class DoctorService {
         return detail(doctor);
     }
 
+    // perfil do medico logado
     @Transactional(readOnly = true)
     public DoctorDetailResponse getCurrent() {
         return detail(loadCurrentDoctor());
     }
 
+    // atualiza perfil, especialidades e convenios do medico logado
     @Transactional
     public DoctorDetailResponse updateProfile(UpdateDoctorProfileRequest request) {
         Doctor doctor = loadCurrentDoctor();
@@ -127,6 +134,7 @@ public class DoctorService {
         return detail(doctor);
     }
 
+    // atualiza expediente e duracoes do medico logado
     @Transactional
     public DoctorDetailResponse updateSchedule(UpdateScheduleRequest request) {
         if (!request.workStartTime().isBefore(request.workEndTime())) {
@@ -150,7 +158,7 @@ public class DoctorService {
             return healthPlanRepository.findById(filter.healthPlanId())
                     .orElseThrow(() -> new ResourceNotFoundException("Convenio nao encontrado"));
         }
-        // Sem checar `active`: um convenio desativado continua valendo para quem ja o tem.
+        // sem checar active: convenio desativado continua valendo para quem ja o tem
         return currentUserProvider.findId()
                 .flatMap(userRepository::findById)
                 .filter(user -> user.getRole() == Role.PATIENT)
@@ -177,13 +185,13 @@ public class DoctorService {
         if (sort.isUnsorted()) {
             sort = Sort.by(Sort.Direction.ASC, "name");
         }
-        // Desempate fixo: sem ele a paginacao pode repetir ou pular medicos com a mesma nota.
+        // desempate por id para a paginacao nao repetir nem pular medicos
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 sort.and(Sort.by(Sort.Direction.ASC, "doctor_id")));
     }
 
     private Doctor loadCurrentDoctor() {
-        // Resolvido pelo usuario autenticado, nunca por id vindo do path.
+        // pelo usuario do token, nunca por id do path
         return doctorRepository.findByUserId(currentUserProvider.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Medico nao encontrado para o usuario logado"));
     }

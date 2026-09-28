@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+// expediente e duracoes do medico logado
 public record UpdateScheduleRequest(
         @NotNull LocalTime workStartTime,
         @NotNull LocalTime workEndTime,

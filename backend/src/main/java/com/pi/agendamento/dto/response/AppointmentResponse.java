@@ -8,6 +8,7 @@ import com.pi.agendamento.enums.AppointmentStatus;
 import com.pi.agendamento.enums.AppointmentType;
 import com.pi.agendamento.enums.PaymentType;
 
+// consulta com nomes de medico, paciente e especialidade
 public record AppointmentResponse(
         UUID id,
         UUID doctorId,
@@ -21,8 +22,7 @@ public record AppointmentResponse(
         AppointmentType type,
         AppointmentStatus status,
         PaymentType paymentType,
-        // Copia do convenio usado nesta consulta; null quando PARTICULAR.
-        // Nunca eh lido de patient.healthPlan — o paciente pode ter trocado de plano depois.
+        // convenio gravado na consulta, nao o atual do paciente; null se PARTICULAR
         HealthPlanSummary healthPlan,
         String patientNotes,
         String doctorNotes,
@@ -31,6 +31,7 @@ public record AppointmentResponse(
         Instant createdAt
 ) {
 
+    // converte a entidade em response
     public static AppointmentResponse from(Appointment appointment) {
         return new AppointmentResponse(
                 appointment.getId(),

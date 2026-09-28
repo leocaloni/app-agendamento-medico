@@ -22,17 +22,11 @@ import com.pi.agendamento.exception.ResourceNotFoundException;
 import com.pi.agendamento.repository.AppointmentRepository;
 import com.pi.agendamento.repository.DoctorRepository;
 
-/**
- * Calculo de disponibilidade. Nao existe tabela de horarios: a grade eh gerada em memoria
- * a cada chamada, a partir do expediente do medico menos as consultas ja marcadas.
- */
+// gera em memoria os horarios livres: expediente menos consultas marcadas
 @Service
 public class AvailabilityService {
 
-    /**
-     * Fixo de proposito. O workStartTime/workEndTime do medico eh horario local da clinica;
-     * ZoneId.systemDefault() mudaria entre a maquina de desenvolvimento e o container.
-     */
+    // fixo porque o expediente eh hora local da clinica; systemDefault mudaria entre maquina e container
     public static final ZoneId CLINIC_ZONE = ZoneId.of("America/Sao_Paulo");
 
     private static final int MAX_RANGE_DAYS = 60;
@@ -46,6 +40,7 @@ public class AvailabilityService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    // calcula os horarios livres do medico no periodo
     @Transactional(readOnly = true)
     public List<TimeSlotResponse> getAvailability(UUID doctorId, LocalDate from, LocalDate to,
                                                   AppointmentType type) {
@@ -55,17 +50,14 @@ public class AvailabilityService {
         return slotsFor(doctor, from, to, type);
     }
 
-    /**
-     * Mesma grade, com o Doctor ja carregado — usado na revalidacao do POST /api/appointments
-     * para nao ir ao banco buscar o medico de novo.
-     */
+    // mesma grade, com o medico ja carregado
     @Transactional(readOnly = true)
     public List<TimeSlotResponse> slotsFor(Doctor doctor, LocalDate from, LocalDate to,
                                            AppointmentType type) {
         if (from.isAfter(to)) {
             throw new BusinessException("O parametro 'from' deve ser anterior ou igual a 'to'");
         }
-        // Sem isso, from=2020&to=2030 geraria milhoes de objetos.
+        // limita o periodo para nao gerar grade gigante
         long days = ChronoUnit.DAYS.between(from, to) + 1;
         if (days > MAX_RANGE_DAYS) {
             throw new BusinessException("O intervalo nao pode passar de " + MAX_RANGE_DAYS + " dias");
@@ -84,8 +76,7 @@ public class AvailabilityService {
             if (!doctor.worksOn(date)) {
                 continue;
             }
-            // Laco em minutos do dia em vez de LocalTime.plusMinutes: o LocalTime daria a volta
-            // na meia-noite e o laco nunca terminaria num expediente que termina tarde.
+            // minutos do dia em vez de LocalTime, que daria a volta na meia-noite
             int openMinute = doctor.getWorkStartTime().toSecondOfDay() / 60;
             int closeMinute = doctor.getWorkEndTime().toSecondOfDay() / 60;
             int step = (int) duration.toMinutes();

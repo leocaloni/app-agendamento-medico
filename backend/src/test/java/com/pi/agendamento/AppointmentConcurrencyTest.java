@@ -52,17 +52,7 @@ import com.pi.agendamento.repository.UserRepository;
 import com.pi.agendamento.service.AppointmentService;
 import com.pi.agendamento.service.AvailabilityService;
 
-/**
- * O unico teste automatizado do projeto.
- *
- * Nao da para reproduzir concorrencia no Postman: ninguem clica duas vezes em 10ms, e eh
- * exatamente onde o bug fica invisivel ate acontecer com usuario real.
- *
- * Exige Postgres de verdade (o container do docker-compose) — H2 nao trata constraint da
- * mesma forma, e a constraint EXCLUDE do segundo cenario nem existe fora do Postgres.
- *
- * O teste nao eh @Transactional de proposito: as duas threads precisam commitar de verdade.
- */
+// concorrencia no agendamento; exige o postgres real e nao eh @Transactional para as threads commitarem
 @SpringBootTest
 class AppointmentConcurrencyTest {
 
@@ -108,8 +98,7 @@ class AppointmentConcurrencyTest {
         doctor.setWorkStartTime(LocalTime.of(8, 0));
         doctor.setWorkEndTime(LocalTime.of(18, 0));
         doctor.setWorkDays(new HashSet<>(Set.of(DayOfWeek.values())));
-        // 60 e 20 para que 10:00 caia nas duas grades (08:00+60 e 08:00+20)
-        // e 10:20 caia na grade de retorno.
+        // 60 e 20 para 10:00 caber nas duas grades e 10:20 na de retorno
         doctor.setFirstVisitDurationMin(FIRST_VISIT_MIN);
         doctor.setReturnDurationMin(RETURN_MIN);
         doctor.setSpecialties(new HashSet<>(Set.of(specialty)));
@@ -127,8 +116,7 @@ class AppointmentConcurrencyTest {
                 .atZone(AvailabilityService.CLINIC_ZONE)
                 .toInstant();
 
-        // Consulta pai concluida, no passado, para o retorno do paciente B.
-        // COMPLETED nao entra no predicado da constraint, entao nao ocupa horario.
+        // consulta pai concluida para o retorno do paciente B; COMPLETED nao ocupa horario
         Appointment parent = new Appointment();
         parent.setPatient(patientB);
         parent.setDoctor(doctor);
@@ -145,8 +133,7 @@ class AppointmentConcurrencyTest {
     @Test
     @DisplayName("a constraint de sobreposicao existe no banco")
     void constraintDeSobreposicaoExiste() throws Exception {
-        // Guarda contra a protecao sumir em silencio: a constraint nao vem das entidades,
-        // eh criada pelo DatabaseExtensionsRunner.
+        // a constraint nao vem das entidades, entao pode sumir em silencio
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet rs = statement.executeQuery("""
@@ -176,11 +163,7 @@ class AppointmentConcurrencyTest {
         assertThat(appointmentRepository.countScheduled()).isEqualTo(1);
     }
 
-    /**
-     * O caso que a UNIQUE(doctor_id, start_at) nao cobre: os dois startAt sao diferentes,
-     * mas os intervalos se sobrepoem (10:00-11:00 contra 10:20-10:40). Sem a constraint
-     * EXCLUDE as duas gravam e o medico fica com a agenda dobrada.
-     */
+    // inicios diferentes com intervalos sobrepostos, caso que uma UNIQUE de inicio nao pega
     @Test
     @DisplayName("sobreposicao parcial com startAt diferentes: exatamente uma vence")
     void sobreposicaoParcial() throws Exception {
@@ -245,7 +228,7 @@ class AppointmentConcurrencyTest {
         }
     }
 
-    // Cada thread tem o proprio SecurityContext; sem isto o CurrentUserProvider nao acha ninguem.
+    // cada thread precisa do proprio contexto de seguranca
     private void authenticateAs(UUID userId) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(
@@ -271,10 +254,12 @@ class AppointmentConcurrencyTest {
         return digits.substring(0, length);
     }
 
+    // resultado da corrida: sucessos e falhas
     private static final class Outcome {
         private int successes;
         private final List<Throwable> failures = new ArrayList<>();
 
+        // resumo usado nas mensagens de assert
         @Override
         public String toString() {
             List<String> descriptions = failures.stream()

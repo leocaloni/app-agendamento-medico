@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+// criacao de medico pelo admin: usuario + perfil
 public record CreateDoctorRequest(
         @NotBlank @Size(max = 255) String fullName,
         @NotBlank @Email @Size(max = 255) String email,

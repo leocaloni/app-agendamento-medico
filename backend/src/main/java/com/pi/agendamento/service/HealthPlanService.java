@@ -13,6 +13,7 @@ import com.pi.agendamento.exception.ConflictException;
 import com.pi.agendamento.exception.ResourceNotFoundException;
 import com.pi.agendamento.repository.HealthPlanRepository;
 
+// catalogo de convenios
 @Service
 public class HealthPlanService {
 
@@ -22,6 +23,7 @@ public class HealthPlanService {
         this.healthPlanRepository = healthPlanRepository;
     }
 
+    // lista os convenios ativos
     @Transactional(readOnly = true)
     public List<HealthPlanResponse> listActive() {
         return healthPlanRepository.findByActiveTrueOrderByNameAsc().stream()
@@ -29,6 +31,7 @@ public class HealthPlanService {
                 .toList();
     }
 
+    // lista todos, inclusive inativos
     @Transactional(readOnly = true)
     public List<HealthPlanResponse> listAll() {
         return healthPlanRepository.findAllByOrderByNameAsc().stream()
@@ -36,11 +39,13 @@ public class HealthPlanService {
                 .toList();
     }
 
+    // busca convenio por id
     @Transactional(readOnly = true)
     public HealthPlanResponse getById(UUID id) {
         return HealthPlanResponse.from(load(id));
     }
 
+    // cria convenio com nome unico
     @Transactional
     public HealthPlanResponse create(HealthPlanRequest request) {
         String name = request.name().trim();
@@ -54,7 +59,7 @@ public class HealthPlanService {
         return HealthPlanResponse.from(healthPlanRepository.save(healthPlan));
     }
 
-    // PUT tambem reativa: um convenio desativado volta a ficar ativo ao ser atualizado.
+    // atualiza convenio; tambem reativa se estava inativo
     @Transactional
     public HealthPlanResponse update(UUID id, HealthPlanRequest request) {
         HealthPlan healthPlan = load(id);
@@ -68,8 +73,7 @@ public class HealthPlanService {
         return HealthPlanResponse.from(healthPlan);
     }
 
-    // Delete logico: quem ja referencia o plano (paciente, medico, consulta) nao eh alterado,
-    // o plano apenas some das listagens publicas.
+    // desativa sem apagar; quem ja referencia o convenio nao muda
     @Transactional
     public void deactivate(UUID id) {
         load(id).setActive(false);

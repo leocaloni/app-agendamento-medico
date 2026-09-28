@@ -30,17 +30,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade agendamento, 1-N com paciente, 1-N com medico, 1-N com especialidade, 1-N com anexos,
-// 1-N com consulta pai (para retorno), 1-N com convenio
+// consulta agendada entre paciente e medico
 @Entity
-// A protecao contra horario duplicado NAO esta aqui. Era uma UNIQUE(doctor_id, start_at), que
-// tinha dois defeitos: so pegava colisao de inicio exato (uma consulta de 40min as 10:00 e um
-// retorno de 20min as 10:20 passavam por ela) e nao olhava o status, entao uma consulta
-// cancelada bloqueava aquele horario para sempre — a disponibilidade oferecia o horario e o
-// POST recusava com 409.
-// Foi substituida pela EXCLUDE USING gist, parcial em status = 'SCHEDULED', criada em
-// DatabaseExtensionsRunner: cobre sobreposicao de intervalo e libera horario cancelado.
-// JPA nao tem EXCLUDE, por isso ela nao pode ser declarada em @Table.
+// sem UNIQUE de horario: a EXCLUDE de sobreposicao (so SCHEDULED) fica em DatabaseExtensionsRunner, JPA nao a declara
 @Table(
         name = "appointment",
         indexes = {
@@ -116,26 +108,31 @@ public class Appointment {
     )
     private List<Attachment> attachments = new ArrayList<>();
 
+    // cancela consulta agendada
     public void cancel(String reason) {
         requireScheduled("cancelar");
         this.status = AppointmentStatus.CANCELLED;
         this.cancellationReason = reason;
     }
 
+    // marca consulta agendada como realizada
     public void complete() {
         requireScheduled("concluir");
         this.status = AppointmentStatus.COMPLETED;
     }
 
+    // marca falta do paciente
     public void markNoShow() {
         requireScheduled("marcar como falta");
         this.status = AppointmentStatus.NO_SHOW;
     }
 
+    // so consulta realizada pode ser avaliada
     public boolean canBeReviewed() {
         return status == AppointmentStatus.COMPLETED;
     }
 
+    // indica se eh consulta de retorno
     public boolean isReturn() {
         return type == AppointmentType.RETORNO;
     }

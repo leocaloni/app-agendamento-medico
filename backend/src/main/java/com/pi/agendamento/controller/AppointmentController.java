@@ -24,8 +24,12 @@ import com.pi.agendamento.dto.response.AppointmentResponse;
 import com.pi.agendamento.enums.AppointmentStatus;
 import com.pi.agendamento.service.AppointmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+// rotas de agendamento e ciclo de vida das consultas
+@Tag(name = "Consultas")
 @RestController
 @RequestMapping("/api/appointments")
 public class AppointmentController {
@@ -36,6 +40,9 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
+    // agenda e responde 201 com Location
+    @Operation(summary = "Agendar consulta (PATIENT)",
+            description = "409 se o horario conflita com outra consulta do medico ou do paciente.")
     @PostMapping
     public ResponseEntity<AppointmentResponse> create(@Valid @RequestBody CreateAppointmentRequest request) {
         AppointmentResponse response = appointmentService.create(request);
@@ -46,7 +53,8 @@ public class AppointmentController {
         return ResponseEntity.created(location).body(response);
     }
 
-    // Mesma rota para paciente e medico: o service olha a role do usuario logado.
+    // mesma rota para paciente e medico; o service decide pelo perfil
+    @Operation(summary = "Minhas consultas", description = "PATIENT ve as suas; DOCTOR ve a propria agenda.")
     @GetMapping("/me")
     public List<AppointmentResponse> listMine(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,
@@ -55,27 +63,37 @@ public class AppointmentController {
         return appointmentService.listMine(from, to, status);
     }
 
+    // detalhe da consulta
+    @Operation(summary = "Detalhe da consulta", description = "Somente o paciente ou o medico da consulta.")
     @GetMapping("/{id}")
     public AppointmentResponse getById(@PathVariable UUID id) {
         return appointmentService.getById(id);
     }
 
+    // cancela com motivo opcional
+    @Operation(summary = "Cancelar consulta", description = "Paciente ou medico da consulta. Corpo opcional.")
     @PatchMapping("/{id}/cancel")
     public AppointmentResponse cancel(@PathVariable UUID id,
                                       @Valid @RequestBody(required = false) CancelAppointmentRequest request) {
         return appointmentService.cancel(id, request != null ? request.reason() : null);
     }
 
+    // marca como realizada
+    @Operation(summary = "Marcar como realizada (DOCTOR)")
     @PatchMapping("/{id}/complete")
     public AppointmentResponse complete(@PathVariable UUID id) {
         return appointmentService.complete(id);
     }
 
+    // marca falta do paciente
+    @Operation(summary = "Marcar falta do paciente (DOCTOR)")
     @PatchMapping("/{id}/no-show")
     public AppointmentResponse markNoShow(@PathVariable UUID id) {
         return appointmentService.markNoShow(id);
     }
 
+    // grava anotacoes do medico
+    @Operation(summary = "Anotacoes do medico (DOCTOR)")
     @PatchMapping("/{id}/notes")
     public AppointmentResponse updateNotes(@PathVariable UUID id,
                                            @Valid @RequestBody UpdateAppointmentNotesRequest request) {

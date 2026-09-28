@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade usuario, 1-1 com medico, 1-N com appointment, 1-N com review, 1-N com convenio
+// usuario do sistema: paciente, medico ou admin
 @Entity
 @Table(
         name = "users",

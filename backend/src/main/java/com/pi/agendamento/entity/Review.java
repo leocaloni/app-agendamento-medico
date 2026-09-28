@@ -23,7 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade de avaliacao, 1-1 com appointment, 1-N com doctor, 1-N com user
+// avaliacao do paciente, uma por consulta
 @Entity
 @Table(
         name = "review",

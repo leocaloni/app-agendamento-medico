@@ -2,8 +2,10 @@ package com.pi.agendamento.dto.response;
 
 import java.util.UUID;
 
+// linha da query de busca: id do medico e nota agregada
 public record DoctorSearchProjection(UUID doctorId, Double ratingAvg, long ratingCount) {
 
+    // converte a linha crua da query
     public static DoctorSearchProjection from(Object[] row) {
         long ratingCount = ((Number) row[3]).longValue();
         Double ratingAvg = ratingCount > 0 ? round(((Number) row[2]).doubleValue()) : null;

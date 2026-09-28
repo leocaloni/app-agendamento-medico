@@ -15,9 +15,12 @@ import com.pi.agendamento.dto.response.DoctorResponse;
 import com.pi.agendamento.dto.response.UserResponse;
 import com.pi.agendamento.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-//Rotas de admin
+// rotas de admin para criar usuarios
+@Tag(name = "Admin - usuarios", description = "Somente ADMIN")
 @RestController
 @RequestMapping("/api/admin/users")
 public class AdminUserController {
@@ -28,10 +31,11 @@ public class AdminUserController {
         this.userService = userService;
     }
 
+    // cria medico e aponta Location para o perfil publico
+    @Operation(summary = "Criar medico")
     @PostMapping("/doctors")
     public ResponseEntity<DoctorResponse> createDoctor(@Valid @RequestBody CreateDoctorRequest request) {
         DoctorResponse response = userService.createDoctor(request);
-        // Perfil publico do medico (GET /api/doctors/{id}, fase 04)
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/doctors/{id}")
                 .buildAndExpand(response.id())
@@ -39,6 +43,8 @@ public class AdminUserController {
         return ResponseEntity.created(location).body(response);
     }
 
+    // cria outro admin
+    @Operation(summary = "Criar admin")
     @PostMapping("/admins")
     public ResponseEntity<UserResponse> createAdmin(@Valid @RequestBody CreateAdminRequest request) {
         UserResponse response = userService.createAdmin(request);

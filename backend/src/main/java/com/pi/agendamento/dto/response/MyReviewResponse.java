@@ -5,8 +5,7 @@ import java.util.UUID;
 
 import com.pi.agendamento.entity.Review;
 
-// Resposta de GET /api/reviews/me. Separada de ReviewResponse de proposito: a data da consulta
-// ao lado do primeiro nome, na listagem publica, diria quando cada paciente foi atendido.
+// avaliacao do proprio paciente; separada da publica para nao expor a data da consulta
 public record MyReviewResponse(
         UUID id,
         int rating,
@@ -17,6 +16,7 @@ public record MyReviewResponse(
         Instant appointmentStartAt
 ) {
 
+    // converte a entidade em response
     public static MyReviewResponse from(Review review) {
         return new MyReviewResponse(
                 review.getId(),

@@ -10,6 +10,7 @@ import com.pi.agendamento.entity.Doctor;
 import com.pi.agendamento.entity.HealthPlan;
 import com.pi.agendamento.entity.Specialty;
 
+// medico recem criado pelo admin
 public record DoctorResponse(
         UUID id,
         UserResponse user,
@@ -28,6 +29,7 @@ public record DoctorResponse(
         Set<UUID> acceptedPlanIds
 ) {
 
+    // converte a entidade em response
     public static DoctorResponse from(Doctor doctor) {
         return new DoctorResponse(
                 doctor.getId(),

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.pi.agendamento.entity.Doctor;
 
+// perfil completo do medico com agenda e nota
 public record DoctorDetailResponse(
         UUID id,
         String fullName,
@@ -29,6 +30,7 @@ public record DoctorDetailResponse(
         DoctorRatingResponse rating
 ) {
 
+    // monta o perfil a partir do medico e da nota
     public static DoctorDetailResponse from(Doctor doctor, DoctorRatingResponse rating) {
         return new DoctorDetailResponse(
                 doctor.getId(),

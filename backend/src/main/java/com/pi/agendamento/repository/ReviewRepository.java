@@ -13,19 +13,21 @@ import org.springframework.data.repository.query.Param;
 import com.pi.agendamento.dto.response.RatingStats;
 import com.pi.agendamento.entity.Review;
 
+// acesso a avaliacoes e estatisticas de nota
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
+    // indica se a consulta ja foi avaliada
     boolean existsByAppointmentId(UUID appointmentId);
 
-    // author no EntityGraph: o response le o primeiro nome, e sem ele cada linha dispara uma query.
+    // avaliacoes do medico, com autor carregado junto
     @EntityGraph(attributePaths = "author")
     Page<Review> findByDoctorId(UUID doctorId, Pageable pageable);
 
-    // Medico e consulta no EntityGraph pelo mesmo motivo: MyReviewResponse le nome e startAt.
+    // avaliacoes do paciente, com medico e consulta carregados junto
     @EntityGraph(attributePaths = {"doctor", "doctor.user", "appointment"})
     List<Review> findByAuthorIdOrderByCreatedAtDesc(UUID authorId);
 
-    // Sem avaliacao: average null e total 0.
+    // media e total do medico; sem avaliacao vem media null e total 0
     @Query("""
             SELECT new com.pi.agendamento.dto.response.RatingStats(
                 AVG(r.rating), COUNT(r.id))
@@ -33,7 +35,7 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
             """)
     RatingStats getStatsByDoctorId(@Param("doctorId") UUID doctorId);
 
-    // Linhas [rating, count]; notas sem avaliacao nao aparecem.
+    // quantidade por nota; notas sem avaliacao nao aparecem
     @Query("SELECT r.rating, COUNT(r) FROM Review r WHERE r.doctor.id = :doctorId GROUP BY r.rating")
     List<Object[]> getRatingDistribution(@Param("doctorId") UUID doctorId);
 }

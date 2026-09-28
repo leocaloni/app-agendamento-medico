@@ -23,7 +23,7 @@ import com.pi.agendamento.repository.HealthPlanRepository;
 import com.pi.agendamento.repository.SpecialtyRepository;
 import com.pi.agendamento.repository.UserRepository;
 
-// Seed de dev. Como o ddl-auto eh create-drop, o banco zera a cada start e isto repopula.
+// popula o banco de dev, que zera a cada start pelo create-drop
 @Component
 public class DevSeedRunner implements CommandLineRunner {
 
@@ -56,6 +56,7 @@ public class DevSeedRunner implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // cria convenios, especialidades, admin, pacientes e medicos se o banco estiver vazio
     @Override
     @Transactional
     public void run(String... args) {
@@ -63,13 +64,12 @@ public class DevSeedRunner implements CommandLineRunner {
             return;
         }
 
-        // Convenios primeiro: pacientes e medicos abaixo referenciam estes registros.
         HealthPlan unimed = healthPlan("Unimed", true);
         HealthPlan bradesco = healthPlan("Bradesco Saude", true);
         HealthPlan sulAmerica = healthPlan("SulAmerica", true);
         HealthPlan amil = healthPlan("Amil", true);
         HealthPlan notreDame = healthPlan("NotreDame Intermedica", true);
-        // Inativo de proposito: prova a filtragem de GET /api/health-plans vs /api/admin/health-plans.
+        // inativo de proposito, para testar a listagem de ativos
         HealthPlan portoSeguro = healthPlan("Porto Seguro", false);
 
         Specialty cardiologia = specialty("Cardiologia", "Coracao e sistema circulatorio",
@@ -89,8 +89,7 @@ public class DevSeedRunner implements CommandLineRunner {
                 "11900000000", LocalDate.of(1985, 3, 12), Role.ADMIN, null);
         userRepository.save(admin);
 
-        // Um paciente particular e dois com convenios distintos: sem essa mistura a validacao
-        // de pagamento da fase 05 nunca chega a ser exercitada.
+        // um paciente particular e dois com convenios diferentes
         patient("Mariana Alves", "mariana@teste.com", "11111111111", "11911111111",
                 LocalDate.of(1992, 7, 4), null);
         patient("Bruno Cardoso", "bruno@teste.com", "22222222222", "11922222222",
@@ -117,7 +116,7 @@ public class DevSeedRunner implements CommandLineRunner {
                 LocalTime.of(7, 0), LocalTime.of(13, 0), WEEKDAYS, 30, 20,
                 Set.of(pediatria, clinicaGeral), Set.of(unimed));
 
-        // Mantem Porto Seguro (inativo) em acceptedPlans: desativar o convenio nao limpa quem o referencia.
+        // aceita convenio inativo: desativar nao limpa quem ja referencia
         doctor("Marcelo Tavares", "marcelo.tavares@teste.com", "10000000004", "11940000004",
                 "456789", "SP", "Ortopedia com foco em joelho e quadril.",
                 "Campinas", "SP", "Av. Norte-Sul, 450 - Cambui",
@@ -132,7 +131,7 @@ public class DevSeedRunner implements CommandLineRunner {
                 Set.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY), 40, 20,
                 Set.of(ginecologia), Set.of(sulAmerica, unimed));
 
-        // Unico sem convenio nenhum: so atende particular.
+        // sem convenio, so atende particular
         doctor("Rafael Monteiro", "rafael.monteiro@teste.com", "10000000006", "11940000006",
                 "678901", "SP", "Neurologia clinica, cefaleia e epilepsia.",
                 "Sao Paulo", "SP", "Rua Haddock Lobo, 585 - Cerqueira Cesar",

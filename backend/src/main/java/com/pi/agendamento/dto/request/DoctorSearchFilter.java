@@ -2,7 +2,7 @@ package com.pi.agendamento.dto.request;
 
 import java.util.UUID;
 
-// Filtros de GET /api/doctors. Todos opcionais e combinaveis.
+// filtros opcionais da busca de medicos
 public record DoctorSearchFilter(
         String name,
         UUID specialtyId,

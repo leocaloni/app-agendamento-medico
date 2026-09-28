@@ -29,7 +29,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//Entidade medico, 1-1 com usuario, 1-N com especialidade, 1-N com convenio
+// perfil de medico, ligado 1-1 ao usuario
 @Entity
 @Table(
         name = "doctor",
@@ -104,19 +104,23 @@ public class Doctor {
 
     private Set<HealthPlan> acceptedPlans = new HashSet<>();
 
+    // indica se o medico atende no dia da semana da data
     public boolean worksOn(LocalDate date) {
         return workDays.contains(date.getDayOfWeek());
     }
 
+    // duracao em minutos para o tipo de consulta
     public int durationFor(AppointmentType type) {
         return type == AppointmentType.RETORNO ? returnDurationMin : firstVisitDurationMin;
     }
 
+    // indica se o medico atende a especialidade
     public boolean hasSpecialty(UUID specialtyId) {
         return specialties.stream()
                 .anyMatch(specialty -> specialty.getId().equals(specialtyId));
     }
 
+    // indica se o medico aceita o convenio
     public boolean acceptsPlan(UUID healthPlanId) {
         return acceptedPlans.stream()
                 .anyMatch(healthPlan -> healthPlan.getId().equals(healthPlanId));

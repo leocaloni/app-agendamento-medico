@@ -14,6 +14,7 @@ import com.pi.agendamento.exception.ConflictException;
 import com.pi.agendamento.exception.ResourceNotFoundException;
 import com.pi.agendamento.repository.SpecialtyRepository;
 
+// catalogo de especialidades
 @Service
 public class SpecialtyService {
 
@@ -23,6 +24,7 @@ public class SpecialtyService {
         this.specialtyRepository = specialtyRepository;
     }
 
+    // lista as especialidades ativas
     @Transactional(readOnly = true)
     public List<SpecialtyResponse> listActive() {
         return specialtyRepository.findByActiveTrueOrderByNameAsc().stream()
@@ -30,6 +32,7 @@ public class SpecialtyService {
                 .toList();
     }
 
+    // lista todas, inclusive inativas
     @Transactional(readOnly = true)
     public List<SpecialtyResponse> listAll() {
         return specialtyRepository.findAllByOrderByNameAsc().stream()
@@ -37,11 +40,13 @@ public class SpecialtyService {
                 .toList();
     }
 
+    // busca especialidade por id
     @Transactional(readOnly = true)
     public SpecialtyResponse getById(UUID id) {
         return SpecialtyResponse.from(load(id));
     }
 
+    // cria especialidade com nome unico
     @Transactional
     public SpecialtyResponse create(SpecialtyRequest request) {
         String name = request.name().trim();
@@ -55,7 +60,7 @@ public class SpecialtyService {
         return SpecialtyResponse.from(specialtyRepository.save(specialty));
     }
 
-    // PUT tambem reativa: uma especialidade desativada volta a ficar ativa ao ser atualizada.
+    // atualiza especialidade; tambem reativa se estava inativa
     @Transactional
     public SpecialtyResponse update(UUID id, SpecialtyRequest request) {
         Specialty specialty = load(id);
@@ -69,7 +74,7 @@ public class SpecialtyService {
         return SpecialtyResponse.from(specialty);
     }
 
-    // Delete logico: medicos e consultas ja vinculados mantem a FK.
+    // desativa sem apagar, para manter os vinculos existentes
     @Transactional
     public void deactivate(UUID id) {
         load(id).setActive(false);
