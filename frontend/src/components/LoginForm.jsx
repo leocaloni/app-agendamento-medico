@@ -3,7 +3,7 @@ import LoginButton from './LoginButton.jsx'
 import LoginField from './LoginField.jsx'
 import SocialLoginButton from './SocialLoginButton.jsx'
 
-export default function LoginForm({ onSubmit }) {
+export default function LoginForm({ onSubmit, onRegister }) {
   return (
     <form
       className="login-form"
@@ -48,7 +48,7 @@ export default function LoginForm({ onSubmit }) {
       </div>
 
       <p className="signup-prompt">
-        Não tem conta? <button className="login-text-button" type="button">Cadastre-se</button>
+        Não tem conta? <button className="login-text-button" type="button" onClick={onRegister}>Cadastre-se</button>
       </p>
     </form>
   )

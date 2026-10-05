@@ -1,0 +1,22 @@
+.cadastro-layout { grid-template-columns: 1fr 1fr; }
+.cadastro-promo { padding-right: clamp(42px, 6vw, 90px); padding-left: clamp(42px, 6vw, 90px); }
+.cadastro-panel { padding-top: 30px; padding-bottom: 30px; }
+.cadastro-content { width: min(100%, 390px); }
+.cadastro-panel h2 { margin-bottom: 3px; }
+.cadastro-intro { margin: 0 0 17px; color: #5b7690; font-size: 11px; }
+.cadastro-form { gap: 10px; }
+.cadastro-form .login-input-wrap { min-height: 43px; }
+.cadastro-login-prompt { margin-top: 16px; }
+
+@media (max-width: 760px) {
+  .cadastro-layout { min-height: 100vh; }
+  .cadastro-page .login-mobile-header { min-height: 174px; }
+  .cadastro-panel { padding-top: 21px; }
+  .cadastro-intro { margin-bottom: 13px; }
+  .cadastro-form { gap: 9px; }
+  .cadastro-form .login-input-wrap { min-height: 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cadastro-page * { transition-duration: .01ms !important; }
+}
