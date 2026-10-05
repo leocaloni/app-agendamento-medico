@@ -2,7 +2,7 @@ import LoginForm from '../components/LoginForm.jsx'
 import TervisBrand from '../components/TervisBrand.jsx'
 import './login.css'
 
-export default function Login() {
+export default function Login({ onLogin }) {
   return (
     <main className="login-page">
       <div className="login-layout">
@@ -23,7 +23,7 @@ export default function Login() {
           <div className="login-panel-content">
             <TervisBrand className="login-form-brand" />
             <h2 id="login-heading">Entre na sua conta</h2><br />
-            <LoginForm />
+            <LoginForm onSubmit={onLogin} />
             <p className="login-terms">Ao continuar, você concorda com nossos termos de uso e política de privacidade.</p>
           </div>
         </section>

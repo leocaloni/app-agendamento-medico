@@ -59,13 +59,6 @@ export default function Navbar() {
         ))}
       </nav>
 
-      <div className="navbar-user">
-        <span className="navbar-user-avatar" aria-hidden="true">AS</span>
-        <span className="navbar-user-info">
-          <strong>Ana Souza</strong>
-          <span>Paciente</span>
-        </span>
-      </div>
     </aside>
   )
 }

@@ -1,0 +1,71 @@
+.patient-app {
+  min-height: 100vh;
+  color: #3a5a78;
+  background: #f7fafe;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.patient-home {
+  width: min(100%, 1120px);
+  min-height: calc(100vh - 68px);
+  margin: 0 auto;
+  padding: 42px 32px;
+}
+
+.patient-home-heading { margin-bottom: 24px; }
+.patient-home-heading p { margin: 0 0 7px; color: #5aa9f0; font-size: 10px; font-weight: 600; }
+.patient-home-heading h1 { margin: 0; color: #3a5a78; font-size: 23px; font-weight: 500; }
+
+.patient-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.patient-shortcut {
+  display: flex;
+  min-width: 0;
+  min-height: 104px;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e9f1fa;
+  border-radius: 8px;
+  color: #3a5a78;
+  background: #fff;
+  font: 500 13px 'Poppins', sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .16s ease, transform .16s ease;
+}
+
+.patient-shortcut:hover { border-color: #5aa9f0; transform: translateY(-2px); }
+.patient-shortcut:focus-visible { outline: 3px solid rgba(90, 169, 240, .35); outline-offset: 2px; }
+
+.patient-shortcut-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 10px;
+}
+
+.tone-blue { color: #3a6a9e; background: #eaf4fe; }
+.tone-mint { color: #2c7a66; background: #ddf3ee; }
+.tone-coral { color: #c25a38; background: #fff4e8; }
+.tone-rose { color: #b45d56; background: #fdeee7; }
+
+@media (max-width: 760px) {
+  .patient-home { min-height: calc(100vh - 64px); padding: 30px 18px; }
+  .patient-home-heading { margin-bottom: 18px; }
+  .patient-home-heading h1 { font-size: 20px; }
+  .patient-shortcuts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .patient-shortcut { min-height: 96px; flex-direction: column; align-items: flex-start; gap: 9px; padding: 12px; font-size: 11px; }
+  .patient-shortcut-icon { width: 36px; height: 36px; border-radius: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .patient-shortcut { transition-duration: .01ms; }
+}

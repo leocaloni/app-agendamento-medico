@@ -3,9 +3,15 @@ import LoginButton from './LoginButton.jsx'
 import LoginField from './LoginField.jsx'
 import SocialLoginButton from './SocialLoginButton.jsx'
 
-export default function LoginForm() {
+export default function LoginForm({ onSubmit }) {
   return (
-    <form className="login-form" onSubmit={(event) => event.preventDefault()}>
+    <form
+      className="login-form"
+      onSubmit={(event) => {
+        event.preventDefault()
+        onSubmit?.()
+      }}
+    >
       <LoginField
         id="email"
         label="E-mail"
@@ -27,7 +33,7 @@ export default function LoginForm() {
         Esqueci minha senha
       </button>
 
-      <LoginButton className="login-submit">Entrar</LoginButton>
+      <LoginButton className="login-submit" type="submit">Entrar</LoginButton>
 
       <div className="social-login-section">
         <div className="login-divider" aria-hidden="true">
