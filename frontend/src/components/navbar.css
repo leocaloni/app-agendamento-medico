@@ -1,0 +1,187 @@
+.app-navbar {
+  --nav-blue: #5aa9f0;
+  --nav-blue-dark: #3a5a78;
+  --nav-blue-bg: #eaf4fe;
+  --nav-mint-bg: #ddf3ee;
+  --nav-mint-text: #2c7a66;
+  --nav-line: #e9f1fa;
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  width: 100%;
+  height: 68px;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px clamp(18px, 3vw, 40px);
+  border-bottom: 1px solid var(--nav-line);
+  color: var(--nav-blue-dark);
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 28px 0 0;
+  color: var(--nav-blue-dark);
+  font: 600 21px 'Josefin Sans', sans-serif;
+}
+
+.navbar-brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 11px;
+  color: #fff;
+  background: var(--nav-blue);
+}
+
+.navbar-caption {
+  display: none;
+  color: #93a5b8;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.navbar-menu {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.navbar-toggle { display: none; }
+.navbar-overlay { display: none; }
+
+.navbar-item {
+  display: flex;
+  min-width: 0;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 9px;
+  color: #5b7690;
+  background: transparent;
+  font: 500 11px 'Poppins', sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: color .16s ease, background .16s ease;
+}
+
+.navbar-item:hover { background: #f5f9fe; }
+.navbar-item.is-active { color: #3a6a9e; background: var(--nav-blue-bg); }
+.navbar-item-icon { flex: 0 0 auto; color: var(--nav-blue); }
+.navbar-item-label { min-width: 0; }
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 22px;
+  padding-left: 20px;
+  border-left: 1px solid var(--nav-line);
+}
+
+.navbar-user-avatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nav-mint-text);
+  background: var(--nav-mint-bg);
+  font: 600 12px 'Josefin Sans', sans-serif;
+}
+
+.navbar-user-info { display: grid; gap: 2px; font-size: 10px; }
+.navbar-user-info strong { color: var(--nav-blue-dark); font-size: 11px; font-weight: 500; }
+.navbar-user-info span { color: #93a5b8; }
+
+@media (max-width: 980px) and (min-width: 761px) {
+  .navbar-brand { padding-right: 12px; }
+  .navbar-user { display: none; }
+  .navbar-menu { gap: 2px; }
+  .navbar-item { gap: 5px; padding: 0 7px; font-size: 10px; }
+}
+
+@media (max-width: 760px) {
+  .app-navbar {
+    height: 64px;
+    justify-content: space-between;
+    padding: 8px 18px;
+  }
+
+  .navbar-brand { padding: 0; }
+  .navbar-caption, .navbar-user { display: none; }
+  .navbar-toggle {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--nav-line);
+    border-radius: 10px;
+    color: var(--nav-blue-dark);
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .navbar-menu, .navbar-menu.is-open {
+    position: fixed;
+    z-index: 2;
+    top: 64px;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    display: flex;
+    width: min(290px, calc(100vw - 56px));
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 16px 14px;
+    border-left: 1px solid var(--nav-line);
+    background: #fff;
+    box-shadow: -12px 0 24px rgba(30, 50, 80, .12);
+    transform: translateX(105%);
+    visibility: hidden;
+    transition: transform .2s ease, visibility .2s ease;
+  }
+
+  .navbar-menu.is-open { transform: translateX(0); visibility: visible; }
+  .navbar-overlay {
+    position: fixed;
+    z-index: 1;
+    inset: 64px 0 0;
+    display: block;
+    border: 0;
+    background: rgba(36, 53, 72, .32);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+
+  .navbar-overlay.is-open { opacity: 1; pointer-events: auto; visibility: visible; }
+  .navbar-item {
+    min-height: 44px;
+    gap: 11px;
+    padding: 0 11px;
+    font-size: 12px;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar-item, .navbar-menu, .navbar-overlay { transition-duration: .01ms; }
+}
