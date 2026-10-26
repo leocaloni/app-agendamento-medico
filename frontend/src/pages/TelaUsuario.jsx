@@ -9,14 +9,15 @@ const shortcuts = [
   { label: 'Avaliações', Icon: Star, tone: 'rose' },
 ]
 
-export default function TelaUsuario() {
+export default function TelaUsuario({ user, onLogout }) {
+  const firstName = user?.firstName?.trim() || user?.fullName?.trim().split(/\s+/)[0]
+
   return (
     <div className="patient-app">
-      <Navbar />
+      <Navbar user={user} onLogout={onLogout} />
       <main className="patient-home">
         <header className="patient-home-heading">
-          <p>ÁREA DO PACIENTE</p>
-          <h1>Como podemos ajudar?</h1>
+          <h1>Como podemos ajudar{firstName ? `, ${firstName}` : ''}?</h1>
         </header>
 
         <nav className="patient-shortcuts" aria-label="Ações do paciente">

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, FileText, Heart, House, Menu, Search, Star, X } from 'lucide-react'
+import { CalendarDays, ChevronDown, FileText, Heart, House, LogOut, Menu, Search, Star, X } from 'lucide-react'
 import './navbar.css'
 
 const items = [
@@ -10,9 +10,13 @@ const items = [
   { id: 'avaliacoes', label: 'Avaliações', Icon: Star },
 ]
 
-export default function Navbar() {
+export default function Navbar({ user, onLogout }) {
   const [activeItem, setActiveItem] = useState('inicio')
   const [isOpen, setIsOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const fullName = user?.fullName || 'Paciente'
+  const displayName = user?.firstName?.trim() || fullName.trim().split(/\s+/)[0] || 'Paciente'
+  const initials = displayName[0]?.toUpperCase() || 'P'
 
   return (
     <aside className="app-navbar" aria-label="Navegação principal">
@@ -59,6 +63,33 @@ export default function Navbar() {
         ))}
       </nav>
 
+      <div className="navbar-account">
+        <button
+          className="navbar-user"
+          type="button"
+          aria-expanded={isProfileOpen}
+          aria-haspopup="menu"
+          aria-controls="navbar-account-menu"
+          onClick={() => setIsProfileOpen((open) => !open)}
+        >
+          <span className="navbar-user-avatar" aria-hidden="true">{initials}</span>
+          <span className="navbar-user-info"><strong>{displayName}</strong></span>
+          <ChevronDown className="navbar-user-chevron" size={15} aria-hidden="true" />
+        </button>
+        {isProfileOpen && (
+          <div className="navbar-account-menu" id="navbar-account-menu" role="menu">
+            <button
+              className="navbar-logout"
+              type="button"
+              role="menuitem"
+              onClick={onLogout}
+            >
+              <LogOut size={16} aria-hidden="true" />
+              <span>Sair da conta</span>
+            </button>
+          </div>
+        )}
+      </div>
     </aside>
   )
 }
