@@ -9,12 +9,12 @@ const shortcuts = [
   { label: 'Avaliações', Icon: Star, tone: 'rose' },
 ]
 
-export default function TelaUsuario({ user, onLogout }) {
+export default function TelaUsuario({ user, onLogout, onNavigate }) {
   const firstName = user?.firstName?.trim() || user?.fullName?.trim().split(/\s+/)[0]
 
   return (
     <div className="patient-app">
-      <Navbar user={user} onLogout={onLogout} />
+      <Navbar user={user} onLogout={onLogout} onNavigate={onNavigate} />
       <main className="patient-home">
         <header className="patient-home-heading">
           <h1>Como podemos ajudar{firstName ? `, ${firstName}` : ''}?</h1>
@@ -22,7 +22,8 @@ export default function TelaUsuario({ user, onLogout }) {
 
         <nav className="patient-shortcuts" aria-label="Ações do paciente">
           {shortcuts.map(({ label, Icon, tone }) => (
-            <button className="patient-shortcut" type="button" key={label}>
+            <button className="patient-shortcut" type="button" key={label}
+              onClick={label === 'Buscar médico' ? () => onNavigate?.('buscar') : undefined}>
               <span className={`patient-shortcut-icon tone-${tone}`}>
                 <Icon size={21} strokeWidth={1.9} />
               </span>

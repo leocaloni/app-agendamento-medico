@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Cadastro from './Cadastro.jsx'
+import DoctorSearch from './DoctorSearch.jsx'
 import Login from './Login.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
 
@@ -24,7 +25,23 @@ export default function Index() {
   }
 
   if (pagina === 'usuario') {
-    return <TelaUsuario user={user} onLogout={handleLogout} />
+    return (
+      <TelaUsuario
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : 'usuario')}
+      />
+    )
+  }
+
+  if (pagina === 'buscar-medico') {
+    return (
+      <DoctorSearch
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : 'usuario')}
+      />
+    )
   }
 
   return (

@@ -10,7 +10,7 @@ const items = [
   { id: 'avaliacoes', label: 'Avaliações', Icon: Star },
 ]
 
-export default function Navbar({ user, onLogout }) {
+export default function Navbar({ user, onLogout, onNavigate }) {
   const [activeItem, setActiveItem] = useState('inicio')
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -55,6 +55,7 @@ export default function Navbar({ user, onLogout }) {
             onClick={() => {
               setActiveItem(id)
               setIsOpen(false)
+              onNavigate?.(id)
             }}
           >
             <Icon className="navbar-item-icon" size={19} strokeWidth={1.9} />
