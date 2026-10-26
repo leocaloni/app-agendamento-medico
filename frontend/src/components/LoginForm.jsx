@@ -6,7 +6,7 @@ import SocialLoginButton from './SocialLoginButton.jsx'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
-export default function LoginForm({ onSubmit, onRegister }) {
+export default function LoginForm({ onSubmit, onRegister, expectedRole = 'PATIENT', showRegister = true }) {
   const [credentials, setCredentials] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,8 +36,9 @@ export default function LoginForm({ onSubmit, onRegister }) {
       if (!response.ok) {
         throw new Error(data?.message || 'E-mail ou senha inválidos.')
       }
-      if (data?.user?.role !== 'PATIENT') {
-        throw new Error('Esta área de acesso é exclusiva para pacientes.')
+      if (data?.user?.role !== expectedRole) {
+        const expectedRoleLabel = expectedRole === 'ADMIN' ? 'administradores' : 'pacientes'
+        throw new Error(`Esta área de acesso é exclusiva para ${expectedRoleLabel}.`)
       }
 
       onSubmit?.(data)
@@ -97,9 +98,11 @@ export default function LoginForm({ onSubmit, onRegister }) {
         </div>
       </div>
 
-      <p className="signup-prompt">
-        Não tem conta? <button className="login-text-button" type="button" onClick={onRegister}>Cadastre-se</button>
-      </p>
+      {showRegister && (
+        <p className="signup-prompt">
+          Não tem conta? <button className="login-text-button" type="button" onClick={onRegister}>Cadastre-se</button>
+        </p>
+      )}
     </form>
   )
 }

@@ -1,0 +1,75 @@
+.admin-doctors-page { min-height: 100vh; color: #314d69; background: #f6f9fc; font-family: 'DM Sans', sans-serif; }
+.admin-doctors-header { display: flex; min-height: 66px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 52px); border-bottom: 1px solid #e5edf4; background: #fff; }
+.admin-doctors-brand { display: inline-flex; align-items: center; gap: 9px; color: #314d69; font: 600 21px 'Josefin Sans', sans-serif; }
+.admin-doctors-brand > span { display: grid; width: 33px; height: 33px; place-items: center; border-radius: 10px; color: #fff; background: #5aa9f0; }
+.admin-doctors-account { display: flex; align-items: center; gap: 11px; color: #5b7690; font-size: 12px; }
+.admin-doctors-logout { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid #e5edf4; border-radius: 7px; color: #5b7690; background: #fff; cursor: pointer; }
+.admin-doctors-content { width: min(100% - 36px, 900px); margin: 0 auto; padding: 25px 0 56px; }
+.admin-back-button { display: inline-flex; align-items: center; gap: 7px; padding: 0; border: 0; color: #5a91bf; background: transparent; font: 500 12px 'DM Sans', sans-serif; cursor: pointer; }
+.login-admin-entry { margin-top: 10px; }
+.admin-doctors-title { display: flex; align-items: center; gap: 13px; margin: 23px 0 28px; }
+.admin-doctors-title-icon { display: grid; width: 44px; height: 44px; flex: 0 0 auto; place-items: center; border-radius: 10px; color: #31856d; background: #e2f3ed; }
+.admin-section-kicker { margin: 0 0 4px; color: #31856d; font-size: 10px; font-weight: 700; }
+.admin-doctors-title h1, .admin-doctor-success h1 { margin: 0; color: #314d69; font-size: 23px; font-weight: 600; }
+.admin-doctors-title div > p:last-child { margin: 5px 0 0; color: #72869a; font-size: 12px; }
+.admin-doctor-form { padding: 0 24px; border: 1px solid #e5edf4; border-radius: 8px; background: #fff; }
+.admin-form-section { padding: 22px 0 24px; border-bottom: 1px solid #eaf0f5; }
+.admin-form-section h2 { margin: 0 0 16px; color: #314d69; font-size: 14px; font-weight: 600; }
+.admin-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 18px; }
+.admin-field-wide { grid-column: 1 / -1; }
+.admin-form-field { display: grid; min-width: 0; gap: 6px; }
+.admin-form-label { color: #5b7185; font-size: 11px; font-weight: 500; }
+.admin-form-field input, .admin-form-field select, .admin-form-field textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid #dce6ef;
+  border-radius: 6px;
+  outline: 0;
+  color: #314d69;
+  background: #fff;
+  font: 400 12px 'DM Sans', sans-serif;
+}
+.admin-form-field textarea { resize: vertical; }
+.admin-form-field input:focus, .admin-form-field select:focus, .admin-form-field textarea:focus,
+.admin-search-input:focus-within { border-color: #80bce8; box-shadow: 0 0 0 3px rgba(36, 119, 200, .1); }
+.admin-multi-select { position: relative; display: grid; gap: 7px; }
+.admin-search-input { display: flex; min-height: 40px; align-items: center; gap: 9px; padding: 0 11px; border: 1px solid #dce6ef; border-radius: 6px; color: #438fca; background: #fff; }
+.admin-search-input input { width: 100%; min-width: 0; border: 0; outline: 0; color: #314d69; background: transparent; font: 400 12px 'DM Sans', sans-serif; }
+.admin-search-input input::placeholder { color: #93a5b8; }
+.admin-selected-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.admin-selected-option { display: inline-flex; min-height: 28px; align-items: center; gap: 6px; padding: 3px 4px 3px 9px; border: 1px solid #d6e8f6; border-radius: 5px; color: #365f7b; background: #eff7fc; font-size: 11px; }
+.admin-selected-option button { display: grid; width: 20px; height: 20px; place-items: center; border: 0; border-radius: 4px; color: #5b7690; background: transparent; cursor: pointer; }
+.admin-selected-option button:hover { color: #a13f42; background: #fff2f1; }
+.admin-search-options { position: absolute; z-index: 4; top: calc(100% - 21px); right: 0; left: 0; max-height: 190px; overflow: auto; padding: 4px; border: 1px solid #dce6ef; border-radius: 6px; background: #fff; box-shadow: 0 8px 20px rgba(36, 53, 72, .12); }
+.admin-search-option { display: block; width: 100%; padding: 8px 9px; border: 0; border-radius: 4px; color: #314d69; background: transparent; font: 400 12px 'DM Sans', sans-serif; text-align: left; cursor: pointer; }
+.admin-search-option:hover { background: #f1f7fc; }
+.admin-no-options { margin: 0; padding: 8px 9px; color: #8291a2; font-size: 11px; }
+.admin-plan-field { display: grid; gap: 12px; }
+.admin-checkbox-row, .admin-day-option { display: inline-flex; align-items: center; gap: 8px; color: #526c83; font-size: 12px; cursor: pointer; }
+.admin-checkbox-row input, .admin-day-option input { width: 16px; height: 16px; accent-color: #2477c8; }
+.admin-days-field { min-width: 0; margin: 0; padding: 0; border: 0; }
+.admin-days-field legend { margin-bottom: 9px; padding: 0; }
+.admin-days-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.admin-day-option { min-height: 33px; padding: 0 9px; border: 1px solid #e3ebf2; border-radius: 5px; background: #fff; font-size: 11px; }
+.admin-form-error { margin: 16px 0 0; color: #b44949; font-size: 12px; }
+.admin-form-actions { display: flex; justify-content: flex-end; gap: 9px; padding: 18px 0; }
+.admin-form-actions button, .admin-doctor-success button { min-height: 40px; padding: 0 16px; border: 1px solid transparent; border-radius: 6px; font: 600 12px 'DM Sans', sans-serif; cursor: pointer; }
+.admin-secondary-button { border-color: #dce6ef !important; color: #526c83; background: #fff; }
+.admin-primary-button { color: #fff; background: #2477c8; }
+.admin-primary-button:hover { background: #1c67ad; }
+.admin-primary-button:disabled { cursor: wait; opacity: .65; }
+.admin-doctor-success { display: grid; justify-items: start; gap: 12px; margin-top: 28px; padding: 30px; border: 1px solid #dcebe4; border-radius: 8px; background: #fff; }
+.admin-success-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; color: #287a5c; background: #e2f3ed; }
+.admin-doctor-success > p:not(.admin-section-kicker) { margin: 0 0 4px; color: #72869a; font-size: 13px; }
+
+@media (max-width: 640px) {
+  .admin-doctors-content { width: calc(100% - 28px); padding-top: 18px; }
+  .admin-doctor-form { padding: 0 14px; }
+  .admin-form-grid { grid-template-columns: minmax(0, 1fr); gap: 13px; }
+  .admin-field-wide { grid-column: auto; }
+  .admin-doctors-title h1 { font-size: 20px; }
+  .admin-form-actions { position: sticky; bottom: 0; margin: 0 -14px; padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #eaf0f5; background: #fff; }
+  .admin-form-actions button { flex: 1; }
+}
