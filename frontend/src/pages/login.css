@@ -41,11 +41,13 @@
 .login-input-wrap:focus-within { border-color: #a8d2f7; box-shadow: 0 0 0 3px rgba(90, 169, 240, .12); }
 .login-input-wrap input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--login-blue-dark); background: transparent; font: 400 12px 'Poppins', sans-serif; }
 .login-input-wrap input::placeholder { color: var(--login-muted); opacity: 1; }
+.login-error { margin: 0; color: #c82828; font-size: 12px; }
 .login-text-button { padding: 0; border: 0; color: var(--login-blue); background: transparent; font: 500 12px 'Poppins', sans-serif; cursor: pointer; }
 .login-text-button:hover { color: #348bd8; }
 .forgot-password { justify-self: end; margin-top: -3px; }
 .login-button { display: inline-flex; min-height: 47px; align-items: center; justify-content: center; padding: 0 18px; border: 0; border-radius: 99px; font: 500 14px 'Poppins', sans-serif; cursor: pointer; transition: background .16s ease, transform .16s ease; }
 .login-button:active { transform: scale(.99); }
+.login-button:disabled { cursor: wait; opacity: .7; }
 .login-submit { width: 100%; color: #fff; background: var(--login-blue); }
 .login-submit:hover { background: #4699e4; }
 .social-login-section { display: none; }

@@ -1,5 +1,6 @@
 export default function LoginField({
   id,
+  name,
   label,
   type,
   placeholder,
@@ -10,6 +11,11 @@ export default function LoginField({
   maxLength,
   pattern,
   inputMode,
+  value,
+  onChange,
+  min,
+  max,
+  step,
 }) {
   function setValidationMessage(event) {
     const input = event.currentTarget
@@ -23,6 +29,8 @@ export default function LoginField({
       input.setCustomValidity('Informe os 11 números do CPF, sem pontuação.')
     } else if (validity.tooShort) {
       input.setCustomValidity(`Digite pelo menos ${input.minLength} caracteres.`)
+    } else if (validity.rangeUnderflow && input.min) {
+      input.setCustomValidity(`Valor mínimo permitido: ${input.min}.`)
     } else {
       input.setCustomValidity('')
     }
@@ -39,7 +47,7 @@ export default function LoginField({
         <Icon size={17} strokeWidth={1.8} aria-hidden="true" />
         <input
           id={id}
-          name={id}
+          name={name ?? id}
           type={type}
           placeholder={placeholder}
           autoComplete={autoComplete}
@@ -48,6 +56,11 @@ export default function LoginField({
           maxLength={maxLength}
           pattern={pattern}
           inputMode={inputMode}
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={onChange}
           onInvalid={setValidationMessage}
           onInput={clearValidationMessage}
         />

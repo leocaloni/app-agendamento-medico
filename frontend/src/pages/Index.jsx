@@ -6,6 +6,11 @@ import TelaUsuario from './TelaUsuario.jsx'
 export default function Index() {
   const [pagina, setPagina] = useState('login')
 
+  function handleLogin(authResponse) {
+    localStorage.setItem('authToken', authResponse.token)
+    setPagina('usuario')
+  }
+
   if (pagina === 'cadastro') {
     return <Cadastro onVoltar={() => setPagina('login')} />
   }
@@ -14,7 +19,7 @@ export default function Index() {
 
   return (
     <Login
-      onLogin={() => setPagina('usuario')}
+      onLogin={handleLogin}
       onRegister={() => setPagina('cadastro')}
     />
   )
