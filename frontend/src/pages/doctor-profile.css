@@ -1,0 +1,52 @@
+.doctor-profile-app { min-height: 100vh; background: #f7fafe; }
+.doctor-profile-page { width: min(100% - 48px, 1080px); margin: 0 auto; padding: 28px 0 52px; color: #3a5a78; font-family: 'Poppins', sans-serif; }
+.doctor-profile-back { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; color: #5b7690; background: transparent; font: 500 12px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-profile-heading { display: flex; align-items: center; gap: 16px; margin: 23px 0 20px; padding: 20px; border: 1px solid #e6eef5; border-radius: 8px; background: #fff; }
+.doctor-profile-avatar { display: grid; width: 64px; height: 64px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #2c7a66; background: #ddf3ee; font: 600 18px 'Josefin Sans', sans-serif; }
+.doctor-profile-identity { flex: 1; min-width: 0; }
+.doctor-profile-identity h1 { margin: 0; color: #314d69; font-size: 19px; font-weight: 500; }
+.doctor-profile-identity p { margin: 5px 0 0; color: #5b7690; font-size: 11px; }
+.doctor-profile-identity > span { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: #71869b; font-size: 10px; }
+.doctor-profile-rating { display: flex; align-items: center; gap: 5px; color: #d5953d; white-space: nowrap; }
+.doctor-profile-rating strong { color: #4f6172; font-size: 13px; }
+.doctor-profile-rating span { color: #8295a7; font-size: 10px; }
+.doctor-profile-bio { margin: 0 0 18px; color: #5b7690; font-size: 12px; line-height: 1.65; }
+.doctor-profile-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr); align-items: start; gap: 16px; }
+.doctor-profile-section, .appointment-form { padding: 18px; border: 1px solid #e6eef5; border-radius: 8px; background: #fff; }
+.doctor-profile-section h2, .appointment-form h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 15px; color: #314d69; font-size: 14px; font-weight: 500; }
+.doctor-profile-section h2 svg { color: #438fca; }
+.appointment-date-list { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 7px; }
+.appointment-date, .appointment-time { min-height: 37px; flex: 0 0 auto; padding: 0 11px; border: 1px solid #dce6ef; border-radius: 6px; color: #536d83; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+.appointment-date.is-selected, .appointment-time.is-selected { border-color: #438fca; color: #fff; background: #438fca; }
+.appointment-time-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.appointment-form { display: grid; gap: 13px; }
+.appointment-form h2 { margin-bottom: 0; }
+.appointment-form label { display: grid; gap: 6px; color: #5b7690; font-size: 10px; }
+.appointment-form select, .appointment-form textarea { width: 100%; min-height: 39px; padding: 9px 10px; border: 1px solid #dce6ef; border-radius: 6px; outline: 0; color: #3a5a78; background: #fff; font: 400 11px 'Poppins', sans-serif; }
+.appointment-form select:focus, .appointment-form textarea:focus { border-color: #80bce8; box-shadow: 0 0 0 3px rgba(36, 119, 200, .1); }
+.appointment-form textarea { resize: vertical; }
+.appointment-selected-summary { display: flex; align-items: center; gap: 6px; margin: 0; color: #317e68; font-size: 11px; }
+.appointment-submit, .appointment-confirmation button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: 0; border-radius: 6px; color: #fff; background: #438fca; font: 500 12px 'Poppins', sans-serif; cursor: pointer; }
+.appointment-submit:hover, .appointment-confirmation button:hover { background: #317eb8; }
+.appointment-submit:disabled { cursor: wait; opacity: .6; }
+.appointment-payment-note { margin-top: -7px; color: #8295a7; font-size: 9px; line-height: 1.5; }
+.doctor-profile-state, .doctor-profile-error { margin: 16px 0; padding: 14px; border: 1px solid #e6eef5; border-radius: 7px; color: #71869b; background: #fff; font-size: 12px; }
+.doctor-profile-error { border-color: #f0d2d0; color: #a13f42; background: #fff8f7; }
+.appointment-confirmation { display: grid; justify-items: start; gap: 10px; max-width: 540px; margin: 50px auto; padding: 26px; border: 1px solid #dcebe4; border-radius: 8px; background: #fff; }
+.appointment-confirmation-icon { display: grid; width: 46px; height: 46px; place-items: center; border-radius: 50%; color: #287a5c; background: #e2f3ed; }
+.appointment-confirmation > p { margin: 2px 0 0; color: #31856d; font-size: 10px; font-weight: 600; }
+.appointment-confirmation h1 { margin: 0; color: #314d69; font-size: 20px; font-weight: 500; }
+.appointment-confirmation > span { color: #5b7690; font-size: 12px; }
+.appointment-confirmation small { margin-bottom: 5px; color: #8295a7; font-size: 10px; line-height: 1.55; }
+
+@media (max-width: 760px) {
+  .doctor-profile-page { width: calc(100% - 32px); padding-top: 20px; }
+  .doctor-profile-heading { align-items: flex-start; flex-wrap: wrap; gap: 11px; padding: 14px; }
+  .doctor-profile-avatar { width: 50px; height: 50px; font-size: 15px; }
+  .doctor-profile-identity { width: calc(100% - 65px); }
+  .doctor-profile-identity h1 { font-size: 16px; }
+  .doctor-profile-rating { margin-left: 61px; }
+  .doctor-profile-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .doctor-profile-section, .appointment-form { padding: 14px; }
+  .appointment-confirmation { margin: 24px auto; padding: 20px; }
+}

@@ -1,0 +1,15 @@
+.doctor-home-page { min-height: 100vh; color: #3a5a78; background: #f7fafe; font-family: 'Poppins', sans-serif; }
+.doctor-home-header { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 40px); border-bottom: 1px solid #e9f1fa; background: #fff; }
+.doctor-home-logout { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 0 11px; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-home-content { width: min(100% - 40px, 1080px); margin: 0 auto; padding: 48px 0; }
+.doctor-home-content p { margin: 0 0 8px; color: #438fca; font-size: 10px; font-weight: 600; }
+.doctor-home-content h1 { margin: 0 0 8px; color: #314d69; font-size: 24px; font-weight: 500; }
+.doctor-home-content > span { color: #71869b; font-size: 13px; }
+
+@media (max-width: 600px) {
+  .doctor-home-header { min-height: 62px; padding: 8px 16px; }
+  .doctor-home-logout { width: 38px; justify-content: center; padding: 0; }
+  .doctor-home-logout span { display: none; }
+  .doctor-home-content { width: calc(100% - 32px); padding-top: 32px; }
+  .doctor-home-content h1 { font-size: 20px; }
+}

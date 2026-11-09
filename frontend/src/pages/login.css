@@ -50,9 +50,12 @@
 .login-button:disabled { cursor: wait; opacity: .7; }
 .login-submit { width: 100%; color: #fff; background: var(--login-blue); }
 .login-submit:hover { background: #4699e4; }
+.login-role-button { width: 100%; min-height: 43px; gap: 8px; margin-top: 2px; border: 1px solid #dce8f3; color: var(--login-blue-dark); background: #fff; font-size: 12px; }
+.login-role-button:hover { border-color: #a8d2f7; background: #f7fbff; }
 .social-login-section { display: none; }
 .signup-prompt { margin: 2px 0 0; color: var(--login-secondary); font-size: 12px; text-align: center; }
 .signup-prompt .login-text-button { margin-left: 2px; }
+.login-role-switch { margin-top: 10px; }
 .login-terms { margin: 25px 0 0; color: var(--login-muted); font-size: 10px; line-height: 1.6; text-align: center; }
 
 @media (max-width: 760px) {

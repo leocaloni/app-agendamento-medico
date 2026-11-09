@@ -1,8 +1,14 @@
+import { useState } from 'react'
+import { Stethoscope, UserRound } from 'lucide-react'
 import LoginForm from '../components/LoginForm.jsx'
+import LoginButton from '../components/LoginButton.jsx'
 import TervisBrand from '../components/TervisBrand.jsx'
 import './login.css'
 
 export default function Login({ onLogin, onRegister }) {
+  const [accessRole, setAccessRole] = useState('PATIENT')
+  const isDoctorLogin = accessRole === 'DOCTOR'
+
   return (
     <main className="login-page">
       <div className="login-layout">
@@ -22,8 +28,21 @@ export default function Login({ onLogin, onRegister }) {
         <section className="login-panel" aria-labelledby="login-heading">
           <div className="login-panel-content">
             <TervisBrand className="login-form-brand" />
-            <h2 id="login-heading">Entre na sua conta</h2><br />
-            <LoginForm onSubmit={onLogin} onRegister={onRegister} />
+            <h2 id="login-heading">{isDoctorLogin ? 'Acesso médico' : 'Entre na sua conta'}</h2><br />
+            <LoginForm
+              onSubmit={onLogin}
+              onRegister={onRegister}
+              expectedRole={accessRole}
+              showRegister={!isDoctorLogin}
+            />
+            <LoginButton
+              className="login-role-button"
+              type="button"
+              onClick={() => setAccessRole(isDoctorLogin ? 'PATIENT' : 'DOCTOR')}
+            >
+              {isDoctorLogin ? <UserRound size={17} aria-hidden="true" /> : <Stethoscope size={17} aria-hidden="true" />}
+              {isDoctorLogin ? 'Voltar para acesso de paciente' : 'Acesso para médicos'}
+            </LoginButton>
             <p className="login-terms">Ao continuar, você concorda com nossos termos de uso e política de privacidade.</p>
           </div>
         </section>

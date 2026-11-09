@@ -33,6 +33,8 @@
 .doctor-result-tag, .doctor-result-particular { padding: 4px 8px; border-radius: 4px; color: #3a6a9e; background: #eaf4fe; font-size: 9px; }
 .doctor-result-particular { color: #2c7a66; background: #ddf3ee; }
 .doctor-detail-note { color: #8295a7; font-size: 9px; white-space: nowrap; }
+.doctor-view-profile { min-height: 33px; margin-top: 12px; padding: 0 10px; border: 1px solid #dce8f3; border-radius: 5px; color: #3a6a9e; background: #fff; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-view-profile:hover { border-color: #80bce8; background: #f7fbff; }
 .doctor-search-state, .doctor-search-error { margin: 18px 0; padding: 15px; border: 1px solid #e6eef5; border-radius: 7px; color: #71869b; background: #fff; font-size: 12px; }
 .doctor-search-error { border-color: #f0d2d0; color: #a13f42; background: #fff8f7; }
 .doctor-search-empty-icon { display: none; }

@@ -17,7 +17,7 @@ function initials(fullName) {
   return fullName.split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase()
 }
 
-export default function DoctorSearch({ user, onLogout, onNavigate }) {
+export default function DoctorSearch({ user, onLogout, onNavigate, onSelectDoctor }) {
   const [filters, setFilters] = useState(initialFilters)
   const [specialties, setSpecialties] = useState([])
   const [healthPlans, setHealthPlans] = useState([])
@@ -183,6 +183,9 @@ export default function DoctorSearch({ user, onLogout, onNavigate }) {
                     {doctor.rating.total ? `${doctor.rating.total} avaliações` : 'Ainda sem avaliações'}
                   </span>
                 </div>
+                <button className="doctor-view-profile" type="button" onClick={() => onSelectDoctor?.(doctor.id)}>
+                  Ver perfil e horários
+                </button>
               </div>
             </article>
           ))}
