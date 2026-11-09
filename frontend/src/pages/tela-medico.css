@@ -1,15 +1,61 @@
 .doctor-home-page { min-height: 100vh; color: #3a5a78; background: #f7fafe; font-family: 'Poppins', sans-serif; }
 .doctor-home-header { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 40px); border-bottom: 1px solid #e9f1fa; background: #fff; }
-.doctor-home-logout { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 0 11px; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
-.doctor-home-content { width: min(100% - 40px, 1080px); margin: 0 auto; padding: 48px 0; }
-.doctor-home-content p { margin: 0 0 8px; color: #438fca; font-size: 10px; font-weight: 600; }
-.doctor-home-content h1 { margin: 0 0 8px; color: #314d69; font-size: 24px; font-weight: 500; }
-.doctor-home-content > span { color: #71869b; font-size: 13px; }
+.doctor-home-account { display: flex; align-items: center; gap: 10px; color: #4f6b83; font-size: 12px; }
+.doctor-home-logout { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; cursor: pointer; }
+.doctor-home-content { width: min(100% - 40px, 1080px); margin: 0 auto; padding: 36px 0 52px; }
+.doctor-home-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 23px; }
+.doctor-home-title p, .doctor-agenda-heading p { margin: 0 0 6px; color: #438fca; font-size: 10px; font-weight: 600; }
+.doctor-home-title h1 { margin: 0; color: #314d69; font-size: 24px; font-weight: 500; }
+.doctor-home-date { display: inline-flex; align-items: center; gap: 7px; color: #71869b; font-size: 11px; }
+.doctor-home-date svg { color: #438fca; }
+.doctor-open-calendar { display: inline-flex; min-height: 37px; align-items: center; gap: 7px; margin: -7px 0 16px; padding: 0 11px; border: 1px solid #dce8f3; border-radius: 6px; color: #3a6a9e; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-open-calendar:hover { border-color: #80bce8; background: #f7fbff; }
+.doctor-home-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.doctor-stat-card { position: relative; display: grid; min-height: 135px; align-content: center; gap: 5px; padding: 18px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; }
+.doctor-stat-icon { display: grid; width: 34px; height: 34px; place-items: center; margin-bottom: 4px; border-radius: 8px; }
+.doctor-stat-card strong { color: #314d69; font-size: 25px; font-weight: 500; line-height: 1; }
+.doctor-stat-card > span:not(.doctor-stat-icon) { color: #5b7690; font-size: 11px; }
+.doctor-stat-card small { color: #8295a7; font-size: 9px; }
+.stat-appointments .doctor-stat-icon { color: #3a6a9e; background: #eaf4fe; }
+.stat-online .doctor-stat-icon { color: #2c7a66; background: #ddf3ee; }
+.stat-pending .doctor-stat-icon { color: #c25a38; background: #fff4e8; }
+.doctor-home-error { margin-top: 16px; padding: 13px; border: 1px solid #f0d2d0; border-radius: 6px; color: #a13f42; background: #fff8f7; font-size: 12px; }
+.doctor-home-agenda { margin-top: 22px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; }
+.doctor-agenda-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; padding: 17px 18px; border-bottom: 1px solid #edf2f7; }
+.doctor-agenda-heading p { margin-bottom: 4px; }
+.doctor-agenda-heading h2 { margin: 0; color: #314d69; font-size: 15px; font-weight: 500; }
+.doctor-agenda-heading > span { color: #8295a7; font-size: 10px; }
+.doctor-agenda-list { padding: 0 18px; }
+.doctor-agenda-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 13px; min-height: 68px; border-bottom: 1px solid #edf2f7; }
+.doctor-agenda-row:last-child { border-bottom: 0; }
+.doctor-agenda-row time { color: #3a6a9e; font-size: 12px; font-weight: 500; }
+.doctor-agenda-patient { display: grid; min-width: 0; gap: 4px; }
+.doctor-agenda-patient strong { overflow: hidden; color: #314d69; font-size: 12px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.doctor-agenda-patient span { overflow: hidden; color: #8295a7; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.doctor-agenda-meta { display: grid; justify-items: end; gap: 4px; }
+.appointment-status { padding: 4px 7px; border-radius: 4px; color: #287a5c; background: #e4f5ef; font-size: 9px; white-space: nowrap; }
+.status-cancelled, .status-no_show { color: #a13f42; background: #fff2f1; }
+.status-completed { color: #3a6a9e; background: #eaf4fe; }
+.doctor-agenda-meta small { color: #8295a7; font-size: 9px; }
+.doctor-agenda-empty { display: flex; min-height: 105px; align-items: center; justify-content: center; gap: 9px; padding: 18px; color: #8295a7; font-size: 11px; text-align: center; }
+.doctor-agenda-empty svg { color: #438fca; }
+.doctor-home-data-note { margin: 12px 0 0; color: #8295a7; font-size: 10px; line-height: 1.5; }
 
 @media (max-width: 600px) {
   .doctor-home-header { min-height: 62px; padding: 8px 16px; }
   .doctor-home-logout { width: 38px; justify-content: center; padding: 0; }
-  .doctor-home-logout span { display: none; }
-  .doctor-home-content { width: calc(100% - 32px); padding-top: 32px; }
+  .doctor-home-content { width: calc(100% - 32px); padding-top: 28px; }
+  .doctor-home-title { align-items: flex-start; flex-direction: column; gap: 8px; }
   .doctor-home-content h1 { font-size: 20px; }
+  .doctor-open-calendar { margin-top: -5px; }
+  .doctor-home-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+  .doctor-stat-card { min-height: 121px; gap: 4px; padding: 11px; }
+  .doctor-stat-icon { width: 29px; height: 29px; }
+  .doctor-stat-card strong { font-size: 21px; }
+  .doctor-stat-card > span:not(.doctor-stat-icon) { font-size: 10px; }
+  .doctor-stat-card small { font-size: 8px; }
+  .doctor-agenda-heading { padding: 14px; }
+  .doctor-agenda-list { padding: 0 12px; }
+  .doctor-agenda-row { grid-template-columns: 45px minmax(0, 1fr); gap: 9px; padding: 9px 0; }
+  .doctor-agenda-meta { grid-column: 2; display: flex; justify-content: space-between; justify-items: unset; }
 }

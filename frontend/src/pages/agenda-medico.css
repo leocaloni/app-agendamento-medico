@@ -1,0 +1,58 @@
+.doctor-calendar-page { min-height: 100vh; color: #3a5a78; background: #f7fafe; font-family: 'Poppins', sans-serif; }
+.doctor-calendar-header { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 40px); border-bottom: 1px solid #e9f1fa; background: #fff; }
+.doctor-calendar-account { display: flex; align-items: center; gap: 10px; color: #4f6b83; font-size: 12px; }
+.doctor-calendar-logout { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; cursor: pointer; }
+.doctor-calendar-content { width: min(100% - 40px, 1120px); margin: 0 auto; padding: 24px 0 48px; }
+.doctor-calendar-back { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; color: #5b7690; background: transparent; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-calendar-title-row { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin: 23px 0 20px; }
+.doctor-calendar-title-row > div:first-child p, .doctor-calendar-day-agenda header p { margin: 0 0 5px; color: #438fca; font-size: 10px; font-weight: 600; }
+.doctor-calendar-title-row h1 { margin: 0; color: #314d69; font-size: 23px; font-weight: 500; }
+.doctor-calendar-month-nav { display: flex; align-items: center; gap: 12px; }
+.doctor-calendar-month-nav h2 { min-width: 150px; margin: 0; color: #314d69; font-size: 14px; font-weight: 500; text-align: center; text-transform: capitalize; }
+.doctor-calendar-month-nav button { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid #dce6ef; border-radius: 6px; color: #526c83; background: #fff; cursor: pointer; }
+.doctor-calendar-month-nav button:hover { border-color: #80bce8; background: #f7fbff; }
+.doctor-calendar-error { margin: 0 0 16px; padding: 12px; border: 1px solid #f0d2d0; border-radius: 6px; color: #a13f42; background: #fff8f7; font-size: 11px; }
+.doctor-calendar-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); align-items: start; gap: 16px; }
+.doctor-calendar-grid-wrap, .doctor-calendar-day-agenda { border: 1px solid #e4edf5; border-radius: 8px; background: #fff; }
+.doctor-calendar-grid-wrap { padding: 18px; }
+.doctor-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.doctor-calendar-weekdays { margin-bottom: 8px; }
+.doctor-calendar-weekdays span { padding: 4px 0; color: #8295a7; font-size: 10px; text-align: center; }
+.doctor-calendar-day, .doctor-calendar-empty-cell { width: 100%; aspect-ratio: 1; }
+.doctor-calendar-day { position: relative; display: grid; place-items: center; border: 1px solid transparent; border-radius: 6px; color: #536d83; background: #f6f9fc; font: 400 12px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-calendar-day:hover { border-color: #b7d7ef; }
+.doctor-calendar-day.is-today { border-color: #438fca; }
+.doctor-calendar-day.is-selected { color: #fff; background: #438fca; }
+.doctor-calendar-day.has-appointments:not(.is-selected) { color: #2c7a66; background: #e4f5ef; }
+.doctor-calendar-day small { position: absolute; right: 4px; bottom: 3px; min-width: 15px; color: #2c7a66; font-size: 8px; text-align: center; }
+.doctor-calendar-day.is-selected small { color: #fff; }
+.doctor-calendar-legend { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; color: #8295a7; font-size: 9px; }
+.doctor-calendar-legend span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.doctor-calendar-legend i { width: 9px; height: 9px; border-radius: 50%; background: #e4f5ef; }
+.doctor-calendar-day-agenda { overflow: hidden; }
+.doctor-calendar-day-agenda header { padding: 16px; border-bottom: 1px solid #edf2f7; }
+.doctor-calendar-day-agenda header h2 { margin: 0; color: #314d69; font-size: 15px; font-weight: 500; text-transform: capitalize; }
+.doctor-calendar-day-agenda header > span { display: inline-block; margin-top: 5px; color: #8295a7; font-size: 10px; }
+.doctor-calendar-appointments { display: grid; }
+.doctor-calendar-appointment { display: grid; gap: 5px; padding: 14px 16px; border-bottom: 1px solid #edf2f7; }
+.doctor-calendar-appointment:last-child { border-bottom: 0; }
+.doctor-calendar-appointment time { display: inline-flex; align-items: center; gap: 5px; color: #3a6a9e; font-size: 10px; }
+.doctor-calendar-appointment strong { color: #314d69; font-size: 12px; font-weight: 500; }
+.doctor-calendar-appointment > span { color: #8295a7; font-size: 10px; }
+.doctor-calendar-appointment > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 3px; }
+.doctor-calendar-status { padding: 4px 7px; border-radius: 4px; color: #287a5c; background: #e4f5ef; font-size: 9px; }
+.doctor-calendar-status.status-cancelled, .doctor-calendar-status.status-no_show { color: #a13f42; background: #fff2f1; }
+.doctor-calendar-status.status-completed { color: #3a6a9e; background: #eaf4fe; }
+.doctor-calendar-appointment small { color: #8295a7; font-size: 9px; }
+.doctor-calendar-day-empty { display: flex; min-height: 100px; align-items: center; justify-content: center; margin: 0; padding: 18px; color: #8295a7; font-size: 11px; text-align: center; }
+
+@media (max-width: 760px) {
+  .doctor-calendar-content { width: calc(100% - 32px); padding-top: 20px; }
+  .doctor-calendar-title-row { align-items: flex-start; flex-direction: column; gap: 13px; }
+  .doctor-calendar-title-row h1 { font-size: 20px; }
+  .doctor-calendar-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .doctor-calendar-grid-wrap { padding: 12px; }
+  .doctor-calendar-grid { gap: 4px; }
+  .doctor-calendar-day { font-size: 11px; }
+  .doctor-calendar-month-nav { align-self: stretch; justify-content: space-between; }
+}
