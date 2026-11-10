@@ -23,7 +23,9 @@ export default function TelaUsuario({ user, onLogout, onNavigate }) {
         <nav className="patient-shortcuts" aria-label="Ações do paciente">
           {shortcuts.map(({ label, Icon, tone }) => (
             <button className="patient-shortcut" type="button" key={label}
-              onClick={label === 'Buscar médico' ? () => onNavigate?.('buscar') : undefined}>
+              onClick={label === 'Buscar médico'
+                ? () => onNavigate?.('buscar')
+                : label === 'Histórico' ? () => onNavigate?.('consultas') : undefined}>
               <span className={`patient-shortcut-icon tone-${tone}`}>
                 <Icon size={21} strokeWidth={1.9} />
               </span>

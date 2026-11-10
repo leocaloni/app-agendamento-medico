@@ -4,6 +4,7 @@ import AgendaMedico from './AgendaMedico.jsx'
 import DoctorSearch from './DoctorSearch.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
 import Login from './Login.jsx'
+import MinhasConsultas from './MinhasConsultas.jsx'
 import TelaMedico from './TelaMedico.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
 
@@ -33,7 +34,17 @@ export default function Index() {
       <TelaUsuario
         user={user}
         onLogout={handleLogout}
-        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : 'usuario')}
+        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : item === 'consultas' ? 'consultas' : 'usuario')}
+      />
+    )
+  }
+
+  if (pagina === 'consultas') {
+    return (
+      <MinhasConsultas
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : item === 'consultas' ? 'consultas' : 'usuario')}
       />
     )
   }
