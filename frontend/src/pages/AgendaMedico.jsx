@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, ChevronLeft, ChevronRight, Clock3, LogOut } from 'lucide-react'
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Clock3, FileText, LogOut, UserX } from 'lucide-react'
 import TervisBrand from '../components/TervisBrand.jsx'
-import { getMyAppointments } from '../services/appointmentApi.js'
+import {
+  completeAppointment,
+  getMyAppointments,
+  markAppointmentNoShow,
+  updateAppointmentNotes,
+} from '../services/appointmentApi.js'
 import './agenda-medico.css'
 
 const CLINIC_TIME_ZONE = 'America/Sao_Paulo'
@@ -92,6 +97,10 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [actingId, setActingId] = useState(null)
+  const [actionError, setActionError] = useState('')
+  const [notesFor, setNotesFor] = useState(null)
+  const [notesDraft, setNotesDraft] = useState('')
 
   useEffect(() => {
     const controller = new AbortController()
@@ -130,6 +139,36 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
     const nextMonthKey = moveMonth(monthKey, amount)
     setMonthKey(nextMonthKey)
     setSelectedDate(nextMonthKey)
+  }
+
+  function applyUpdatedAppointment(updated) {
+    setAppointments((current) => current.map((item) => (item.id === updated.id ? updated : item)))
+  }
+
+  async function runAction(appointmentId, action) {
+    setActingId(appointmentId)
+    setActionError('')
+    try {
+      const updated = await action()
+      applyUpdatedAppointment(updated)
+      return true
+    } catch (runError) {
+      setActionError(runError.message)
+      return false
+    } finally {
+      setActingId(null)
+    }
+  }
+
+  function openNotes(appointment) {
+    setActionError('')
+    setNotesFor(appointment.id)
+    setNotesDraft(appointment.doctorNotes || '')
+  }
+
+  async function saveNotes(appointment) {
+    const ok = await runAction(appointment.id, () => updateAppointmentNotes(appointment.id, notesDraft))
+    if (ok) setNotesFor(null)
   }
 
   return (
@@ -208,6 +247,8 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
               <span>{selectedAppointments.length} {selectedAppointments.length === 1 ? 'consulta' : 'consultas'}</span>
             </header>
 
+            {actionError && <p className="doctor-appointment-action-error" role="alert">{actionError}</p>}
+
             {isLoading ? (
               <p className="doctor-calendar-day-empty">Carregando consultas...</p>
             ) : selectedAppointments.length ? (
@@ -225,6 +266,48 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
                         ? appointment.healthPlan?.name || 'Convênio'
                         : 'Particular'}</small>
                     </div>
+
+                    {appointment.doctorNotes && notesFor !== appointment.id && (
+                      <p className="doctor-appointment-note"><strong>Anotação:</strong> {appointment.doctorNotes}</p>
+                    )}
+
+                    <div className="doctor-appointment-actions">
+                      {appointment.status === 'SCHEDULED' && (
+                        <>
+                          <button type="button" className="doctor-action-btn is-done" disabled={actingId === appointment.id}
+                            onClick={() => runAction(appointment.id, () => completeAppointment(appointment.id))}>
+                            <Check size={13} aria-hidden="true" /> Concluir
+                          </button>
+                          <button type="button" className="doctor-action-btn is-miss" disabled={actingId === appointment.id}
+                            onClick={() => runAction(appointment.id, () => markAppointmentNoShow(appointment.id))}>
+                            <UserX size={13} aria-hidden="true" /> Falta
+                          </button>
+                        </>
+                      )}
+                      <button type="button" className="doctor-action-btn is-notes" disabled={actingId === appointment.id}
+                        onClick={() => (notesFor === appointment.id ? setNotesFor(null) : openNotes(appointment))}>
+                        <FileText size={13} aria-hidden="true" /> Anotações
+                      </button>
+                    </div>
+
+                    {notesFor === appointment.id && (
+                      <div className="doctor-notes-box">
+                        <textarea
+                          value={notesDraft}
+                          onChange={(event) => setNotesDraft(event.target.value)}
+                          placeholder="Anotações clínicas da consulta..."
+                        />
+                        <div className="doctor-notes-actions">
+                          <button type="button" className="doctor-action-btn is-notes" onClick={() => setNotesFor(null)}>
+                            Cancelar
+                          </button>
+                          <button type="button" className="doctor-action-btn is-done" disabled={actingId === appointment.id}
+                            onClick={() => saveNotes(appointment)}>
+                            {actingId === appointment.id ? 'Salvando...' : 'Salvar anotação'}
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </article>
                 ))}
               </div>

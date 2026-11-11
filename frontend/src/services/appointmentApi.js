@@ -88,3 +88,43 @@ export async function createAppointmentReview(appointmentId, review) {
   }
   return data
 }
+
+async function patchAppointmentAction(path, body, signal) {
+  const token = localStorage.getItem('authToken')
+  if (!token) throw new Error('Sua sessão expirou. Entre novamente.')
+
+  let response
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal,
+    })
+  } catch (error) {
+    if (error.name === 'AbortError') throw error
+    throw new Error('Não foi possível conectar ao servidor. Confira se o backend está iniciado.')
+  }
+
+  const data = await response.json().catch(() => null)
+  if (!response.ok) {
+    const validationDetails = data?.fields ? Object.values(data.fields).join(' ') : ''
+    throw new Error([data?.message, validationDetails].filter(Boolean).join(' ') || 'Não foi possível atualizar a consulta.')
+  }
+  return data
+}
+
+export function completeAppointment(appointmentId, signal) {
+  return patchAppointmentAction(`/api/appointments/${appointmentId}/complete`, undefined, signal)
+}
+
+export function markAppointmentNoShow(appointmentId, signal) {
+  return patchAppointmentAction(`/api/appointments/${appointmentId}/no-show`, undefined, signal)
+}
+
+export function updateAppointmentNotes(appointmentId, doctorNotes, signal) {
+  return patchAppointmentAction(`/api/appointments/${appointmentId}/notes`, { doctorNotes }, signal)
+}

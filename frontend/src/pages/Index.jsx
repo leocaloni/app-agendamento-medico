@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Cadastro from './Cadastro.jsx'
 import AgendaMedico from './AgendaMedico.jsx'
+import MeusHorarios from './MeusHorarios.jsx'
 import DoctorSearch from './DoctorSearch.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
 import Login from './Login.jsx'
@@ -50,11 +51,22 @@ export default function Index() {
   }
 
   if (pagina === 'medico') {
-    return <TelaMedico user={user} onLogout={handleLogout} onNavigate={() => setPagina('agenda-medica')} />
+    return (
+      <TelaMedico
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={() => setPagina('agenda-medica')}
+        onOpenHorarios={() => setPagina('meus-horarios')}
+      />
+    )
   }
 
   if (pagina === 'agenda-medica') {
     return <AgendaMedico user={user} onLogout={handleLogout} onBack={() => setPagina('medico')} />
+  }
+
+  if (pagina === 'meus-horarios') {
+    return <MeusHorarios user={user} onLogout={handleLogout} onBack={() => setPagina('medico')} />
   }
 
   if (pagina === 'buscar-medico') {

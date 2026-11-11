@@ -65,3 +65,14 @@ export function createAppointment(appointment) {
     body: JSON.stringify(appointment),
   })
 }
+
+export function getMyDoctorProfile(signal) {
+  return get('/api/doctors/me', signal)
+}
+
+export function updateDoctorSchedule(schedule) {
+  return request('/api/doctors/me/schedule', {
+    method: 'PUT',
+    body: JSON.stringify(schedule),
+  })
+}

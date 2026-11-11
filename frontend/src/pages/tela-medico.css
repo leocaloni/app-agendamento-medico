@@ -8,6 +8,8 @@
 .doctor-home-title h1 { margin: 0; color: #314d69; font-size: 24px; font-weight: 500; }
 .doctor-home-date { display: inline-flex; align-items: center; gap: 7px; color: #71869b; font-size: 11px; }
 .doctor-home-date svg { color: #438fca; }
+.doctor-home-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: -7px 0 16px; }
+.doctor-home-actions .doctor-open-calendar { margin: 0; }
 .doctor-open-calendar { display: inline-flex; min-height: 37px; align-items: center; gap: 7px; margin: -7px 0 16px; padding: 0 11px; border: 1px solid #dce8f3; border-radius: 6px; color: #3a6a9e; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
 .doctor-open-calendar:hover { border-color: #80bce8; background: #f7fbff; }
 .doctor-home-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
