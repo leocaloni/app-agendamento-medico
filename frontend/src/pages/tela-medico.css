@@ -8,9 +8,12 @@
 .doctor-home-title h1 { margin: 0; color: #314d69; font-size: 24px; font-weight: 500; }
 .doctor-home-date { display: inline-flex; align-items: center; gap: 7px; color: #71869b; font-size: 11px; }
 .doctor-home-date svg { color: #438fca; }
+.doctor-home-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: -7px 0 16px; }
+.doctor-home-actions .doctor-open-calendar { margin: 0; }
 .doctor-open-calendar { display: inline-flex; min-height: 37px; align-items: center; gap: 7px; margin: -7px 0 16px; padding: 0 11px; border: 1px solid #dce8f3; border-radius: 6px; color: #3a6a9e; background: #fff; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
 .doctor-open-calendar:hover { border-color: #80bce8; background: #f7fbff; }
 .doctor-home-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
 .doctor-stat-card { position: relative; display: grid; min-height: 135px; align-content: center; gap: 5px; padding: 18px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; }
 .doctor-stat-icon { display: grid; width: 34px; height: 34px; place-items: center; margin-bottom: 4px; border-radius: 8px; }
 .doctor-stat-card strong { color: #314d69; font-size: 25px; font-weight: 500; line-height: 1; }
@@ -32,10 +35,12 @@
 .doctor-agenda-patient { display: grid; min-width: 0; gap: 4px; }
 .doctor-agenda-patient strong { overflow: hidden; color: #314d69; font-size: 12px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .doctor-agenda-patient span { overflow: hidden; color: #8295a7; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+
 .doctor-agenda-meta { display: grid; justify-items: end; gap: 4px; }
 .appointment-status { padding: 4px 7px; border-radius: 4px; color: #287a5c; background: #e4f5ef; font-size: 9px; white-space: nowrap; }
 .status-cancelled, .status-no_show { color: #a13f42; background: #fff2f1; }
 .status-completed { color: #3a6a9e; background: #eaf4fe; }
+
 .doctor-agenda-meta small { color: #8295a7; font-size: 9px; }
 .doctor-agenda-empty { display: flex; min-height: 105px; align-items: center; justify-content: center; gap: 9px; padding: 18px; color: #8295a7; font-size: 11px; text-align: center; }
 .doctor-agenda-empty svg { color: #438fca; }

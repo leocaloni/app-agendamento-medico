@@ -1,12 +1,23 @@
-import { useState } from 'react'
-import { CalendarDays, IdCard, LockKeyhole, Mail, Phone, UserRound } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CalendarClock, CalendarDays, Droplet, IdCard, LockKeyhole, Mail, Phone, Pill, ShieldAlert, ShieldPlus, Stethoscope, UserRound, Users } from 'lucide-react'
 import LoginButton from '../components/LoginButton.jsx'
 import LoginField from '../components/LoginField.jsx'
 import TervisBrand from '../components/TervisBrand.jsx'
+import { getHealthPlans } from '../services/userApi.js'
 import './login.css'
 import './cadastro.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+
+const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Não sei']
+
+const appointmentFrequencies = [
+  'Raramente',
+  'Uma vez por ano',
+  'Duas vezes por ano',
+  'A cada três meses',
+  'Mensalmente',
+]
 
 const initialForm = {
   fullName: '',
@@ -15,13 +26,36 @@ const initialForm = {
   password: '',
   phone: '',
   birthDate: '',
+  healthPlanId: '',
+  bloodType: '',
+  allergies: '',
+  familyHistory: '',
+  currentMedications: '',
+  appointmentFrequency: '',
 }
 
 export default function Cadastro({ onVoltar }) {
   const [form, setForm] = useState(initialForm)
+  const [healthPlans, setHealthPlans] = useState([])
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isCreated, setIsCreated] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadHealthPlans() {
+      try {
+        const plans = await getHealthPlans(controller.signal)
+        setHealthPlans(plans)
+      } catch (loadError) {
+        if (loadError.name !== 'AbortError') setHealthPlans([])
+      }
+    }
+
+    loadHealthPlans()
+    return () => controller.abort()
+  }, [])
 
   function updateField(event) {
     const { name, value } = event.target
@@ -41,7 +75,12 @@ export default function Cadastro({ onVoltar }) {
       password: form.password,
       phone: form.phone.replace(/\D/g, '') || null,
       birthDate: form.birthDate,
-      healthPlanId: null,
+      healthPlanId: form.healthPlanId || null,
+      bloodType: form.bloodType || null,
+      allergies: form.allergies.trim() || null,
+      familyHistory: form.familyHistory.trim() || null,
+      currentMedications: form.currentMedications.trim() || null,
+      appointmentFrequency: form.appointmentFrequency || null,
     }
 
     try {
@@ -182,6 +221,84 @@ export default function Cadastro({ onVoltar }) {
                 value={form.birthDate}
                 onChange={updateField}
               />
+
+              <div className="cadastro-section">
+                <Stethoscope size={15} strokeWidth={1.8} aria-hidden="true" />
+                <span>Informações médicas</span>
+              </div>
+              <p className="cadastro-section-hint">Opcional. Ajuda o médico a conhecer seu histórico antes da consulta.</p>
+
+              <div className="login-field-group">
+                <label className="login-label" htmlFor="cadastro-convenio">Convênio</label>
+                <div className="login-input-wrap">
+                  <ShieldPlus size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <select id="cadastro-convenio" name="healthPlanId" value={form.healthPlanId} onChange={updateField}>
+                    <option value="">Particular</option>
+                    {healthPlans.map((plan) => (
+                      <option key={plan.id} value={plan.id}>{plan.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="login-field-group">
+                <label className="login-label" htmlFor="cadastro-tipo-sanguineo">Tipo sanguíneo</label>
+                <div className="login-input-wrap">
+                  <Droplet size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <select id="cadastro-tipo-sanguineo" name="bloodType" value={form.bloodType} onChange={updateField}>
+                    <option value="">Selecione</option>
+                    {bloodTypes.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="login-field-group">
+                <label className="login-label" htmlFor="cadastro-frequencia">Frequência de consultas</label>
+                <div className="login-input-wrap">
+                  <CalendarClock size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <select id="cadastro-frequencia" name="appointmentFrequency" value={form.appointmentFrequency} onChange={updateField}>
+                    <option value="">Selecione</option>
+                    {appointmentFrequencies.map((frequency) => (
+                      <option key={frequency} value={frequency}>{frequency}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <LoginField
+                id="cadastro-alergias"
+                name="allergies"
+                label="Alergias"
+                type="text"
+                placeholder="Ex.: Dipirona, penicilina"
+                autoComplete="off"
+                icon={ShieldAlert}
+                value={form.allergies}
+                onChange={updateField}
+                maxLength={500}
+              />
+
+              <div className="login-field-group">
+                <label className="login-label" htmlFor="cadastro-historico">Histórico de doenças familiares</label>
+                <div className="login-input-wrap login-input-wrap-area">
+                  <Users size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <textarea id="cadastro-historico" name="familyHistory" rows={3} maxLength={1000}
+                    placeholder="Ex.: Diabetes, hipertensão, doenças cardíacas"
+                    value={form.familyHistory} onChange={updateField} />
+                </div>
+              </div>
+
+              <div className="login-field-group">
+                <label className="login-label" htmlFor="cadastro-medicacoes">Medicações atuais</label>
+                <div className="login-input-wrap login-input-wrap-area">
+                  <Pill size={17} strokeWidth={1.8} aria-hidden="true" />
+                  <textarea id="cadastro-medicacoes" name="currentMedications" rows={3} maxLength={1000}
+                    placeholder="Ex.: Losartana 50mg, uso diário"
+                    value={form.currentMedications} onChange={updateField} />
+                </div>
+              </div>
 
               {error && (
                 <p role="alert" style={{ margin: 0, color: '#c82828', fontSize: 12 }}>

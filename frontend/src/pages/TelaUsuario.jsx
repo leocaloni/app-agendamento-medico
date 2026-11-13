@@ -1,12 +1,13 @@
-import { CalendarDays, FileText, Search, Star } from 'lucide-react'
+import { CalendarDays, FileText, Search, Star, UserRound } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
 import './tela-usuario.css'
 
 const shortcuts = [
-  { label: 'Buscar médico', Icon: Search, tone: 'blue' },
-  { label: 'Meus exames', Icon: FileText, tone: 'mint' },
-  { label: 'Histórico', Icon: CalendarDays, tone: 'coral' },
-  { label: 'Avaliações', Icon: Star, tone: 'rose' },
+  { item: 'buscar', label: 'Buscar médico', Icon: Search, tone: 'blue' },
+  { item: 'exames', label: 'Meus exames', Icon: FileText, tone: 'mint' },
+  { item: 'consultas', label: 'Minhas consultas', Icon: CalendarDays, tone: 'coral' },
+  { item: 'avaliacoes', label: 'Avaliações', Icon: Star, tone: 'rose' },
+  { item: 'perfil', label: 'Meu perfil', Icon: UserRound, tone: 'blue' },
 ]
 
 export default function TelaUsuario({ user, onLogout, onNavigate }) {
@@ -21,11 +22,8 @@ export default function TelaUsuario({ user, onLogout, onNavigate }) {
         </header>
 
         <nav className="patient-shortcuts" aria-label="Ações do paciente">
-          {shortcuts.map(({ label, Icon, tone }) => (
-            <button className="patient-shortcut" type="button" key={label}
-              onClick={label === 'Buscar médico'
-                ? () => onNavigate?.('buscar')
-                : label === 'Histórico' ? () => onNavigate?.('consultas') : undefined}>
+          {shortcuts.map(({ item, label, Icon, tone }) => (
+            <button className="patient-shortcut" type="button" key={item} onClick={() => onNavigate?.(item)}>
               <span className={`patient-shortcut-icon tone-${tone}`}>
                 <Icon size={21} strokeWidth={1.9} />
               </span>
