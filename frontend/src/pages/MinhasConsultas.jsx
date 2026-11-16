@@ -141,7 +141,6 @@ export default function MinhasConsultas({ user, onLogout, onNavigate }) {
       <main className="appointments-content">
         <header className="appointments-heading">
           <div>
-            <p>ÁREA DO PACIENTE</p>
             <h1>Minhas consultas</h1>
           </div>
           <span><CalendarDays size={16} aria-hidden="true" /> {appointments.length} no histórico</span>

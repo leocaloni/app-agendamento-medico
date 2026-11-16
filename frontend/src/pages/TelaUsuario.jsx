@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarCheck, CalendarDays, ChevronRight, Clock3, FileText, Search, Star, Stethoscope, UserRound } from 'lucide-react'
+import { CalendarCheck, CalendarDays, ChevronRight, Clock3, FileText, Star, Stethoscope, UserRound } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
 import { getAllMyAppointments, getMyReviews } from '../services/appointmentApi.js'
 import './tela-usuario.css'
@@ -7,11 +7,10 @@ import './tela-usuario.css'
 const CLINIC_TIME_ZONE = 'America/Sao_Paulo'
 
 const shortcuts = [
-  { item: 'buscar', label: 'Buscar médico', Icon: Search, tone: 'blue' },
+  { item: 'perfil', label: 'Meu perfil', Icon: UserRound, tone: 'blue' },
   { item: 'exames', label: 'Meus exames', Icon: FileText, tone: 'mint' },
   { item: 'consultas', label: 'Minhas consultas', Icon: CalendarDays, tone: 'coral' },
   { item: 'avaliacoes', label: 'Avaliações', Icon: Star, tone: 'rose' },
-  { item: 'perfil', label: 'Meu perfil', Icon: UserRound, tone: 'blue' },
 ]
 
 const appointmentTypeLabel = {

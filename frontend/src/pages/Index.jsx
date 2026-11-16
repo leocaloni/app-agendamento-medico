@@ -6,6 +6,7 @@ import DoctorSearch from './DoctorSearch.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
 import Login from './Login.jsx'
 import MinhasConsultas from './MinhasConsultas.jsx'
+import MinhasAvaliacoes from './MinhasAvaliacoes.jsx'
 import MeuPerfil from './MeuPerfil.jsx'
 import MeusExames from './MeusExames.jsx'
 import Pacientes from './Pacientes.jsx'
@@ -14,7 +15,7 @@ import TelaMedico from './TelaMedico.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
 import { getCurrentUser } from '../services/userApi.js'
 
-const PATIENT_PAGES = new Set(['usuario', 'buscar-medico', 'consultas', 'exames', 'meu-perfil', 'perfil-medico'])
+const PATIENT_PAGES = new Set(['usuario', 'buscar-medico', 'consultas', 'exames', 'avaliacoes', 'meu-perfil', 'perfil-medico'])
 const DOCTOR_PAGES = new Set(['medico', 'agenda-medica', 'meus-horarios', 'pacientes', 'medico-perfil'])
 
 export default function Index() {
@@ -71,7 +72,7 @@ export default function Index() {
     if (item === 'buscar') return setPagina('buscar-medico')
     if (item === 'consultas') return setPagina('consultas')
     if (item === 'exames') return setPagina('exames')
-    if (item === 'avaliacoes') return setPagina('consultas')
+    if (item === 'avaliacoes') return setPagina('avaliacoes')
     if (item === 'perfil') return setPagina('meu-perfil')
     return setPagina('usuario')
   }
@@ -94,6 +95,10 @@ export default function Index() {
 
   if (pagina === 'exames') {
     return <MeusExames user={user} onLogout={handleLogout} onNavigate={patientNavigate} />
+  }
+
+  if (pagina === 'avaliacoes') {
+    return <MinhasAvaliacoes user={user} onLogout={handleLogout} onNavigate={patientNavigate} />
   }
 
   if (pagina === 'meu-perfil') {

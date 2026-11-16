@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarDays, ChevronDown, FileText, Heart, House, LogOut, Menu, Search, Star, X } from 'lucide-react'
+import { CalendarDays, ChevronDown, FileText, Heart, House, LogOut, Menu, Search, Star, UserRound, X } from 'lucide-react'
 import './navbar.css'
 
 const items = [
@@ -53,9 +53,8 @@ export default function Navbar({ user, onLogout, onNavigate }) {
             key={id}
             aria-current={activeItem === id ? 'page' : undefined}
             onClick={() => {
-              const section = id === 'avaliacoes' ? 'consultas' : id
-              setActiveItem(section)
-              localStorage.setItem('patientSection', section)
+              setActiveItem(id)
+              localStorage.setItem('patientSection', id)
               setIsOpen(false)
               onNavigate?.(id)
             }}
@@ -81,6 +80,18 @@ export default function Navbar({ user, onLogout, onNavigate }) {
         </button>
         {isProfileOpen && (
           <div className="navbar-account-menu" id="navbar-account-menu" role="menu">
+            <button
+              className="navbar-account-action"
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setIsProfileOpen(false)
+                onNavigate?.('perfil')
+              }}
+            >
+              <UserRound size={16} aria-hidden="true" />
+              <span>Meu perfil</span>
+            </button>
             <button
               className="navbar-logout"
               type="button"

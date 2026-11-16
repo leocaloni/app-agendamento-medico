@@ -147,7 +147,6 @@ export default function MeusExames({ user, onLogout, onNavigate }) {
       <main className="exams-content">
         <header className="exams-heading">
           <div>
-            <p>ÁREA DO PACIENTE</p>
             <h1>Meus exames</h1>
           </div>
           <span><FileText size={16} aria-hidden="true" /> Fotos e resultados em um só lugar</span>
