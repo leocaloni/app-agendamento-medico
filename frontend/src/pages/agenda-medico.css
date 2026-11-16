@@ -46,6 +46,22 @@
 .doctor-calendar-appointment small { color: #8295a7; font-size: 9px; }
 .doctor-calendar-day-empty { display: flex; min-height: 100px; align-items: center; justify-content: center; margin: 0; padding: 18px; color: #8295a7; font-size: 11px; text-align: center; }
 
+.doctor-appointment-action-error { margin: 0 16px; padding: 9px 11px; border: 1px solid #f0d2d0; border-radius: 6px; color: #a13f42; background: #fff8f7; font-size: 10px; }
+.doctor-appointment-note { margin: 3px 0 0; color: #5b7690; font-size: 10px; line-height: 1.5; }
+.doctor-appointment-note strong { color: #314d69; font-weight: 500; }
+.doctor-appointment-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.doctor-action-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border: 1px solid #dce8f3; border-radius: 6px; color: #3a6a9e; background: #fff; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
+.doctor-action-btn:hover:not(:disabled) { border-color: #80bce8; background: #f7fbff; }
+.doctor-action-btn:disabled { opacity: .55; cursor: default; }
+.doctor-action-btn.is-done { color: #287a5c; border-color: #bfe6d7; background: #f2fbf7; }
+.doctor-action-btn.is-done:hover:not(:disabled) { border-color: #7fd0b4; }
+.doctor-action-btn.is-miss { color: #a13f42; border-color: #f0d2d0; background: #fff8f7; }
+.doctor-action-btn.is-miss:hover:not(:disabled) { border-color: #e5a9a6; }
+.doctor-notes-box { margin-top: 8px; }
+.doctor-notes-box textarea { width: 100%; min-height: 64px; padding: 9px 10px; border: 1px solid #dce6ef; border-radius: 6px; color: #3a5a78; font: 400 11px 'Poppins', sans-serif; resize: vertical; outline: none; }
+.doctor-notes-box textarea:focus { border-color: #80bce8; }
+.doctor-notes-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px; }
+
 @media (max-width: 760px) {
   .doctor-calendar-content { width: calc(100% - 32px); padding-top: 20px; }
   .doctor-calendar-title-row { align-items: flex-start; flex-direction: column; gap: 13px; }

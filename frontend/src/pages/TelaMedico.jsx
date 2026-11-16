@@ -50,7 +50,7 @@ const appointmentStatusLabel = {
   NO_SHOW: 'Não compareceu',
 }
 
-export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes, onOpenPerfil }) {
+export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes, onOpenPerfil, onOpenHorarios }) {
   const firstName = user?.firstName?.trim() || user?.fullName?.trim().split(/\s+/)[0]
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -102,6 +102,8 @@ export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes
           <button className="doctor-open-calendar" type="button" onClick={onNavigate}>
             <CalendarDays size={16} aria-hidden="true" /> Ver agenda mensal
           </button>
+          <button className="doctor-open-calendar" type="button" onClick={onOpenHorarios}>
+            <Clock3 size={16} aria-hidden="true" /> Meus horários
           <button className="doctor-open-calendar" type="button" onClick={onOpenPacientes}>
             <Users size={16} aria-hidden="true" /> Meus pacientes
           </button>
