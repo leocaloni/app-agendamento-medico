@@ -1,11 +1,14 @@
 package com.pi.agendamento.dto.request;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -35,6 +38,7 @@ public record CreateDoctorRequest(
         @NotEmpty Set<@NotNull DayOfWeek> workDays,
         @Positive int firstVisitDurationMin,
         @Positive int returnDurationMin,
+        @NotNull @DecimalMin("0.00") @Digits(integer = 8, fraction = 2) BigDecimal consultationPrice,
         @NotEmpty Set<@NotNull UUID> specialtyIds,
         Set<@NotNull UUID> acceptedPlanIds
 ) {

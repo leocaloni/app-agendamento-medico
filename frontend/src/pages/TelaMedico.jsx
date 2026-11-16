@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CalendarDays, Clock3, LogOut, Stethoscope, Video } from 'lucide-react'
+import { CalendarDays, Clock3, LogOut, Stethoscope, UserRound, Users, Video } from 'lucide-react'
 import TervisBrand from '../components/TervisBrand.jsx'
 import { getMyAppointments } from '../services/appointmentApi.js'
 import './tela-medico.css'
@@ -50,7 +50,7 @@ const appointmentStatusLabel = {
   NO_SHOW: 'Não compareceu',
 }
 
-export default function TelaMedico({ user, onLogout, onNavigate, onOpenHorarios }) {
+export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes, onOpenPerfil, onOpenHorarios }) {
   const firstName = user?.firstName?.trim() || user?.fullName?.trim().split(/\s+/)[0]
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -104,6 +104,11 @@ export default function TelaMedico({ user, onLogout, onNavigate, onOpenHorarios 
           </button>
           <button className="doctor-open-calendar" type="button" onClick={onOpenHorarios}>
             <Clock3 size={16} aria-hidden="true" /> Meus horários
+          <button className="doctor-open-calendar" type="button" onClick={onOpenPacientes}>
+            <Users size={16} aria-hidden="true" /> Meus pacientes
+          </button>
+          <button className="doctor-open-calendar" type="button" onClick={onOpenPerfil}>
+            <UserRound size={16} aria-hidden="true" /> Meu perfil
           </button>
         </div>
 

@@ -1,5 +1,6 @@
 package com.pi.agendamento.dto.response;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Comparator;
@@ -20,6 +21,7 @@ public record DoctorDetailResponse(
         String city,
         String state,
         String address,
+        BigDecimal consultationPrice,
         Set<DayOfWeek> workDays,
         LocalTime workStartTime,
         LocalTime workEndTime,
@@ -40,6 +42,7 @@ public record DoctorDetailResponse(
                 doctor.getCity(),
                 doctor.getState(),
                 doctor.getAddress(),
+                doctor.getConsultationPrice(),
                 new TreeSet<>(doctor.getWorkDays()),
                 doctor.getWorkStartTime(),
                 doctor.getWorkEndTime(),

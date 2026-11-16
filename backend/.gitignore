@@ -34,3 +34,6 @@ build/
 
 CLAUDE.MD
 /specs/
+
+### uploads de exames (dev) ###
+uploads/

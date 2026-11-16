@@ -18,11 +18,14 @@ import com.pi.agendamento.dto.request.CreateAdminRequest;
 import com.pi.agendamento.dto.request.CreateDoctorRequest;
 import com.pi.agendamento.dto.request.LoginRequest;
 import com.pi.agendamento.dto.request.RegisterRequest;
+import com.pi.agendamento.dto.request.UpdateHealthInfoRequest;
 import com.pi.agendamento.dto.request.UpdateProfileRequest;
 import com.pi.agendamento.dto.response.AuthResponse;
 import com.pi.agendamento.dto.response.DoctorResponse;
+import com.pi.agendamento.dto.response.HealthInfoResponse;
 import com.pi.agendamento.dto.response.UserResponse;
 import com.pi.agendamento.entity.Doctor;
+import com.pi.agendamento.entity.HealthInfo;
 import com.pi.agendamento.entity.HealthPlan;
 import com.pi.agendamento.entity.Specialty;
 import com.pi.agendamento.entity.User;
@@ -117,6 +120,34 @@ public class UserService {
         return UserResponse.from(user);
     }
 
+    // dados de saude do paciente logado
+    @Transactional(readOnly = true)
+    public HealthInfoResponse getHealthInfo() {
+        return HealthInfoResponse.from(loadCurrentUser().getHealthInfo());
+    }
+
+    // substitui os dados de saude do paciente logado; campo null limpa
+    @Transactional
+    public HealthInfoResponse updateHealthInfo(UpdateHealthInfoRequest request) {
+        User user = loadCurrentUser();
+        if (user.getRole() != Role.PATIENT) {
+            throw new BusinessException("Dados de saude so podem ser informados por pacientes");
+        }
+
+        HealthInfo info = new HealthInfo();
+        info.setBloodType(request.bloodType());
+        info.setHeightCm(request.heightCm());
+        info.setWeightKg(request.weightKg());
+        info.setAllergies(trimToNull(request.allergies()));
+        info.setChronicConditions(trimToNull(request.chronicConditions()));
+        info.setContinuousMedications(trimToNull(request.continuousMedications()));
+        info.setEmergencyContactName(trimToNull(request.emergencyContactName()));
+        info.setEmergencyContactPhone(trimToNull(request.emergencyContactPhone()));
+        user.setHealthInfo(info);
+
+        return HealthInfoResponse.from(info);
+    }
+
     // cria usuario e perfil de medico
     @Transactional
     public DoctorResponse createDoctor(CreateDoctorRequest request) {
@@ -145,6 +176,7 @@ public class UserService {
         doctor.setWorkDays(new HashSet<>(request.workDays()));
         doctor.setFirstVisitDurationMin(request.firstVisitDurationMin());
         doctor.setReturnDurationMin(request.returnDurationMin());
+        doctor.setConsultationPrice(request.consultationPrice());
         doctor.setSpecialties(resolveSpecialties(request.specialtyIds()));
         doctor.setAcceptedPlans(resolveHealthPlans(request.acceptedPlanIds()));
 
@@ -220,6 +252,10 @@ public class UserService {
     private AuthResponse authResponseFor(User user) {
         String token = jwtService.generateToken(user.getId(), user.getRole());
         return new AuthResponse(token, TOKEN_TYPE, jwtService.getExpirationSeconds(), UserResponse.from(user));
+    }
+
+    private static String trimToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
     }
 
     private static String normalizeEmail(String email) {

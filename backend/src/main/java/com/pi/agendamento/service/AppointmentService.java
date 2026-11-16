@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pi.agendamento.config.CurrentUserProvider;
 import com.pi.agendamento.dto.request.CreateAppointmentRequest;
 import com.pi.agendamento.dto.response.AppointmentResponse;
+import com.pi.agendamento.dto.response.HealthInfoResponse;
 import com.pi.agendamento.dto.response.TimeSlotResponse;
 import com.pi.agendamento.entity.Appointment;
 import com.pi.agendamento.entity.Doctor;
@@ -118,6 +119,10 @@ public class AppointmentService {
         appointment.setPaymentType(request.paymentType());
         // copia o convenio: a consulta nao depende do plano atual do paciente
         appointment.setHealthPlan(healthPlan);
+        // copia o preco: mudar o valor depois nao altera consulta ja marcada; convenio fica sem preco
+        appointment.setPrice(request.paymentType() == PaymentType.PARTICULAR
+                ? doctor.getConsultationPrice()
+                : null);
         appointment.setPatientNotes(request.patientNotes());
 
         return AppointmentResponse.from(save(appointment));
@@ -191,6 +196,13 @@ public class AppointmentService {
         Appointment appointment = loadAsOwningDoctor(id);
         appointment.setDoctorNotes(doctorNotes);
         return AppointmentResponse.from(appointment);
+    }
+
+    // dados de saude do paciente, so para o medico da consulta
+    @Transactional(readOnly = true)
+    public HealthInfoResponse getPatientHealth(UUID id) {
+        Appointment appointment = loadAsOwningDoctor(id);
+        return HealthInfoResponse.from(appointment.getPatient().getHealthInfo());
     }
 
     // a constraint do banco barra a concorrencia; o flush faz o erro subir aqui e nao no commit

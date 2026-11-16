@@ -1,0 +1,16 @@
+.exams-content { width: min(100% - 40px, 820px); margin: 0 auto; padding: 36px 0 52px; }
+.exams-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.exams-heading p { margin: 0 0 5px; color: #438fca; font-size: 10px; font-weight: 600; }
+.exams-heading h1 { margin: 0; color: #314d69; font-size: 23px; font-weight: 500; }
+.exams-heading span { display: inline-flex; align-items: center; gap: 7px; color: #71869b; font-size: 11px; white-space: nowrap; }
+.exams-heading span svg { color: #438fca; }
+.exams-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 48px 24px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; text-align: center; }
+.exams-empty-icon { display: grid; width: 52px; height: 52px; place-items: center; border-radius: 14px; color: #3a6a9e; background: #eaf4fe; }
+.exams-empty h2 { margin: 4px 0 0; color: #314d69; font-size: 15px; font-weight: 500; }
+.exams-empty p { max-width: 360px; margin: 0; color: #8295a7; font-size: 12px; line-height: 1.55; }
+
+@media (max-width: 600px) {
+  .exams-content { width: calc(100% - 32px); padding-top: 26px; }
+  .exams-heading { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .exams-heading h1 { font-size: 20px; }
+}

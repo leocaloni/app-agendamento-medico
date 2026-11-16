@@ -1,8 +1,7 @@
 package com.pi.agendamento.entity;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,7 +11,6 @@ import com.pi.agendamento.enums.AppointmentType;
 import com.pi.agendamento.enums.PaymentType;
 import com.pi.agendamento.exception.BusinessException;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,7 +22,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -100,13 +97,9 @@ public class Appointment {
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
-    @OneToMany(
-            mappedBy = "appointment",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
-    )
-    private List<Attachment> attachments = new ArrayList<>();
+    // preco do medico copiado no agendamento; null quando CONVENIO
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
     // cancela consulta agendada
     public void cancel(String reason) {

@@ -129,6 +129,7 @@ public class DoctorService {
         doctor.setCity(request.city());
         doctor.setState(request.state());
         doctor.setAddress(request.address());
+        doctor.setConsultationPrice(request.consultationPrice());
         doctor.setSpecialties(resolveSpecialties(request.specialtyIds()));
         doctor.setAcceptedPlans(resolveHealthPlans(request.acceptedPlanIds()));
         return detail(doctor);

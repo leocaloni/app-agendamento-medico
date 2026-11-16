@@ -1,5 +1,6 @@
 package com.pi.agendamento.dto.response;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
@@ -25,6 +26,7 @@ public record DoctorResponse(
         Set<DayOfWeek> workDays,
         int firstVisitDurationMin,
         int returnDurationMin,
+        BigDecimal consultationPrice,
         Set<UUID> specialtyIds,
         Set<UUID> acceptedPlanIds
 ) {
@@ -45,6 +47,7 @@ public record DoctorResponse(
                 Set.copyOf(doctor.getWorkDays()),
                 doctor.getFirstVisitDurationMin(),
                 doctor.getReturnDurationMin(),
+                doctor.getConsultationPrice(),
                 doctor.getSpecialties().stream().map(Specialty::getId).collect(Collectors.toSet()),
                 doctor.getAcceptedPlans().stream().map(HealthPlan::getId).collect(Collectors.toSet()));
     }

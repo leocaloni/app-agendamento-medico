@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.pi.agendamento.enums.Role;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -68,6 +69,10 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "health_plan_id")
     private HealthPlan healthPlan;
+
+    // so preenchido para PATIENT; o hibernate devolve null quando todas as colunas estao vazias
+    @Embedded
+    private HealthInfo healthInfo;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

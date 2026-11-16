@@ -6,6 +6,10 @@ import DoctorSearch from './DoctorSearch.jsx'
 import DoctorProfile from './DoctorProfile.jsx'
 import Login from './Login.jsx'
 import MinhasConsultas from './MinhasConsultas.jsx'
+import MeuPerfil from './MeuPerfil.jsx'
+import MeusExames from './MeusExames.jsx'
+import Pacientes from './Pacientes.jsx'
+import PerfilMedico from './PerfilMedico.jsx'
 import TelaMedico from './TelaMedico.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
 
@@ -26,26 +30,38 @@ export default function Index() {
     setPagina('login')
   }
 
+  function patientNavigate(item) {
+    if (item === 'buscar') return setPagina('buscar-medico')
+    if (item === 'consultas') return setPagina('consultas')
+    if (item === 'exames') return setPagina('exames')
+    if (item === 'avaliacoes') return setPagina('consultas')
+    if (item === 'perfil') return setPagina('meu-perfil')
+    return setPagina('usuario')
+  }
+
   if (pagina === 'cadastro') {
     return <Cadastro onVoltar={() => setPagina('login')} />
   }
 
   if (pagina === 'usuario') {
-    return (
-      <TelaUsuario
-        user={user}
-        onLogout={handleLogout}
-        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : item === 'consultas' ? 'consultas' : 'usuario')}
-      />
-    )
+    return <TelaUsuario user={user} onLogout={handleLogout} onNavigate={patientNavigate} />
   }
 
   if (pagina === 'consultas') {
+    return <MinhasConsultas user={user} onLogout={handleLogout} onNavigate={patientNavigate} />
+  }
+
+  if (pagina === 'exames') {
+    return <MeusExames user={user} onLogout={handleLogout} onNavigate={patientNavigate} />
+  }
+
+  if (pagina === 'meu-perfil') {
     return (
-      <MinhasConsultas
+      <MeuPerfil
         user={user}
         onLogout={handleLogout}
-        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : item === 'consultas' ? 'consultas' : 'usuario')}
+        onNavigate={patientNavigate}
+        onProfileUpdated={(updated) => setUser(updated)}
       />
     )
   }
@@ -57,6 +73,8 @@ export default function Index() {
         onLogout={handleLogout}
         onNavigate={() => setPagina('agenda-medica')}
         onOpenHorarios={() => setPagina('meus-horarios')}
+        onOpenPacientes={() => setPagina('pacientes')}
+        onOpenPerfil={() => setPagina('medico-perfil')}
       />
     )
   }
@@ -69,6 +87,14 @@ export default function Index() {
     return <MeusHorarios user={user} onLogout={handleLogout} onBack={() => setPagina('medico')} />
   }
 
+  if (pagina === 'pacientes') {
+    return <Pacientes user={user} onLogout={handleLogout} onBack={() => setPagina('medico')} />
+  }
+
+  if (pagina === 'medico-perfil') {
+    return <PerfilMedico user={user} onLogout={handleLogout} onBack={() => setPagina('medico')} />
+  }
+
   if (pagina === 'buscar-medico') {
     return (
       <DoctorSearch
@@ -78,7 +104,7 @@ export default function Index() {
           setSelectedDoctorId(doctorId)
           setPagina('perfil-medico')
         }}
-        onNavigate={(item) => setPagina(item === 'buscar' ? 'buscar-medico' : 'usuario')}
+        onNavigate={patientNavigate}
       />
     )
   }

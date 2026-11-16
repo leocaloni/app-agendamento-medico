@@ -21,6 +21,7 @@ import com.pi.agendamento.dto.request.CancelAppointmentRequest;
 import com.pi.agendamento.dto.request.CreateAppointmentRequest;
 import com.pi.agendamento.dto.request.UpdateAppointmentNotesRequest;
 import com.pi.agendamento.dto.response.AppointmentResponse;
+import com.pi.agendamento.dto.response.HealthInfoResponse;
 import com.pi.agendamento.enums.AppointmentStatus;
 import com.pi.agendamento.service.AppointmentService;
 
@@ -98,5 +99,12 @@ public class AppointmentController {
     public AppointmentResponse updateNotes(@PathVariable UUID id,
                                            @Valid @RequestBody UpdateAppointmentNotesRequest request) {
         return appointmentService.updateNotes(id, request.doctorNotes());
+    }
+
+    // dados de saude do paciente da consulta
+    @Operation(summary = "Dados de saude do paciente (DOCTOR)", description = "Somente o medico da consulta.")
+    @GetMapping("/{id}/patient-health")
+    public HealthInfoResponse getPatientHealth(@PathVariable UUID id) {
+        return appointmentService.getPatientHealth(id);
     }
 }

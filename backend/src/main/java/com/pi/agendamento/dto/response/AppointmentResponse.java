@@ -1,5 +1,6 @@
 package com.pi.agendamento.dto.response;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -24,6 +25,8 @@ public record AppointmentResponse(
         PaymentType paymentType,
         // convenio gravado na consulta, nao o atual do paciente; null se PARTICULAR
         HealthPlanSummary healthPlan,
+        // preco copiado no agendamento; null se CONVENIO
+        BigDecimal price,
         String patientNotes,
         String doctorNotes,
         String cancellationReason,
@@ -47,6 +50,7 @@ public record AppointmentResponse(
                 appointment.getStatus(),
                 appointment.getPaymentType(),
                 HealthPlanSummary.from(appointment.getHealthPlan()),
+                appointment.getPrice(),
                 appointment.getPatientNotes(),
                 appointment.getDoctorNotes(),
                 appointment.getCancellationReason(),

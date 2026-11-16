@@ -1,0 +1,35 @@
+.doctor-patients-page { min-height: 100vh; color: #3a5a78; background: #f7fafe; font-family: 'Poppins', sans-serif; }
+
+.doctor-patients-header { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 40px); border-bottom: 1px solid #e9f1fa; background: #fff; }
+.doctor-patients-account { display: flex; align-items: center; gap: 10px; color: #4f6b83; font-size: 12px; }
+.doctor-patients-logout { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; cursor: pointer; }
+.doctor-patients-logout:hover { border-color: #80bce8; background: #f7fbff; }
+.doctor-patients-content { width: min(100% - 40px, 820px); margin: 0 auto; padding: 24px 0 48px; }
+.doctor-patients-back { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; color: #5b7690; background: transparent; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+
+.doctor-patients-title-row { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 23px 0 18px; }
+.doctor-patients-title-row p { margin: 0 0 5px; color: #438fca; font-size: 10px; font-weight: 600; }
+.doctor-patients-title-row h1 { margin: 0; color: #314d69; font-size: 23px; font-weight: 500; }
+.doctor-patients-title-row > span { display: inline-flex; align-items: center; gap: 7px; color: #71869b; font-size: 11px; white-space: nowrap; }
+.doctor-patients-title-row svg { color: #438fca; }
+
+.doctor-patients-search { display: flex; align-items: center; gap: 9px; margin-bottom: 18px; padding: 0 13px; border: 1px solid #dce6ef; border-radius: 6px; background: #fff; }
+.doctor-patients-search svg { color: #8295a7; }
+.doctor-patients-search input { width: 100%; height: 42px; border: 0; color: #3a5a78; font: 400 13px 'Poppins', sans-serif; background: transparent; outline: none; }
+.doctor-patients-error { margin: 0 0 16px; padding: 12px; border: 1px solid #f0d2d0; border-radius: 6px; color: #a13f42; background: #fff8f7; font-size: 11px; }
+.doctor-patients-empty { display: flex; min-height: 110px; align-items: center; justify-content: center; margin: 0; padding: 20px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; color: #8295a7; font-size: 12px; text-align: center; }
+.doctor-patients-list { display: grid; margin: 0; padding: 0; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; list-style: none; }
+.doctor-patient-item { display: flex; align-items: center; gap: 13px; padding: 14px 16px; border-bottom: 1px solid #edf2f7; }
+.doctor-patient-item:last-child { border-bottom: 0; }
+.doctor-patient-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #2c7a66; background: #e4f5ef; font-size: 13px; font-weight: 600; }
+.doctor-patient-main { display: grid; min-width: 0; gap: 3px; }
+.doctor-patient-main strong { overflow: hidden; color: #314d69; font-size: 13px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.doctor-patient-main span { overflow: hidden; color: #8295a7; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.doctor-patient-count { margin-left: auto; padding: 4px 9px; border-radius: 99px; color: #3a6a9e; background: #eaf4fe; font-size: 10px; white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .doctor-patients-content { width: calc(100% - 32px); padding-top: 20px; }
+  .doctor-patients-title-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .doctor-patients-title-row h1 { font-size: 20px; }
+  .doctor-patient-count { display:  none; }
+}
