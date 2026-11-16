@@ -14,10 +14,18 @@ import TelaMedico from './TelaMedico.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
 import { getCurrentUser } from '../services/userApi.js'
 
+const PATIENT_PAGES = new Set(['usuario', 'buscar-medico', 'consultas', 'exames', 'meu-perfil', 'perfil-medico'])
+const DOCTOR_PAGES = new Set(['medico', 'agenda-medica', 'meus-horarios', 'pacientes', 'medico-perfil'])
+
 export default function Index() {
-  const [pagina, setPagina] = useState(() => localStorage.getItem('authToken') ? 'restoring-session' : 'login')
+  const [pagina, setPaginaState] = useState(() => localStorage.getItem('authToken') ? 'restoring-session' : 'login')
   const [user, setUser] = useState(null)
-  const [selectedDoctorId, setSelectedDoctorId] = useState(null)
+  const [selectedDoctorId, setSelectedDoctorId] = useState(() => localStorage.getItem('selectedDoctorId'))
+
+  function setPagina(nextPage) {
+    setPaginaState(nextPage)
+    if (nextPage !== 'restoring-session') localStorage.setItem('appPage', nextPage)
+  }
 
   useEffect(() => {
     if (!localStorage.getItem('authToken')) return undefined
@@ -26,11 +34,16 @@ export default function Index() {
     getCurrentUser(controller.signal)
       .then((currentUser) => {
         setUser(currentUser)
-        setPagina(currentUser.role === 'DOCTOR' ? 'medico' : 'usuario')
+        const savedPage = localStorage.getItem('appPage')
+        const isDoctor = currentUser.role === 'DOCTOR'
+        const validPage = isDoctor ? DOCTOR_PAGES.has(savedPage) : PATIENT_PAGES.has(savedPage)
+        setPagina(validPage ? savedPage : (isDoctor ? 'medico' : 'usuario'))
       })
       .catch((error) => {
         if (error.name !== 'AbortError') {
           localStorage.removeItem('authToken')
+          localStorage.removeItem('appPage')
+          localStorage.removeItem('patientSection')
           setPagina('login')
         }
       })
@@ -41,11 +54,15 @@ export default function Index() {
   function handleLogin(authResponse) {
     localStorage.setItem('authToken', authResponse.token)
     setUser(authResponse.user)
+    localStorage.setItem('patientSection', 'inicio')
     setPagina(authResponse.user.role === 'DOCTOR' ? 'medico' : 'usuario')
   }
 
   function handleLogout() {
     localStorage.removeItem('authToken')
+    localStorage.removeItem('appPage')
+    localStorage.removeItem('selectedDoctorId')
+    localStorage.removeItem('patientSection')
     setUser(null)
     setPagina('login')
   }
@@ -126,6 +143,7 @@ export default function Index() {
         onLogout={handleLogout}
         onSelectDoctor={(doctorId) => {
           setSelectedDoctorId(doctorId)
+          localStorage.setItem('selectedDoctorId', doctorId)
           setPagina('perfil-medico')
         }}
         onNavigate={patientNavigate}

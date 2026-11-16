@@ -11,7 +11,7 @@ const items = [
 ]
 
 export default function Navbar({ user, onLogout, onNavigate }) {
-  const [activeItem, setActiveItem] = useState('inicio')
+  const [activeItem, setActiveItem] = useState(() => localStorage.getItem('patientSection') || 'inicio')
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const fullName = user?.fullName || 'Paciente'
@@ -53,7 +53,9 @@ export default function Navbar({ user, onLogout, onNavigate }) {
             key={id}
             aria-current={activeItem === id ? 'page' : undefined}
             onClick={() => {
-              setActiveItem(id)
+              const section = id === 'avaliacoes' ? 'consultas' : id
+              setActiveItem(section)
+              localStorage.setItem('patientSection', section)
               setIsOpen(false)
               onNavigate?.(id)
             }}
