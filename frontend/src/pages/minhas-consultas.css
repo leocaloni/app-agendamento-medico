@@ -3,21 +3,21 @@
 .appointments-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
 .appointments-heading p { margin: 0 0 5px; color: #438fca; font-size: 10px; font-weight: 600; }
 .appointments-heading h1 { margin: 0; color: #314d69; font-size: 22px; font-weight: 500; }
-.appointments-heading > span { display: inline-flex; align-items: center; gap: 6px; color: #8295a7; font-size: 10px; }
+.appointments-heading > span { display: inline-flex; align-items: center; gap: 6px; color: #5f7387; font-size: 10px; }
 .appointments-filters { display: flex; gap: 7px; margin-bottom: 16px; }
 .appointments-filters button { min-height: 34px; padding: 0 11px; border: 1px solid #dce6ef; border-radius: 6px; color: #5b7690; background: #fff; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
 .appointments-filters button.is-active { border-color: #438fca; color: #fff; background: #438fca; }
-.appointments-empty, .appointments-error, .appointments-success { margin: 0; padding: 15px; border: 1px solid #e4edf5; border-radius: 7px; color: #8295a7; background: #fff; font-size: 11px; }
+.appointments-empty, .appointments-error, .appointments-success { margin: 0; padding: 15px; border: 1px solid #e4edf5; border-radius: 7px; color: #5f7387; background: #fff; font-size: 11px; }
 .appointments-error { margin-bottom: 12px; border-color: #f0d2d0; color: #a13f42; background: #fff8f7; }
 .appointments-success { margin-bottom: 12px; border-color: #d5ece1; color: #287a5c; background: #f5fbf7; }
 .appointments-list { display: grid; gap: 10px; }
 .appointment-history-item { display: grid; grid-template-columns: 130px minmax(0, 1fr) auto; align-items: start; gap: 16px; padding: 16px; border: 1px solid #e4edf5; border-radius: 8px; background: #fff; }
 .appointment-history-date { display: grid; gap: 5px; padding-right: 12px; border-right: 1px solid #edf2f7; }
-.appointment-history-date span { color: #71869b; font-size: 10px; }
+.appointment-history-date span { color: #5b6f82; font-size: 10px; }
 .appointment-history-date strong { color: #3a6a9e; font-size: 14px; font-weight: 500; }
 .appointment-history-main { display: grid; min-width: 0; gap: 4px; }
 .appointment-history-main h2 { margin: 0; color: #314d69; font-size: 13px; font-weight: 500; }
-.appointment-history-main p, .appointment-history-main > span { margin: 0; color: #71869b; font-size: 10px; }
+.appointment-history-main p, .appointment-history-main > span { margin: 0; color: #5b6f82; font-size: 10px; }
 .appointment-history-actions { display: grid; justify-items: end; gap: 9px; }
 .appointment-history-status { padding: 4px 7px; border-radius: 4px; color: #287a5c; background: #e4f5ef; font-size: 9px; white-space: nowrap; }
 .appointment-history-status.status-cancelled, .appointment-history-status.status-no_show { color: #a13f42; background: #fff2f1; }

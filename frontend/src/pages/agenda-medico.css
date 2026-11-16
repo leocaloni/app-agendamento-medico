@@ -17,7 +17,7 @@
 .doctor-calendar-grid-wrap { padding: 18px; }
 .doctor-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
 .doctor-calendar-weekdays { margin-bottom: 8px; }
-.doctor-calendar-weekdays span { padding: 4px 0; color: #8295a7; font-size: 10px; text-align: center; }
+.doctor-calendar-weekdays span { padding: 4px 0; color: #5f7387; font-size: 10px; text-align: center; }
 .doctor-calendar-day, .doctor-calendar-empty-cell { width: 100%; aspect-ratio: 1; }
 .doctor-calendar-day { position: relative; display: grid; place-items: center; border: 1px solid transparent; border-radius: 6px; color: #536d83; background: #f6f9fc; font: 400 12px 'Poppins', sans-serif; cursor: pointer; }
 .doctor-calendar-day:hover { border-color: #b7d7ef; }
@@ -26,25 +26,25 @@
 .doctor-calendar-day.has-appointments:not(.is-selected) { color: #2c7a66; background: #e4f5ef; }
 .doctor-calendar-day small { position: absolute; right: 4px; bottom: 3px; min-width: 15px; color: #2c7a66; font-size: 8px; text-align: center; }
 .doctor-calendar-day.is-selected small { color: #fff; }
-.doctor-calendar-legend { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; color: #8295a7; font-size: 9px; }
+.doctor-calendar-legend { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; color: #5f7387; font-size: 9px; }
 .doctor-calendar-legend span:first-child { display: inline-flex; align-items: center; gap: 6px; }
 .doctor-calendar-legend i { width: 9px; height: 9px; border-radius: 50%; background: #e4f5ef; }
 .doctor-calendar-day-agenda { overflow: hidden; }
 .doctor-calendar-day-agenda header { padding: 16px; border-bottom: 1px solid #edf2f7; }
 .doctor-calendar-day-agenda header h2 { margin: 0; color: #314d69; font-size: 15px; font-weight: 500; text-transform: capitalize; }
-.doctor-calendar-day-agenda header > span { display: inline-block; margin-top: 5px; color: #8295a7; font-size: 10px; }
+.doctor-calendar-day-agenda header > span { display: inline-block; margin-top: 5px; color: #5f7387; font-size: 10px; }
 .doctor-calendar-appointments { display: grid; }
 .doctor-calendar-appointment { display: grid; gap: 5px; padding: 14px 16px; border-bottom: 1px solid #edf2f7; }
 .doctor-calendar-appointment:last-child { border-bottom: 0; }
 .doctor-calendar-appointment time { display: inline-flex; align-items: center; gap: 5px; color: #3a6a9e; font-size: 10px; }
 .doctor-calendar-appointment strong { color: #314d69; font-size: 12px; font-weight: 500; }
-.doctor-calendar-appointment > span { color: #8295a7; font-size: 10px; }
+.doctor-calendar-appointment > span { color: #5f7387; font-size: 10px; }
 .doctor-calendar-appointment > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 3px; }
 .doctor-calendar-status { padding: 4px 7px; border-radius: 4px; color: #287a5c; background: #e4f5ef; font-size: 9px; }
 .doctor-calendar-status.status-cancelled, .doctor-calendar-status.status-no_show { color: #a13f42; background: #fff2f1; }
 .doctor-calendar-status.status-completed { color: #3a6a9e; background: #eaf4fe; }
-.doctor-calendar-appointment small { color: #8295a7; font-size: 9px; }
-.doctor-calendar-day-empty { display: flex; min-height: 100px; align-items: center; justify-content: center; margin: 0; padding: 18px; color: #8295a7; font-size: 11px; text-align: center; }
+.doctor-calendar-appointment small { color: #5f7387; font-size: 9px; }
+.doctor-calendar-day-empty { display: flex; min-height: 100px; align-items: center; justify-content: center; margin: 0; padding: 18px; color: #5f7387; font-size: 11px; text-align: center; }
 
 .doctor-appointment-action-error { margin: 0 16px; padding: 9px 11px; border: 1px solid #f0d2d0; border-radius: 6px; color: #a13f42; background: #fff8f7; font-size: 10px; }
 .doctor-appointment-note { margin: 3px 0 0; color: #5b7690; font-size: 10px; line-height: 1.5; }
@@ -63,12 +63,12 @@
 .doctor-action-btn.is-exams:hover:not(:disabled) { border-color: #80bce8; }
 .doctor-shared-exams { margin-top: 8px; padding: 10px; border: 1px solid #dce8f3; border-radius: 6px; background: #f8fbfe; }
 .doctor-shared-exams > strong { color: #314d69; font-size: 10px; font-weight: 500; }
-.doctor-shared-exams > p { margin: 7px 0 0; color: #8295a7; font-size: 10px; }
+.doctor-shared-exams > p { margin: 7px 0 0; color: #5f7387; font-size: 10px; }
 .doctor-shared-exams ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
 .doctor-shared-exams li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 7px; border-top: 1px solid #e8f0f7; }
 .doctor-shared-exams li > span { display: grid; min-width: 0; gap: 2px; }
 .doctor-shared-exams li strong { overflow: hidden; color: #3a5a78; font-size: 10px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
-.doctor-shared-exams li small { overflow: hidden; color: #8295a7; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.doctor-shared-exams li small { overflow: hidden; color: #5f7387; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 .doctor-notes-box { margin-top: 8px; }
 .doctor-notes-box textarea { width: 100%; min-height: 64px; padding: 9px 10px; border: 1px solid #dce6ef; border-radius: 6px; color: #3a5a78; font: 400 11px 'Poppins', sans-serif; resize: vertical; outline: none; }
 .doctor-notes-box textarea:focus { border-color: #80bce8; }

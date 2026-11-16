@@ -6,10 +6,10 @@
 .doctor-profile-identity { flex: 1; min-width: 0; }
 .doctor-profile-identity h1 { margin: 0; color: #314d69; font-size: 19px; font-weight: 500; }
 .doctor-profile-identity p { margin: 5px 0 0; color: #5b7690; font-size: 11px; }
-.doctor-profile-identity > span { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: #71869b; font-size: 10px; }
+.doctor-profile-identity > span { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: #5b6f82; font-size: 10px; }
 .doctor-profile-rating { display: flex; align-items: center; gap: 5px; color: #d5953d; white-space: nowrap; }
 .doctor-profile-rating strong { color: #4f6172; font-size: 13px; }
-.doctor-profile-rating span { color: #8295a7; font-size: 10px; }
+.doctor-profile-rating span { color: #5f7387; font-size: 10px; }
 .doctor-profile-bio { margin: 0 0 18px; color: #5b7690; font-size: 12px; line-height: 1.65; }
 .doctor-profile-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr); align-items: start; gap: 16px; }
 .doctor-profile-section, .appointment-form { padding: 18px; border: 1px solid #e6eef5; border-radius: 8px; background: #fff; }
@@ -29,35 +29,35 @@
 .appointment-submit, .appointment-confirmation button { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: 0; border-radius: 6px; color: #fff; background: #438fca; font: 500 12px 'Poppins', sans-serif; cursor: pointer; }
 .appointment-submit:hover, .appointment-confirmation button:hover { background: #317eb8; }
 .appointment-submit:disabled { cursor: wait; opacity: .6; }
-.appointment-payment-note { margin-top: -7px; color: #8295a7; font-size: 9px; line-height: 1.5; }
+.appointment-payment-note { margin-top: -7px; color: #5f7387; font-size: 9px; line-height: 1.5; }
 .doctor-reviews-section { margin-top: 16px; padding: 18px; border: 1px solid #e6eef5; border-radius: 8px; background: #fff; }
 .doctor-reviews-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
 .doctor-reviews-heading p { margin: 0 0 4px; color: #438fca; font-size: 10px; font-weight: 600; }
 .doctor-reviews-heading h2 { margin: 0; color: #314d69; font-size: 14px; font-weight: 500; }
 .doctor-reviews-summary { display: inline-flex; align-items: center; gap: 5px; color: #d5953d; }
 .doctor-reviews-summary strong { color: #4f6172; font-size: 13px; }
-.doctor-reviews-summary small { color: #8295a7; font-size: 10px; }
-.doctor-reviews-empty { margin: 0; padding: 20px 0 5px; color: #8295a7; font-size: 11px; text-align: center; }
+.doctor-reviews-summary small { color: #5f7387; font-size: 10px; }
+.doctor-reviews-empty { margin: 0; padding: 20px 0 5px; color: #5f7387; font-size: 11px; text-align: center; }
 .doctor-reviews-list { display: grid; border-top: 1px solid #edf2f7; }
 .doctor-review-item { padding: 13px 0; border-bottom: 1px solid #edf2f7; }
 .doctor-review-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .doctor-review-top strong { color: #314d69; font-size: 11px; font-weight: 500; }
-.doctor-review-top time { color: #8295a7; font-size: 10px; }
+.doctor-review-top time { color: #5f7387; font-size: 10px; }
 .doctor-review-stars { display: flex; gap: 2px; margin-top: 6px; color: #d5953d; }
 .doctor-review-item p { margin: 7px 0 0; color: #5b7690; font-size: 11px; line-height: 1.55; }
 .doctor-reviews-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
 .doctor-reviews-pagination button { padding: 7px 10px; border: 1px solid #dce6ef; border-radius: 5px; color: #3a6a9e; background: #fff; cursor: pointer; font: 500 10px 'Poppins', sans-serif; }
 .doctor-reviews-pagination button:hover:not(:disabled) { border-color: #80bce8; background: #f7fbff; }
 .doctor-reviews-pagination button:disabled { cursor: default; opacity: .5; }
-.doctor-reviews-pagination span { color: #8295a7; font-size: 10px; }
-.doctor-profile-state, .doctor-profile-error { margin: 16px 0; padding: 14px; border: 1px solid #e6eef5; border-radius: 7px; color: #71869b; background: #fff; font-size: 12px; }
+.doctor-reviews-pagination span { color: #5f7387; font-size: 10px; }
+.doctor-profile-state, .doctor-profile-error { margin: 16px 0; padding: 14px; border: 1px solid #e6eef5; border-radius: 7px; color: #5b6f82; background: #fff; font-size: 12px; }
 .doctor-profile-error { border-color: #f0d2d0; color: #a13f42; background: #fff8f7; }
 .appointment-confirmation { display: grid; justify-items: start; gap: 10px; max-width: 540px; margin: 50px auto; padding: 26px; border: 1px solid #dcebe4; border-radius: 8px; background: #fff; }
 .appointment-confirmation-icon { display: grid; width: 46px; height: 46px; place-items: center; border-radius: 50%; color: #287a5c; background: #e2f3ed; }
 .appointment-confirmation > p { margin: 2px 0 0; color: #31856d; font-size: 10px; font-weight: 600; }
 .appointment-confirmation h1 { margin: 0; color: #314d69; font-size: 20px; font-weight: 500; }
 .appointment-confirmation > span { color: #5b7690; font-size: 12px; }
-.appointment-confirmation small { margin-bottom: 5px; color: #8295a7; font-size: 10px; line-height: 1.55; }
+.appointment-confirmation small { margin-bottom: 5px; color: #5f7387; font-size: 10px; line-height: 1.55; }
 .booking-modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(31, 57, 78, .35); }
 .booking-modal { width: min(100%, 500px); padding: 22px; border: 1px solid #e6eef5; border-radius: 10px; background: #fff; box-shadow: 0 18px 50px rgba(31, 57, 78, .2); }
 .booking-modal > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid #edf2f7; }
@@ -71,7 +71,7 @@
 .booking-modal-details span { text-align: right; }
 .booking-modal-note { margin: 10px 0 0; padding: 10px; border-radius: 6px; color: #5b7690; background: #f7fafe; font-size: 10px; line-height: 1.5; }
 .booking-modal-note strong { color: #314d69; font-weight: 500; }
-.booking-modal > small { display: block; margin-top: 12px; color: #8295a7; font-size: 9px; }
+.booking-modal > small { display: block; margin-top: 12px; color: #5f7387; font-size: 9px; }
 .booking-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
 .booking-modal-actions button { min-height: 38px; padding: 0 14px; border-radius: 6px; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
 .booking-modal-cancel { border: 1px solid #dce6ef; color: #536d83; background: #fff; }

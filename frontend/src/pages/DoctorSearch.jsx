@@ -170,6 +170,8 @@ export default function DoctorSearch({ user, onLogout, onNavigate, onSelectDocto
                   </p>
                 )}
 
+                {doctor.bio && <p className="doctor-result-bio">{doctor.bio}</p>}
+
                 <div className="doctor-result-details">
                   <div>
                     <span className="doctor-detail-label">Convênios</span>
