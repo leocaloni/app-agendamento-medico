@@ -104,6 +104,7 @@ export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes
           </button>
           <button className="doctor-open-calendar" type="button" onClick={onOpenHorarios}>
             <Clock3 size={16} aria-hidden="true" /> Meus horários
+          </button>
           <button className="doctor-open-calendar" type="button" onClick={onOpenPacientes}>
             <Users size={16} aria-hidden="true" /> Meus pacientes
           </button>

@@ -74,6 +74,9 @@ export function updateDoctorSchedule(schedule) {
   return request('/api/doctors/me/schedule', {
     method: 'PUT',
     body: JSON.stringify(schedule),
+  })
+}
+
 export function updateDoctorProfile(profile) {
   return request('/api/doctors/me', {
     method: 'PUT',
