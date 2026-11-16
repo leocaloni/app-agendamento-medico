@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CalendarDays, Clock3, LogOut, Stethoscope, UserRound, Users, Video } from 'lucide-react'
+import { CalendarDays, ChevronDown, Clock3, LogOut, Stethoscope, UserRound, Users, Video } from 'lucide-react'
 import TervisBrand from '../components/TervisBrand.jsx'
 import { getMyAppointments } from '../services/appointmentApi.js'
 import './tela-medico.css'
@@ -55,6 +55,7 @@ export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -82,10 +83,40 @@ export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes
       <header className="doctor-home-header">
         <TervisBrand />
         <div className="doctor-home-account">
-          <span>{firstName || 'Médico'}</span>
-          <button className="doctor-home-logout" type="button" onClick={onLogout} aria-label="Sair da conta">
-            <LogOut size={16} aria-hidden="true" />
+          <button
+            className="doctor-home-user"
+            type="button"
+            aria-expanded={isProfileOpen}
+            aria-haspopup="menu"
+            aria-controls="doctor-account-menu"
+            onClick={() => setIsProfileOpen((open) => !open)}
+          >
+            <span className="doctor-home-avatar" aria-hidden="true">
+              {(firstName || 'M').charAt(0).toUpperCase()}
+            </span>
+            <span>{firstName || 'Médico'}</span>
+            <ChevronDown size={15} aria-hidden="true" />
           </button>
+          {isProfileOpen && (
+            <div className="doctor-account-menu" id="doctor-account-menu" role="menu">
+              <button
+                className="doctor-account-action"
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setIsProfileOpen(false)
+                  onOpenPerfil()
+                }}
+              >
+                <UserRound size={16} aria-hidden="true" />
+                <span>Meu perfil</span>
+              </button>
+              <button className="doctor-account-logout" type="button" role="menuitem" onClick={onLogout}>
+                <LogOut size={16} aria-hidden="true" />
+                <span>Sair da conta</span>
+              </button>
+            </div>
+          )}
         </div>
       </header>
       <section className="doctor-home-content">

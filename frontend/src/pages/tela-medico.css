@@ -1,7 +1,14 @@
 .doctor-home-page { min-height: 100vh; color: #3a5a78; background: #f7fafe; font-family: 'Poppins', sans-serif; }
 .doctor-home-header { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 10px clamp(18px, 4vw, 40px); border-bottom: 1px solid #e9f1fa; background: #fff; }
-.doctor-home-account { display: flex; align-items: center; gap: 10px; color: #4f6b83; font-size: 12px; }
-.doctor-home-logout { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #e9f1fa; border-radius: 6px; color: #5b7690; background: #fff; cursor: pointer; }
+.doctor-home-account { position: relative; display: flex; align-items: center; gap: 10px; color: #4f6b83; font-size: 12px; }
+.doctor-home-user { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; color: inherit; background: transparent; font: inherit; cursor: pointer; }
+.doctor-home-user > svg { color: #93a5b8; }
+.doctor-home-avatar { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; color: #2c7a66; background: #ddf3ee; font-size: 11px; font-weight: 600; }
+.doctor-account-menu { position: absolute; z-index: 12; top: calc(100% + 9px); right: 0; width: 182px; padding: 5px; border: 1px solid #e9f1fa; border-radius: 8px; background: #fff; box-shadow: 0 10px 24px rgba(36, 53, 72, .12); }
+.doctor-account-action, .doctor-account-logout { display: flex; width: 100%; min-height: 40px; align-items: center; gap: 10px; padding: 0 10px; border: 0; border-radius: 5px; color: #314d69; background: transparent; font: 500 12px 'Poppins', sans-serif; text-align: left; cursor: pointer; }
+.doctor-account-action:hover { background: #f5f9fe; }
+.doctor-account-logout { color: #a13f42; }
+.doctor-account-logout:hover { background: #fff2f1; }
 .doctor-home-content { width: min(100% - 40px, 1080px); margin: 0 auto; padding: 36px 0 52px; }
 .doctor-home-title { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 23px; }
 .doctor-home-title p, .doctor-agenda-heading p { margin: 0 0 6px; color: #438fca; font-size: 10px; font-weight: 600; }

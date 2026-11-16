@@ -16,3 +16,38 @@ body { min-height: 100vh; }
 button { font: inherit; }
 a { color: inherit; text-decoration: none; }
 
+.doctor-home-header .tervis-brand,
+.doctor-calendar-header .tervis-brand,
+.doctor-schedule-header .tervis-brand,
+.doctor-patients-header .tervis-brand,
+.doctor-edit-header .tervis-brand {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.doctor-home-header .tervis-logo-mark,
+.doctor-calendar-header .tervis-logo-mark,
+.doctor-schedule-header .tervis-logo-mark,
+.doctor-patients-header .tervis-logo-mark,
+.doctor-edit-header .tervis-logo-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  margin-bottom: 0;
+  border-radius: 11px;
+  color: #fff;
+  background: #5aa9f0;
+}
+
+.doctor-home-header .tervis-brand-name,
+.doctor-calendar-header .tervis-brand-name,
+.doctor-schedule-header .tervis-brand-name,
+.doctor-patients-header .tervis-brand-name,
+.doctor-edit-header .tervis-brand-name {
+  color: #3a5a78;
+  font-size: 21px;
+}
+
