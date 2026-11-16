@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cadastro from './Cadastro.jsx'
 import AgendaMedico from './AgendaMedico.jsx'
 import MeusHorarios from './MeusHorarios.jsx'
@@ -12,11 +12,31 @@ import Pacientes from './Pacientes.jsx'
 import PerfilMedico from './PerfilMedico.jsx'
 import TelaMedico from './TelaMedico.jsx'
 import TelaUsuario from './TelaUsuario.jsx'
+import { getCurrentUser } from '../services/userApi.js'
 
 export default function Index() {
-  const [pagina, setPagina] = useState('login')
+  const [pagina, setPagina] = useState(() => localStorage.getItem('authToken') ? 'restoring-session' : 'login')
   const [user, setUser] = useState(null)
   const [selectedDoctorId, setSelectedDoctorId] = useState(null)
+
+  useEffect(() => {
+    if (!localStorage.getItem('authToken')) return undefined
+
+    const controller = new AbortController()
+    getCurrentUser(controller.signal)
+      .then((currentUser) => {
+        setUser(currentUser)
+        setPagina(currentUser.role === 'DOCTOR' ? 'medico' : 'usuario')
+      })
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          localStorage.removeItem('authToken')
+          setPagina('login')
+        }
+      })
+
+    return () => controller.abort()
+  }, [])
 
   function handleLogin(authResponse) {
     localStorage.setItem('authToken', authResponse.token)
@@ -37,6 +57,10 @@ export default function Index() {
     if (item === 'avaliacoes') return setPagina('consultas')
     if (item === 'perfil') return setPagina('meu-perfil')
     return setPagina('usuario')
+  }
+
+  if (pagina === 'restoring-session') {
+    return <main className="session-loading">Restaurando sua sessão...</main>
   }
 
   if (pagina === 'cadastro') {
