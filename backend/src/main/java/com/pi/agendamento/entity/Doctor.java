@@ -1,5 +1,6 @@
 package com.pi.agendamento.entity;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -87,6 +88,10 @@ public class Doctor {
     @Column(nullable = false)
     private int returnDurationMin;
 
+    // valor da consulta particular, so exibido; o sistema nao cobra
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal consultationPrice;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "doctor_specialty",
@@ -101,7 +106,6 @@ public class Doctor {
             joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "health_plan_id")
     )
-
     private Set<HealthPlan> acceptedPlans = new HashSet<>();
 
     // indica se o medico atende no dia da semana da data

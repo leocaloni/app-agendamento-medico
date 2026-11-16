@@ -1,11 +1,14 @@
 package com.pi.agendamento.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pi.agendamento.dto.request.UpdateHealthInfoRequest;
 import com.pi.agendamento.dto.request.UpdateProfileRequest;
+import com.pi.agendamento.dto.response.HealthInfoResponse;
 import com.pi.agendamento.dto.response.UserResponse;
 import com.pi.agendamento.service.UserService;
 
@@ -30,5 +33,19 @@ public class UserController {
     @PutMapping("/me")
     public UserResponse updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
         return userService.updateProfile(request);
+    }
+
+    // dados de saude do paciente logado
+    @Operation(summary = "Meus dados de saude (PATIENT)")
+    @GetMapping("/me/health")
+    public HealthInfoResponse getHealthInfo() {
+        return userService.getHealthInfo();
+    }
+
+    // substitui os dados de saude; campo null limpa
+    @Operation(summary = "Atualizar meus dados de saude (PATIENT)")
+    @PutMapping("/me/health")
+    public HealthInfoResponse updateHealthInfo(@Valid @RequestBody UpdateHealthInfoRequest request) {
+        return userService.updateHealthInfo(request);
     }
 }

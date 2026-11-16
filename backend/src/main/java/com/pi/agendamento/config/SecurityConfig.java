@@ -72,6 +72,12 @@ public class SecurityConfig {
                                 "/api/appointments/*/complete",
                                 "/api/appointments/*/no-show",
                                 "/api/appointments/*/notes").hasRole("DOCTOR")
+                        .requestMatchers("/api/users/me/health").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/api/appointments/*/patient-health").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.POST, "/api/exams").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/api/exams/me").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/exams/*").hasRole("PATIENT")
+                        .requestMatchers("/api/exams/*/shares/**").hasRole("PATIENT")
                         .requestMatchers(HttpMethod.GET, "/api/reviews/me").hasRole("PATIENT")
                         .requestMatchers(HttpMethod.DELETE, "/api/reviews/*").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

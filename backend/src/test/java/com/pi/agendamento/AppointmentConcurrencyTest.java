@@ -2,6 +2,7 @@ package com.pi.agendamento;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -101,6 +102,7 @@ class AppointmentConcurrencyTest {
         // 60 e 20 para 10:00 caber nas duas grades e 10:20 na de retorno
         doctor.setFirstVisitDurationMin(FIRST_VISIT_MIN);
         doctor.setReturnDurationMin(RETURN_MIN);
+        doctor.setConsultationPrice(new BigDecimal("200.00"));
         doctor.setSpecialties(new HashSet<>(Set.of(specialty)));
         doctorRepository.save(doctor);
         doctorId = doctor.getId();

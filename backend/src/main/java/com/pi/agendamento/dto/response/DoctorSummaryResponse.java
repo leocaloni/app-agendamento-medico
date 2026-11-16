@@ -1,5 +1,6 @@
 package com.pi.agendamento.dto.response;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public record DoctorSummaryResponse(
         String crm,
         String city,
         String state,
+        BigDecimal consultationPrice,
         Set<String> specialties,
         Set<String> acceptedPlans,
         RatingSummaryResponse rating
@@ -28,6 +30,7 @@ public record DoctorSummaryResponse(
                 crm(doctor),
                 doctor.getCity(),
                 doctor.getState(),
+                doctor.getConsultationPrice(),
                 names(doctor.getSpecialties().stream().map(Specialty::getName).toList()),
                 names(doctor.getAcceptedPlans().stream().map(HealthPlan::getName).toList()),
                 new RatingSummaryResponse(ratingAvg, ratingCount));

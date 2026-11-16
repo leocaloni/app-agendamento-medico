@@ -5,6 +5,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/agendamento
     username: agendamento
     password: agendamento
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -27,3 +31,6 @@ app:
   jwt:
     secret: pi-agendamento-jwt-secret-0123456789abcdef
     expiration: 24h
+  storage:
+    # pasta dos exames enviados, relativa a onde a aplicacao sobe
+    local-path: uploads
