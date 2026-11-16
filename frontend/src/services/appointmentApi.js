@@ -128,3 +128,8 @@ export function markAppointmentNoShow(appointmentId, signal) {
 export function updateAppointmentNotes(appointmentId, doctorNotes, signal) {
   return patchAppointmentAction(`/api/appointments/${appointmentId}/notes`, { doctorNotes }, signal)
 }
+
+export function cancelAppointment(appointmentId, reason, signal) {
+  return patchAppointmentAction(`/api/appointments/${appointmentId}/cancel`,
+    reason ? { reason } : undefined, signal)
+}

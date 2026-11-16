@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, CalendarDays, Check, Clock3, MapPin, Star } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Check, Clock3, MapPin, Star, X } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
 import { createAppointment, getDoctor, getDoctorAvailability, getDoctorReviews } from '../services/doctorApi.js'
 import './doctor-profile.css'
@@ -47,6 +47,10 @@ function formatTime(instant) {
   }).format(new Date(instant))
 }
 
+function formatCurrency(value) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value || 0))
+}
+
 function initials(fullName) {
   return fullName?.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'M'
 }
@@ -61,6 +65,7 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
   const [paymentType, setPaymentType] = useState('PARTICULAR')
   const [healthPlanId, setHealthPlanId] = useState('')
   const [patientNotes, setPatientNotes] = useState('')
+  const [bookingDraft, setBookingDraft] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -137,7 +142,7 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
     }
   }
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault()
     setError('')
     if (!selectedSlot) {
@@ -153,7 +158,12 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
       return
     }
 
+    setBookingDraft(true)
+  }
+
+  async function confirmBooking() {
     setIsSubmitting(true)
+    setError('')
     try {
       const appointment = await createAppointment({
         doctorId,
@@ -166,8 +176,10 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
         parentAppointmentId: null,
       })
       setConfirmation(appointment)
+      setBookingDraft(false)
     } catch (submitError) {
       setError(submitError.message)
+      setBookingDraft(false)
     } finally {
       setIsSubmitting(false)
     }
@@ -299,7 +311,7 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
                 )}
 
                 <button className="appointment-submit" type="submit" disabled={isSubmitting || !dates.length}>
-                  {isSubmitting ? 'Agendando...' : 'Confirmar horário'}
+                  Confirmar horário
                 </button>
                 <small className="appointment-payment-note">O agendamento não realiza cobrança nesta etapa.</small>
               </form>
@@ -362,6 +374,44 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
               )}
             </section>
           </>
+        )}
+        {bookingDraft && selectedAppointmentSlot && (
+          <div className="booking-modal-backdrop" role="presentation" onClick={() => !isSubmitting && setBookingDraft(false)}>
+            <section className="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title"
+              onClick={(event) => event.stopPropagation()}>
+              <header>
+                <div>
+                  <p>CONFIRME SUA CONSULTA</p>
+                  <h2 id="booking-modal-title">Confira os detalhes</h2>
+                </div>
+                <button type="button" className="booking-modal-close" onClick={() => setBookingDraft(false)}
+                  disabled={isSubmitting} aria-label="Fechar confirmação">
+                  <X size={17} aria-hidden="true" />
+                </button>
+              </header>
+              <div className="booking-modal-details">
+                <p><strong>Médico</strong><span>{doctor.fullName}</span></p>
+                <p><strong>Especialidade</strong><span>{doctor.specialties.find((specialty) => specialty.id === selectedSpecialtyId)?.name || 'Não informada'}</span></p>
+                <p><strong>Data</strong><span>{formatDay(clinicDateKey(selectedAppointmentSlot.startAt))}</span></p>
+                <p><strong>Horário</strong><span>{formatTime(selectedAppointmentSlot.startAt)}</span></p>
+                <p><strong>Pagamento</strong><span>{paymentType === 'CONVENIO'
+                  ? doctor.acceptedPlans.find((plan) => plan.id === healthPlanId)?.name || 'Convênio'
+                  : `Particular · ${formatCurrency(doctor.consultationPrice)}`}</span></p>
+              </div>
+              {patientNotes.trim() && (
+                <p className="booking-modal-note"><strong>Observação:</strong> {patientNotes.trim()}</p>
+              )}
+              <small>O pagamento não será processado agora.</small>
+              <div className="booking-modal-actions">
+                <button type="button" className="booking-modal-cancel" onClick={() => setBookingDraft(false)} disabled={isSubmitting}>
+                  Voltar
+                </button>
+                <button type="button" className="booking-modal-confirm" onClick={confirmBooking} disabled={isSubmitting}>
+                  {isSubmitting ? 'Agendando...' : 'Confirmar consulta'}
+                </button>
+              </div>
+            </section>
+          </div>
         )}
       </main>
     </div>

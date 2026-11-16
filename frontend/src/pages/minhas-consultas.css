@@ -24,6 +24,8 @@
 .appointment-history-status.status-completed { color: #3a6a9e; background: #eaf4fe; }
 .appointment-review-button, .review-submit, .review-cancel { min-height: 34px; padding: 0 10px; border: 1px solid #dce6ef; border-radius: 5px; color: #3a6a9e; background: #fff; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
 .appointment-review-button:hover, .review-cancel:hover { border-color: #80bce8; background: #f7fbff; }
+.appointment-cancel-button { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 0 9px; border: 1px solid #f0d2d0; border-radius: 5px; color: #a13f42; background: #fff8f7; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
+.appointment-cancel-button:hover { border-color: #e5a9a6; background: #fff2f1; }
 .appointment-reviewed { display: inline-flex; align-items: center; gap: 5px; color: #b47a2c; font-size: 10px; }
 .appointment-review-form { display: grid; grid-column: 2 / -1; gap: 11px; padding: 14px; border: 1px solid #e7eef5; border-radius: 7px; background: #fbfdff; }
 .appointment-review-form h3 { margin: 0; color: #314d69; font-size: 12px; font-weight: 500; }
@@ -37,6 +39,18 @@
 .review-submit { border-color: #438fca; color: #fff; background: #438fca; }
 .review-submit:hover { background: #317eb8; }
 .review-submit:disabled, .review-cancel:disabled { cursor: wait; opacity: .6; }
+.appointment-cancel-modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(31, 57, 78, .35); }
+.appointment-cancel-modal { width: min(100%, 450px); padding: 21px; border: 1px solid #f0d2d0; border-radius: 9px; background: #fff; box-shadow: 0 18px 50px rgba(31, 57, 78, .2); }
+.appointment-cancel-modal h2 { margin: 0; color: #314d69; font-size: 17px; font-weight: 500; }
+.appointment-cancel-modal > p { margin: 11px 0 16px; color: #5b7690; font-size: 11px; line-height: 1.55; }
+.appointment-cancel-modal > p strong { color: #314d69; font-weight: 500; }
+.appointment-cancel-warning { margin: -5px 0 15px !important; padding: 9px; border-radius: 5px; color: #a13f42 !important; background: #fff2f1; font-size: 10px !important; }
+.appointment-cancel-modal label { display: grid; gap: 5px; color: #5b7690; font-size: 10px; }
+.appointment-cancel-modal textarea { width: 100%; padding: 9px 10px; border: 1px solid #dce6ef; border-radius: 5px; outline: 0; color: #3a5a78; background: #fff; font: 400 11px 'Poppins', sans-serif; resize: vertical; }
+.appointment-cancel-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 16px; }
+.appointment-cancel-confirm { min-height: 34px; padding: 0 10px; border: 1px solid #d88a87; border-radius: 5px; color: #fff; background: #b85251; font: 500 10px 'Poppins', sans-serif; cursor: pointer; }
+.appointment-cancel-confirm:hover { background: #a84645; }
+.appointment-cancel-confirm:disabled { cursor: wait; opacity: .6; }
 
 @media (max-width: 640px) {
   .appointments-content { width: calc(100% - 32px); padding-top: 24px; }

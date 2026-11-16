@@ -58,6 +58,26 @@
 .appointment-confirmation h1 { margin: 0; color: #314d69; font-size: 20px; font-weight: 500; }
 .appointment-confirmation > span { color: #5b7690; font-size: 12px; }
 .appointment-confirmation small { margin-bottom: 5px; color: #8295a7; font-size: 10px; line-height: 1.55; }
+.booking-modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(31, 57, 78, .35); }
+.booking-modal { width: min(100%, 500px); padding: 22px; border: 1px solid #e6eef5; border-radius: 10px; background: #fff; box-shadow: 0 18px 50px rgba(31, 57, 78, .2); }
+.booking-modal > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid #edf2f7; }
+.booking-modal header p { margin: 0 0 5px; color: #438fca; font-size: 10px; font-weight: 600; }
+.booking-modal h2 { margin: 0; color: #314d69; font-size: 18px; font-weight: 500; }
+.booking-modal-close { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #dce6ef; border-radius: 6px; color: #5b7690; background: #fff; cursor: pointer; }
+.booking-modal-close:hover:not(:disabled) { border-color: #80bce8; background: #f7fbff; }
+.booking-modal-details { display: grid; gap: 10px; padding: 17px 0 4px; }
+.booking-modal-details p { display: flex; justify-content: space-between; gap: 15px; margin: 0; color: #5b7690; font-size: 11px; }
+.booking-modal-details strong { color: #314d69; font-weight: 500; }
+.booking-modal-details span { text-align: right; }
+.booking-modal-note { margin: 10px 0 0; padding: 10px; border-radius: 6px; color: #5b7690; background: #f7fafe; font-size: 10px; line-height: 1.5; }
+.booking-modal-note strong { color: #314d69; font-weight: 500; }
+.booking-modal > small { display: block; margin-top: 12px; color: #8295a7; font-size: 9px; }
+.booking-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.booking-modal-actions button { min-height: 38px; padding: 0 14px; border-radius: 6px; font: 500 11px 'Poppins', sans-serif; cursor: pointer; }
+.booking-modal-cancel { border: 1px solid #dce6ef; color: #536d83; background: #fff; }
+.booking-modal-confirm { border: 0; color: #fff; background: #438fca; }
+.booking-modal-actions button:hover:not(:disabled) { filter: brightness(.96); }
+.booking-modal-actions button:disabled { cursor: wait; opacity: .6; }
 
 @media (max-width: 760px) {
   .doctor-profile-page { width: calc(100% - 32px); padding-top: 20px; }
@@ -71,4 +91,7 @@
   .doctor-reviews-section { padding: 14px; }
   .doctor-review-top { align-items: flex-start; flex-direction: column; gap: 3px; }
   .appointment-confirmation { margin: 24px auto; padding: 20px; }
+  .booking-modal { padding: 18px; }
+  .booking-modal-details p { align-items: flex-start; flex-direction: column; gap: 2px; }
+  .booking-modal-details span { text-align: left; }
 }

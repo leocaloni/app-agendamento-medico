@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CalendarDays, Star } from 'lucide-react'
+import { CalendarDays, Star, XCircle } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
-import { createAppointmentReview, getAllMyAppointments, getMyReviews } from '../services/appointmentApi.js'
+import { cancelAppointment, createAppointmentReview, getAllMyAppointments, getMyReviews } from '../services/appointmentApi.js'
 import './minhas-consultas.css'
 
 const CLINIC_TIME_ZONE = 'America/Sao_Paulo'
@@ -37,6 +37,15 @@ function formatTime(instant) {
   }).format(new Date(instant))
 }
 
+function isFutureScheduled(appointment) {
+  return appointment.status === 'SCHEDULED' && new Date(appointment.startAt).getTime() > Date.now()
+}
+
+function canCancel(appointment) {
+  return isFutureScheduled(appointment)
+    && new Date(appointment.startAt).getTime() - Date.now() >= 24 * 60 * 60 * 1000
+}
+
 export default function MinhasConsultas({ user, onLogout, onNavigate }) {
   const [appointments, setAppointments] = useState([])
   const [reviews, setReviews] = useState([])
@@ -48,6 +57,9 @@ export default function MinhasConsultas({ user, onLogout, onNavigate }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [cancellingAppointment, setCancellingAppointment] = useState(null)
+  const [cancelReason, setCancelReason] = useState('')
+  const [isCancelling, setIsCancelling] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -135,6 +147,33 @@ export default function MinhasConsultas({ user, onLogout, onNavigate }) {
     }
   }
 
+  function openCancellation(appointment) {
+    setCancellingAppointment(appointment)
+    setCancelReason('')
+    setError('')
+  }
+
+  async function confirmCancellation() {
+    if (!cancellingAppointment) return
+    setIsCancelling(true)
+    setError('')
+    try {
+      const updated = await cancelAppointment(
+        cancellingAppointment.id,
+        cancelReason.trim() || null,
+      )
+      setAppointments((current) => current.map((item) => item.id === updated.id ? updated : item))
+      setCancellingAppointment(null)
+      setCancelReason('')
+      setSuccess('Consulta cancelada com sucesso.')
+    } catch (cancelError) {
+      setError(cancelError.message)
+      setCancellingAppointment(null)
+    } finally {
+      setIsCancelling(false)
+    }
+  }
+
   return (
     <div className="patient-app appointments-page">
       <Navbar user={user} onLogout={onLogout} onNavigate={onNavigate} />
@@ -204,6 +243,11 @@ export default function MinhasConsultas({ user, onLogout, onNavigate }) {
                         </button>
                       )
                     )}
+                    {isFutureScheduled(appointment) && (
+                      <button className="appointment-cancel-button" type="button" onClick={() => openCancellation(appointment)}>
+                        <XCircle size={14} aria-hidden="true" /> Cancelar consulta
+                      </button>
+                    )}
                   </div>
 
                   {isReviewing && (
@@ -242,6 +286,36 @@ export default function MinhasConsultas({ user, onLogout, onNavigate }) {
               )
             })}
           </section>
+        )}
+        {cancellingAppointment && (
+          <div className="appointment-cancel-modal-backdrop" role="presentation"
+            onClick={() => !isCancelling && setCancellingAppointment(null)}>
+            <section className="appointment-cancel-modal" role="dialog" aria-modal="true" aria-labelledby="cancel-appointment-title"
+              onClick={(event) => event.stopPropagation()}>
+              <h2 id="cancel-appointment-title">Cancelar consulta?</h2>
+              <p>Você está cancelando a consulta com <strong>{cancellingAppointment.doctorName}</strong> em{' '}
+                <strong>{formatDate(cancellingAppointment.startAt)} às {formatTime(cancellingAppointment.startAt)}</strong>.</p>
+              {!canCancel(cancellingAppointment) && (
+                <p className="appointment-cancel-warning">
+                  O cancelamento só pode ser confirmado com pelo menos 24 horas de antecedência.
+                </p>
+              )}
+              <label>
+                <span>Motivo (opcional)</span>
+                <textarea value={cancelReason} onChange={(event) => setCancelReason(event.target.value)}
+                  maxLength={500} rows={3} placeholder="Informe o motivo do cancelamento." />
+              </label>
+              <div className="appointment-cancel-actions">
+                <button type="button" className="review-cancel" onClick={() => setCancellingAppointment(null)} disabled={isCancelling}>
+                  Voltar
+                </button>
+                <button type="button" className="appointment-cancel-confirm" onClick={confirmCancellation}
+                  disabled={isCancelling || !canCancel(cancellingAppointment)}>
+                  {isCancelling ? 'Cancelando...' : 'Confirmar cancelamento'}
+                </button>
+              </div>
+            </section>
+          </div>
         )}
       </main>
     </div>

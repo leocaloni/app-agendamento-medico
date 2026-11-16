@@ -38,6 +38,7 @@ import com.pi.agendamento.repository.UserRepository;
 @Service
 public class AppointmentService {
 
+    private static final Duration MIN_PATIENT_CANCELLATION_NOTICE = Duration.ofHours(24);
     // limites usados quando o cliente nao manda from/to
     private static final Instant OPEN_START = Instant.EPOCH;
     private static final Instant OPEN_END = Instant.parse("9999-12-31T23:59:59Z");
@@ -170,6 +171,12 @@ public class AppointmentService {
     @Transactional
     public AppointmentResponse cancel(UUID id, String reason) {
         Appointment appointment = loadVisible(id);
+        if (appointment.getPatient().getId().equals(currentUserProvider.getId())
+                && Duration.between(Instant.now(), appointment.getStartAt())
+                        .compareTo(MIN_PATIENT_CANCELLATION_NOTICE) < 0) {
+            throw new BusinessException(
+                    "O paciente precisa cancelar a consulta com pelo menos 24 horas de antecedencia");
+        }
         appointment.cancel(reason);
         return AppointmentResponse.from(appointment);
     }

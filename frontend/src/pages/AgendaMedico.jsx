@@ -3,6 +3,7 @@ import { ArrowLeft, Check, ChevronLeft, ChevronRight, Clock3, FileText, LogOut, 
 import TervisBrand from '../components/TervisBrand.jsx'
 import {
   completeAppointment,
+  cancelAppointment,
   getMyAppointments,
   markAppointmentNoShow,
   updateAppointmentNotes,
@@ -105,6 +106,9 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
   const [examsFor, setExamsFor] = useState(null)
   const [sharedExams, setSharedExams] = useState({})
   const [examsLoadingFor, setExamsLoadingFor] = useState(null)
+  const [cancellingAppointment, setCancellingAppointment] = useState(null)
+  const [cancelReason, setCancelReason] = useState('')
+  const [isCancelling, setIsCancelling] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -173,6 +177,32 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
   async function saveNotes(appointment) {
     const ok = await runAction(appointment.id, () => updateAppointmentNotes(appointment.id, notesDraft))
     if (ok) setNotesFor(null)
+  }
+
+  function openCancellation(appointment) {
+    setCancellingAppointment(appointment)
+    setCancelReason('')
+    setActionError('')
+  }
+
+  async function confirmCancellation() {
+    if (!cancellingAppointment) return
+    setIsCancelling(true)
+    setActionError('')
+    try {
+      const updated = await cancelAppointment(
+        cancellingAppointment.id,
+        cancelReason.trim() || null,
+      )
+      applyUpdatedAppointment(updated)
+      setCancellingAppointment(null)
+      setCancelReason('')
+    } catch (cancelError) {
+      setActionError(cancelError.message)
+      setCancellingAppointment(null)
+    } finally {
+      setIsCancelling(false)
+    }
   }
 
   async function toggleExams(appointmentId) {
@@ -318,6 +348,10 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
                             onClick={() => runAction(appointment.id, () => markAppointmentNoShow(appointment.id))}>
                             <UserX size={13} aria-hidden="true" /> Falta
                           </button>
+                          <button type="button" className="doctor-action-btn is-cancel" disabled={actingId === appointment.id}
+                            onClick={() => openCancellation(appointment)}>
+                            Cancelar consulta
+                          </button>
                         </>
                       )}
                       <button type="button" className="doctor-action-btn is-notes" disabled={actingId === appointment.id}
@@ -384,6 +418,30 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
           </section>
         </div>
       </section>
+      {cancellingAppointment && (
+        <div className="doctor-cancel-modal-backdrop" role="presentation"
+          onClick={() => !isCancelling && setCancellingAppointment(null)}>
+          <section className="doctor-cancel-modal" role="dialog" aria-modal="true" aria-labelledby="doctor-cancel-title"
+            onClick={(event) => event.stopPropagation()}>
+            <h2 id="doctor-cancel-title">Cancelar consulta?</h2>
+            <p>Você está cancelando a consulta de <strong>{cancellingAppointment.patientName}</strong> em{' '}
+              <strong>{formatTime(cancellingAppointment.startAt)}</strong>.</p>
+            <label>
+              <span>Motivo (opcional)</span>
+              <textarea value={cancelReason} onChange={(event) => setCancelReason(event.target.value)}
+                maxLength={500} rows={3} placeholder="Informe o motivo do cancelamento." />
+            </label>
+            <div className="doctor-cancel-modal-actions">
+              <button type="button" className="doctor-action-btn" onClick={() => setCancellingAppointment(null)} disabled={isCancelling}>
+                Voltar
+              </button>
+              <button type="button" className="doctor-action-btn is-cancel" onClick={confirmCancellation} disabled={isCancelling}>
+                {isCancelling ? 'Cancelando...' : 'Confirmar cancelamento'}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   )
 }
