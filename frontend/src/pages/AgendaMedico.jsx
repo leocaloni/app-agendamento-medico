@@ -7,6 +7,7 @@ import {
   markAppointmentNoShow,
   updateAppointmentNotes,
 } from '../services/appointmentApi.js'
+import { downloadExam, getAppointmentExams } from '../services/examApi.js'
 import './agenda-medico.css'
 
 const CLINIC_TIME_ZONE = 'America/Sao_Paulo'
@@ -101,6 +102,9 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
   const [actionError, setActionError] = useState('')
   const [notesFor, setNotesFor] = useState(null)
   const [notesDraft, setNotesDraft] = useState('')
+  const [examsFor, setExamsFor] = useState(null)
+  const [sharedExams, setSharedExams] = useState({})
+  const [examsLoadingFor, setExamsLoadingFor] = useState(null)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -169,6 +173,38 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
   async function saveNotes(appointment) {
     const ok = await runAction(appointment.id, () => updateAppointmentNotes(appointment.id, notesDraft))
     if (ok) setNotesFor(null)
+  }
+
+  async function toggleExams(appointmentId) {
+    if (examsFor === appointmentId) {
+      setExamsFor(null)
+      return
+    }
+    setExamsFor(appointmentId)
+    if (sharedExams[appointmentId]) return
+
+    setExamsLoadingFor(appointmentId)
+    setActionError('')
+    try {
+      const exams = await getAppointmentExams(appointmentId)
+      setSharedExams((current) => ({ ...current, [appointmentId]: exams }))
+    } catch (loadError) {
+      setActionError(loadError.message)
+    } finally {
+      setExamsLoadingFor(null)
+    }
+  }
+
+  async function downloadSharedExam(exam) {
+    setActionError('')
+    setActingId(exam.id)
+    try {
+      await downloadExam(exam)
+    } catch (downloadError) {
+      setActionError(downloadError.message)
+    } finally {
+      setActingId(null)
+    }
   }
 
   return (
@@ -288,7 +324,38 @@ export default function AgendaMedico({ user, onLogout, onBack }) {
                         onClick={() => (notesFor === appointment.id ? setNotesFor(null) : openNotes(appointment))}>
                         <FileText size={13} aria-hidden="true" /> Anotações
                       </button>
+                      <button type="button" className="doctor-action-btn is-exams" disabled={actingId === appointment.id}
+                        onClick={() => toggleExams(appointment.id)}>
+                        <FileText size={13} aria-hidden="true" />
+                        {examsFor === appointment.id ? 'Ocultar exames' : 'Exames compartilhados'}
+                      </button>
                     </div>
+
+                    {examsFor === appointment.id && (
+                      <div className="doctor-shared-exams">
+                        <strong>Exames liberados pelo paciente</strong>
+                        {examsLoadingFor === appointment.id ? (
+                          <p>Carregando exames...</p>
+                        ) : (sharedExams[appointment.id] || []).length === 0 ? (
+                          <p>Nenhum exame foi compartilhado com esta consulta.</p>
+                        ) : (
+                          <ul>
+                            {sharedExams[appointment.id].map((exam) => (
+                              <li key={exam.id}>
+                                <span>
+                                  <strong>{exam.title}</strong>
+                                  <small>{exam.fileName} · {exam.laboratory || 'Laboratório não informado'}</small>
+                                </span>
+                                <button type="button" className="doctor-action-btn is-exams"
+                                  disabled={actingId === exam.id} onClick={() => downloadSharedExam(exam)}>
+                                  {actingId === exam.id ? 'Baixando...' : 'Baixar'}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
 
                     {notesFor === appointment.id && (
                       <div className="doctor-notes-box">
