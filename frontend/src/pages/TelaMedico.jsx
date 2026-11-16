@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { CalendarDays, Clock3, LogOut, Stethoscope, Video } from 'lucide-react'
+import { CalendarDays, Clock3, LogOut, Stethoscope, UserRound, Users, Video } from 'lucide-react'
 import TervisBrand from '../components/TervisBrand.jsx'
 import { getMyAppointments } from '../services/appointmentApi.js'
 import './tela-medico.css'
@@ -50,7 +50,7 @@ const appointmentStatusLabel = {
   NO_SHOW: 'Não compareceu',
 }
 
-export default function TelaMedico({ user, onLogout, onNavigate }) {
+export default function TelaMedico({ user, onLogout, onNavigate, onOpenPacientes, onOpenPerfil }) {
   const firstName = user?.firstName?.trim() || user?.fullName?.trim().split(/\s+/)[0]
   const [appointments, setAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -98,9 +98,17 @@ export default function TelaMedico({ user, onLogout, onNavigate }) {
             {new Intl.DateTimeFormat('pt-BR', { timeZone: CLINIC_TIME_ZONE, dateStyle: 'full' }).format(new Date())}
           </span>
         </header>
-        <button className="doctor-open-calendar" type="button" onClick={onNavigate}>
-          <CalendarDays size={16} aria-hidden="true" /> Ver agenda mensal
-        </button>
+        <div className="doctor-home-actions">
+          <button className="doctor-open-calendar" type="button" onClick={onNavigate}>
+            <CalendarDays size={16} aria-hidden="true" /> Ver agenda mensal
+          </button>
+          <button className="doctor-open-calendar" type="button" onClick={onOpenPacientes}>
+            <Users size={16} aria-hidden="true" /> Meus pacientes
+          </button>
+          <button className="doctor-open-calendar" type="button" onClick={onOpenPerfil}>
+            <UserRound size={16} aria-hidden="true" /> Meu perfil
+          </button>
+        </div>
 
         <section className="doctor-home-stats" aria-label="Resumo de hoje">
           <article className="doctor-stat-card stat-appointments">
