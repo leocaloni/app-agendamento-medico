@@ -30,6 +30,26 @@
 .appointment-submit:hover, .appointment-confirmation button:hover { background: #317eb8; }
 .appointment-submit:disabled { cursor: wait; opacity: .6; }
 .appointment-payment-note { margin-top: -7px; color: #8295a7; font-size: 9px; line-height: 1.5; }
+.doctor-reviews-section { margin-top: 16px; padding: 18px; border: 1px solid #e6eef5; border-radius: 8px; background: #fff; }
+.doctor-reviews-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+.doctor-reviews-heading p { margin: 0 0 4px; color: #438fca; font-size: 10px; font-weight: 600; }
+.doctor-reviews-heading h2 { margin: 0; color: #314d69; font-size: 14px; font-weight: 500; }
+.doctor-reviews-summary { display: inline-flex; align-items: center; gap: 5px; color: #d5953d; }
+.doctor-reviews-summary strong { color: #4f6172; font-size: 13px; }
+.doctor-reviews-summary small { color: #8295a7; font-size: 10px; }
+.doctor-reviews-empty { margin: 0; padding: 20px 0 5px; color: #8295a7; font-size: 11px; text-align: center; }
+.doctor-reviews-list { display: grid; border-top: 1px solid #edf2f7; }
+.doctor-review-item { padding: 13px 0; border-bottom: 1px solid #edf2f7; }
+.doctor-review-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.doctor-review-top strong { color: #314d69; font-size: 11px; font-weight: 500; }
+.doctor-review-top time { color: #8295a7; font-size: 10px; }
+.doctor-review-stars { display: flex; gap: 2px; margin-top: 6px; color: #d5953d; }
+.doctor-review-item p { margin: 7px 0 0; color: #5b7690; font-size: 11px; line-height: 1.55; }
+.doctor-reviews-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.doctor-reviews-pagination button { padding: 7px 10px; border: 1px solid #dce6ef; border-radius: 5px; color: #3a6a9e; background: #fff; cursor: pointer; font: 500 10px 'Poppins', sans-serif; }
+.doctor-reviews-pagination button:hover:not(:disabled) { border-color: #80bce8; background: #f7fbff; }
+.doctor-reviews-pagination button:disabled { cursor: default; opacity: .5; }
+.doctor-reviews-pagination span { color: #8295a7; font-size: 10px; }
 .doctor-profile-state, .doctor-profile-error { margin: 16px 0; padding: 14px; border: 1px solid #e6eef5; border-radius: 7px; color: #71869b; background: #fff; font-size: 12px; }
 .doctor-profile-error { border-color: #f0d2d0; color: #a13f42; background: #fff8f7; }
 .appointment-confirmation { display: grid; justify-items: start; gap: 10px; max-width: 540px; margin: 50px auto; padding: 26px; border: 1px solid #dcebe4; border-radius: 8px; background: #fff; }
@@ -48,5 +68,7 @@
   .doctor-profile-rating { margin-left: 61px; }
   .doctor-profile-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .doctor-profile-section, .appointment-form { padding: 14px; }
+  .doctor-reviews-section { padding: 14px; }
+  .doctor-review-top { align-items: flex-start; flex-direction: column; gap: 3px; }
   .appointment-confirmation { margin: 24px auto; padding: 20px; }
 }

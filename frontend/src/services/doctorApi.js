@@ -54,6 +54,11 @@ export function getDoctor(doctorId, signal) {
   return get(`/api/doctors/${doctorId}`, signal)
 }
 
+export function getDoctorReviews(doctorId, page = 0, signal) {
+  const params = new URLSearchParams({ page: String(page), size: '5' })
+  return get(`/api/doctors/${doctorId}/reviews?${params.toString()}`, signal)
+}
+
 export function getDoctorAvailability(doctorId, from, to, type = 'PRIMEIRA_CONSULTA', signal) {
   const params = new URLSearchParams({ from, to, type })
   return get(`/api/doctors/${doctorId}/availability?${params.toString()}`, signal)

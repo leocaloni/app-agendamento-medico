@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, CalendarDays, Check, Clock3, MapPin, Star } from 'lucide-react'
 import Navbar from '../components/Navbar.jsx'
-import { createAppointment, getDoctor, getDoctorAvailability } from '../services/doctorApi.js'
+import { createAppointment, getDoctor, getDoctorAvailability, getDoctorReviews } from '../services/doctorApi.js'
 import './doctor-profile.css'
 
 const CLINIC_TIME_ZONE = 'America/Sao_Paulo'
@@ -54,6 +54,7 @@ function initials(fullName) {
 export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
   const [doctor, setDoctor] = useState(null)
   const [availability, setAvailability] = useState([])
+  const [reviews, setReviews] = useState({ content: [], number: 0, totalPages: 0, totalElements: 0 })
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedSlot, setSelectedSlot] = useState('')
   const [selectedSpecialtyId, setSelectedSpecialtyId] = useState('')
@@ -64,6 +65,8 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [confirmation, setConfirmation] = useState(null)
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [reviewsError, setReviewsError] = useState('')
 
   useEffect(() => {
     const controller = new AbortController()
@@ -74,12 +77,14 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
       setIsLoading(true)
       setError('')
       try {
-        const [doctorData, slots] = await Promise.all([
+        const [doctorData, slots, reviewData] = await Promise.all([
           getDoctor(doctorId, controller.signal),
           getDoctorAvailability(doctorId, from, to, APPOINTMENT_TYPE, controller.signal),
+          getDoctorReviews(doctorId, 0, controller.signal),
         ])
         setDoctor(doctorData)
         setAvailability(slots)
+        setReviews(reviewData)
         setSelectedDate(slots.length ? clinicDateKey(slots[0].startAt) : '')
         setSelectedSpecialtyId(doctorData.specialties[0]?.id || '')
 
@@ -92,13 +97,29 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
       } catch (loadError) {
         if (loadError.name !== 'AbortError') setError(loadError.message)
       } finally {
-        if (!controller.signal.aborted) setIsLoading(false)
+        if (!controller.signal.aborted) {
+          setIsLoading(false)
+          setReviewsLoading(false)
+        }
       }
     }
 
     loadProfile()
     return () => controller.abort()
   }, [doctorId, user?.healthPlan?.id])
+
+  async function changeReviewsPage(page) {
+    setReviewsLoading(true)
+    setReviewsError('')
+    try {
+      const reviewData = await getDoctorReviews(doctorId, page)
+      setReviews(reviewData)
+    } catch (loadError) {
+      setReviewsError(loadError.message)
+    } finally {
+      setReviewsLoading(false)
+    }
+  }
 
   const dates = useMemo(() => [...new Set(availability.map((slot) => clinicDateKey(slot.startAt)))], [availability])
   const slotsForDate = availability.filter((slot) => clinicDateKey(slot.startAt) === selectedDate)
@@ -283,6 +304,63 @@ export default function DoctorProfile({ doctorId, user, onLogout, onBack }) {
                 <small className="appointment-payment-note">O agendamento não realiza cobrança nesta etapa.</small>
               </form>
             </div>
+
+            <section className="doctor-reviews-section" aria-labelledby="doctor-reviews-title">
+              <div className="doctor-reviews-heading">
+                <div>
+                  <p>OPINIÕES DE PACIENTES</p>
+                  <h2 id="doctor-reviews-title">Avaliações</h2>
+                </div>
+                {hasRating && (
+                  <span className="doctor-reviews-summary">
+                    <Star size={15} fill="currentColor" aria-hidden="true" />
+                    <strong>{ratingAverage.toFixed(1)}</strong>
+                    <small>{doctor.rating.total} avaliações</small>
+                  </span>
+                )}
+              </div>
+
+              {reviewsError && <p className="doctor-profile-error" role="alert">{reviewsError}</p>}
+              {reviewsLoading ? (
+                <p className="doctor-reviews-empty">Carregando avaliações...</p>
+              ) : reviews.content.length === 0 ? (
+                <p className="doctor-reviews-empty">Este médico ainda não recebeu avaliações.</p>
+              ) : (
+                <>
+                  <div className="doctor-reviews-list">
+                    {reviews.content.map((review) => (
+                      <article className="doctor-review-item" key={review.id}>
+                        <div className="doctor-review-top">
+                          <strong>{review.authorFirstName}</strong>
+                          <time dateTime={review.createdAt}>
+                            {new Intl.DateTimeFormat('pt-BR', { dateStyle: 'medium' }).format(new Date(review.createdAt))}
+                          </time>
+                        </div>
+                        <div className="doctor-review-stars" aria-label={`${review.rating} de 5 estrelas`}>
+                          {[1, 2, 3, 4, 5].map((value) => (
+                            <Star key={value} size={14} fill={value <= review.rating ? 'currentColor' : 'none'} />
+                          ))}
+                        </div>
+                        {review.comment && <p>{review.comment}</p>}
+                      </article>
+                    ))}
+                  </div>
+                  {reviews.totalPages > 1 && (
+                    <div className="doctor-reviews-pagination">
+                      <button type="button" disabled={reviews.number === 0 || reviewsLoading}
+                        onClick={() => changeReviewsPage(reviews.number - 1)}>
+                        Anteriores
+                      </button>
+                      <span>Página {reviews.number + 1} de {reviews.totalPages}</span>
+                      <button type="button" disabled={reviews.number + 1 >= reviews.totalPages || reviewsLoading}
+                        onClick={() => changeReviewsPage(reviews.number + 1)}>
+                        Próximas
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </section>
           </>
         )}
       </main>
