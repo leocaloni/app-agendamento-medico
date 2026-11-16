@@ -18,10 +18,12 @@
 
 .login-layout { display: grid; min-height: 100vh; grid-template-columns: 1.08fr .92fr; }
 .login-mobile-header { display: none; }
-.login-promo { display: flex; flex-direction: column; justify-content: center; padding: 72px clamp(48px, 8vw, 120px); background: var(--login-blue-bg); }
-.login-promo-kicker { margin: 0 0 22px; color: var(--login-blue); font-size: 11px; font-weight: 600; letter-spacing: 1.4px; }
-.login-promo h1 { margin: 0 0 18px; color: var(--login-blue-dark); font: 500 clamp(36px, 4vw, 48px)/1.2 'Lora', serif; }
-.login-promo-copy { max-width: 400px; margin: 0; color: var(--login-secondary); font-size: 14px; line-height: 1.8; }
+.login-promo { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 72px clamp(48px, 8vw, 120px); overflow: hidden; background: var(--login-blue-dark); }
+.login-promo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(150deg, rgba(49, 77, 105, .84), rgba(58, 111, 176, .5) 58%, rgba(67, 143, 202, .22)), url('../assets/login.jpg') center 22% / cover no-repeat; }
+.login-promo > * { position: relative; z-index: 1; }
+.login-promo-kicker { margin: 0 0 22px; color: #d2e7ff; font-size: 11px; font-weight: 600; letter-spacing: 1.4px; }
+.login-promo h1 { margin: 0 0 18px; color: #fff; font: 500 clamp(36px, 4vw, 48px)/1.2 'Lora', serif; }
+.login-promo-copy { max-width: 400px; margin: 0; color: rgba(255, 255, 255, .9); font-size: 14px; line-height: 1.8; }
 .login-promo-detail { display: flex; align-items: center; gap: 12px; margin-top: 54px; color: var(--login-secondary); font-size: 11px; }
 .promo-detail-line { width: 34px; height: 1px; background: var(--login-mint); }
 .login-panel { display: flex; align-items: center; justify-content: center; padding: 56px 42px; background: #fff; }
